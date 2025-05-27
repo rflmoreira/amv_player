@@ -1,0 +1,247 @@
+/* Fonte principal do projeto */
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+* {
+  cursor: none !important;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Centraliza tudo na tela */
+body {
+  display: block;
+  height: 100vh;
+  margin: 0;
+  background: #000000; /* Só o fundo animado aparece */
+}
+
+/* Fundo da capa */
+.body-capa {
+  background: url('src/capa.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Centralização dos elementos principais */
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+/* Área do player com visual moderno */
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.2rem 2rem; /* margem superior/inferior menor, laterais mantidas */
+  background-color: #00000086;
+  border-radius: 20px;
+  box-shadow: 5px 5px 30px 7px #000000;
+  backdrop-filter: saturate(180%) blur(13px);
+  font-family: "Fredoka", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: "wdth" 120;
+  position: fixed;           /* Adicionado */
+  left: 50%;                 /* Centraliza horizontalmente */
+  bottom: 30px;              /* Distância da base da tela */
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 350px;         /* Defina o valor ideal para seu layout */
+  min-width: 350px;
+  max-width: 350px;
+  box-sizing: border-box;
+}
+
+/* Exibição dos tempos de música */
+.time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.time span {
+  font-size: 16px;
+  color: #ffffff86;
+}
+
+/* Rodapé ocupa toda a largura */
+.footer {
+  width: 100%;
+}
+
+/* Barra de progresso da música */
+.progress-bar {
+  height: 8px;
+  background-color: #3a3a3a5d;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.progress {
+  height: 8px;
+  background-color: #ffffff86;
+  border-radius: 5px;
+}
+
+/* Container das informações da música */
+.music-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Nome da música centralizado */
+#musicName {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 0 0.1rem 0;
+  font-size: 1rem;
+  text-decoration: none;
+  color: #ffffff86;
+  width: 100%;
+}
+
+/* Novo estilo para o autor */
+.music-author {
+  font-size: 0.85rem;
+  color: #ffffff86;
+  margin-bottom: 0;
+  margin-left: 0;
+  text-align: left;
+  width: 100%;
+  display: block;
+}
+
+/* Botões alinhados */
+#container-botoes {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+  
+button {
+  background-color: inherit;
+  color: #ffffff86;
+  border: none;
+  padding: 10px;
+}
+
+/* Link sem sublinhado */
+#meuLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Botão desativado fica apagado e sem interação */
+.botao-desativado {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+/* Esconde o cursor apenas em telas maiores, deixa o cursor padrão no mobile */
+@media (pointer: coarse), (max-width: 900px) {
+  * {
+    cursor: auto !important;
+  }
+  .cursor,
+  .cursor2 {
+    display: none !important;
+  }
+}
+
+/* Esconde os controles nativos do vídeo de fundo */
+#bg-video::-webkit-media-controls {
+  display: none !important;
+}
+
+/* Permite que o vídeo de fundo não capture eventos do mouse */
+#bg-video {
+  pointer-events: none;
+}
+
+/* Estilo para o cabeçalho do player */
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+/* Estilo para a seção do autor em tela cheia */
+.author-fullscreen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+/* Informações da música (nome e autor) */
+.music-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+}
+
+/* Cabeçalho do player em layout de coluna e centralizado */
+.player-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ou align-items: stretch; se quiser que os filhos ocupem toda a largura */
+}
+
+/* Remove a barra de rolagem da playlistSection em desktop */
+/* Seção da playlist: inicia fechada, transições suaves para abrir/fechar */
+#playlistSection {
+  display: block; /* Visível, mas controlado por altura/opacidade */
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+  width: 90%;
+  max-height: 150px;
+  background-color: rgba(255,255,255,0.1);
+  padding: 0 10px; /* Só laterais, topo/base animados depois */
+  border-radius: 8px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+#playlistSection.expanded {
+  height: 150px; /* Mesmo valor do max-height */
+  opacity: 1;
+  padding: 10px;
+}
+
+#playlistSection li {
+  color: #ffffff86;
+  opacity: 0.85;
+  transition: color 0.2s, background 0.2s;
+}
+
+#playlistSection li:hover {
+  color: #ffffff86;
+  background: rgba(255,255,255,0.08);
+}
+
+/* Esconde a barra de rolagem da playlist (Firefox) */
+#playlistSection {
+  overflow: hidden;
+  scrollbar-width: none;
+}
+
+/* Esconde a barra de rolagem da playlist (Webkit) */
+#playlistSection::-webkit-scrollbar {
+  display: none;
+}
