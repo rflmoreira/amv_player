@@ -381,14 +381,13 @@ document.getElementById('fullscreenButton').addEventListener('click', function (
 // Evento para todos navegadores
 function exitFullscreenHandler() {
   const video = document.getElementById('bg-video');
-  // Só remove controls se realmente saiu do fullscreen
+  // Remove controls ao sair do fullscreen
   if (
     !document.fullscreenElement &&
     !document.webkitFullscreenElement &&
     !document.msFullscreenElement
   ) {
-    // Não remova o controls aqui! Apenas desabilite pointerEvents se quiser
-    // video.removeAttribute('controls'); // Remova esta linha
+    video.removeAttribute('controls');
     video.style.pointerEvents = 'auto'; // Deixe sempre interativo
   } else {
     video.setAttribute('controls', 'controls');
