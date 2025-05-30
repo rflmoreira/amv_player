@@ -1,8 +1,11 @@
 // Seletores dos elementos principais
-const bgVideo = document.querySelector("#bg-video");
+const bgVideo = document.getElementById('bg-video');
+const syncCanvas = document.getElementById('sync-canvas');
+const ctx = syncCanvas.getContext('2d');
 const musicName = document.querySelector("#musicName");
 const musicAuthor = document.querySelector("#musicAuthor");
 const playPauseButton = document.querySelector("#playPauseButton");
+const playPauseIcon = playPauseButton.querySelector('i');
 const prevButton = document.querySelector("#prevButton");
 const nextButton = document.querySelector("#nextButton");
 const currentTime = document.querySelector("#currentTime");
@@ -18,6 +21,19 @@ const textButtonPlay = `<i style="font-size: 4rem;" class='bx bx-play-circle'></
 const textButtonPause = `<i style="font-size: 4rem;" class='bx bx-pause-circle'></i>`;
 
 let index = 0;
+let isPlaying = false;
+
+// Ao carregar a página, exiba apenas a capa (index 0), sem tocar nada
+window.addEventListener('DOMContentLoaded', () => {
+  index = 0;
+  atualizarBackground();
+  setVideoSources(); // Não passe src na capa
+  musicName.innerHTML = songs[index].name;
+  musicAuthor.textContent = songs[index].author || "";
+  playPauseButton.innerHTML = textButtonPlay;
+  updateTime();
+  atualizarBotoesAvanco && atualizarBotoesAvanco();
+});
 
 // Botões de avançar e voltar
 prevButton.onclick = () => prevNextMusic("prev");
@@ -37,6 +53,7 @@ const playPause = () => {
     playPauseButton.innerHTML = textButtonPause;
     updateTime();
     atualizarBotoesAvanco();
+    renderPlaylist(index);
     return;
   }
 
@@ -96,7 +113,7 @@ const updateTime = () => {
     ? (bgVideo.currentTime / durationFormatted) * 100
     : 0;
 
-  if (isBuffering) {
+  if (isBuffering && index !== 0) {
     currentTime.textContent = "Buffering...";
     duration.textContent = "-:--";
   } else if (
@@ -124,10 +141,14 @@ const updateTime = () => {
 
 // Troca o vídeo de fundo e configurações
 function setVideoSources(src) {
-  bgVideo.src = src;
-  bgVideo.loop = (index === songs.length - 1);
-  bgVideo.muted = (index === 0);
-  bgVideo.play().catch(()=>{});
+  if (src) {
+    bgVideo.src = src;
+    bgVideo.loop = (index === songs.length - 1);
+    bgVideo.muted = false;
+    bgVideo.load();
+  } else {
+    bgVideo.src = '';
+  }
 }
 
 // Alterna entre a última faixa (ao vivo) e a segunda música ao clicar no botão AO VIVO
@@ -197,7 +218,6 @@ document.addEventListener('mousemove', function(e){
   cursorinner.style.top = y + 'px';
 });
 
-// Efeito de clique no cursor
 document.addEventListener('mousedown', function(){
   cursor.classList.add('click');
   cursorinner.classList.add('cursorinnerhover');
@@ -208,7 +228,6 @@ document.addEventListener('mouseup', function(){
   cursorinner.classList.remove('cursorinnerhover');
 });
 
-// Cursor reage ao passar o mouse sobre links
 a.forEach(item => {
   item.addEventListener('mouseover', () => {
     cursor.classList.add('hover');
@@ -218,7 +237,6 @@ a.forEach(item => {
   });
 });
 
-// Cursor reage ao passar o mouse sobre botões
 buttons.forEach(item => {
   item.addEventListener('mouseover', () => {
     cursor.classList.add('hover');
@@ -319,19 +337,17 @@ function atualizarFaixa() {
   musicAuthor.textContent = songs[index].author || "";
 }
 
-// Sempre que trocar de música, chama a função acima
 atualizarFaixa();
 
 window.addEventListener('DOMContentLoaded', () => {
-  index = 1;
+  index = 0;
   atualizarBackground();
-  setVideoSources(songs[index].src);
+  setVideoSources();
   musicName.innerHTML = songs[index].name;
   musicAuthor.textContent = songs[index].author || "";
-  playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-pause-circle'></i>`;
+  playPauseButton.innerHTML = textButtonPlay;
   updateTime();
   atualizarBotoesAvanco && atualizarBotoesAvanco();
-  bgVideo.play().catch(()=>{});
 });
 
 function atualizarBackground() {
@@ -344,31 +360,40 @@ function atualizarBackground() {
 
 // Botão de tela cheia
 document.getElementById('fullscreenButton').addEventListener('click', () => {
-  const elem = document.documentElement;
   if (!document.fullscreenElement) {
-    elem.requestFullscreen();
+    bgVideo.requestFullscreen(); // Fullscreen no vídeo!
+    bgVideo.setAttribute('controls', 'controls');
+    bgVideo.style.pointerEvents = 'auto';
   } else {
     document.exitFullscreen();
+    bgVideo.removeAttribute('controls');
+    bgVideo.style.pointerEvents = 'none';
   }
 });
 
-// Alterna a exibição da playlist ao clicar no botão
-document.addEventListener('DOMContentLoaded', () => {
-  const playlistToggleButton = document.getElementById('playlistToggleButton');
-  const playlistSection = document.getElementById('playlistSection');
-
-  if (playlistToggleButton && playlistSection) {
-    playlistToggleButton.addEventListener('click', () => {
-      const isExpanded = playlistSection.classList.contains('expanded');
-      if (isExpanded) {
-        playlistSection.classList.remove('expanded');
-        playlistToggleButton.setAttribute('aria-expanded', 'false');
-      } else {
-        playlistSection.classList.add('expanded');
-        playlistToggleButton.setAttribute('aria-expanded', 'true');
-      }
-    });
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    bgVideo.removeAttribute('controls');
+    bgVideo.style.pointerEvents = 'none';
+  } else {
+    bgVideo.setAttribute('controls', 'controls');
+    bgVideo.style.pointerEvents = 'auto';
   }
+});
+
+// Referências
+const playlistToggleButton = document.getElementById('playlistToggleButton');
+const playlistSection = document.getElementById('playlistSection');
+const playlistCloseButton = document.getElementById('playlistCloseButton');
+
+// Exibe ou oculta a playlist ao clicar no botão
+playlistToggleButton.addEventListener('click', () => {
+  playlistSection.classList.toggle('expanded');
+});
+
+// Fecha a playlist ao clicar no botão de fechar
+playlistCloseButton.addEventListener('click', () => {
+  playlistSection.classList.remove('expanded');
 });
 
 // --- Playlist ---
@@ -399,17 +424,33 @@ function renderPlaylist(selectedIndex = 1) {
 // Seleciona uma música da playlist
 function selectSong(idx) {
   currentSongIndex = idx;
+  index = idx;
   renderPlaylist(idx);
   musicName.textContent = songs[idx].name;
   musicAuthor.textContent = songs[idx].author;
+  
   if (songs[idx].src) {
-    bgVideo.src = songs[idx].src;
-    bgVideo.play();
+    setVideoSources(songs[idx].src);
   } else {
-    bgVideo.src = "";
+    setVideoSources('');
   }
+  
+  atualizarBackground();
+  updateTime();
+  atualizarBotoesAvanco();
 }
 
-// Inicializa a playlist e exibe a primeira faixa visível
-renderPlaylist(1);
-selectSong(1);
+// Inicializa a playlist e exibe a capa (index 0)
+renderPlaylist(0);
+selectSong(0);
+
+function drawToCanvas() {
+  if (!bgVideo.paused && !bgVideo.ended) {
+    ctx.drawImage(bgVideo, 0, 0, syncCanvas.width, syncCanvas.height);
+  }
+  requestAnimationFrame(drawToCanvas);
+}
+
+bgVideo.addEventListener('play', () => {
+  drawToCanvas();
+});

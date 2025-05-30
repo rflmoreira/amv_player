@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
 * {
-  cursor: none !important;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -36,7 +35,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.2rem 2rem; /* margem superior/inferior menor, laterais mantidas */
+  padding: 0.2rem 2rem;
   background-color: #00000086;
   border-radius: 20px;
   box-shadow: 5px 5px 30px 7px #000000;
@@ -46,15 +45,34 @@ section {
   font-weight: 700;
   font-style: normal;
   font-variation-settings: "wdth" 120;
-  position: fixed;           /* Adicionado */
-  left: 50%;                 /* Centraliza horizontalmente */
-  bottom: 30px;              /* Distância da base da tela */
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
   transform: translateX(-50%);
   z-index: 10;
-  width: 350px;         /* Defina o valor ideal para seu layout */
+  width: 350px;
   min-width: 350px;
   max-width: 350px;
   box-sizing: border-box;
+}
+
+/* Esconde o cursor no fundo (body) e na área do player */
+body,
+.player,
+.player * {
+  cursor: none !important;
+}
+
+/* Exibe o cursor normalmente quando o player está em fullscreen */
+:fullscreen,
+:fullscreen * {
+  cursor: auto !important;
+}
+
+/* Para compatibilidade com navegadores WebKit */
+:-webkit-full-screen .player,
+:-webkit-full-screen .player * {
+  cursor: auto !important;
 }
 
 /* Exibição dos tempos de música */
@@ -148,23 +166,28 @@ button {
 
 /* Esconde o cursor apenas em telas maiores, deixa o cursor padrão no mobile */
 @media (pointer: coarse), (max-width: 900px) {
-  * {
-    cursor: auto !important;
-  }
   .cursor,
   .cursor2 {
     display: none !important;
   }
 }
 
-/* Esconde os controles nativos do vídeo de fundo */
-#bg-video::-webkit-media-controls {
+/* Esconde os controles nativos do vídeo de fundo apenas fora do fullscreen */
+#bg-video:not(:fullscreen)::-webkit-media-controls,
+#bg-video:not(:-webkit-full-screen)::-webkit-media-controls {
   display: none !important;
 }
 
 /* Permite que o vídeo de fundo não capture eventos do mouse */
 #bg-video {
   pointer-events: none;
+}
+
+/* Permite interação com o vídeo em fullscreen */
+:fullscreen #bg-video,
+:-webkit-full-screen #bg-video {
+  pointer-events: auto !important;
+  z-index: 9999 !important;
 }
 
 /* Estilo para o cabeçalho do player */
@@ -174,6 +197,7 @@ button {
   justify-content: space-between;
   width: 100%;
   gap: 1rem;
+  flex-direction: column;
 }
 
 /* Estilo para a seção do autor em tela cheia */
@@ -194,34 +218,29 @@ button {
   flex: 1;
 }
 
-/* Cabeçalho do player em layout de coluna e centralizado */
-.player-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Ou align-items: stretch; se quiser que os filhos ocupem toda a largura */
-}
-
 /* Remove a barra de rolagem da playlistSection em desktop */
-/* Seção da playlist: inicia fechada, transições suaves para abrir/fechar */
+
+/* Estilo para a área da playlist sobrepondo o player */
 #playlistSection {
-  display: block; /* Visível, mas controlado por altura/opacidade */
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
-  width: 90%;
-  max-height: 150px;
-  background-color: rgba(255,255,255,0.1);
-  padding: 0 10px; /* Só laterais, topo/base animados depois */
-  border-radius: 8px;
-  margin-bottom: 10px;
-  text-align: left;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(24,24,24,0.97);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 40px;
+  overflow-y: auto;
+  transition: opacity 0.2s;
 }
 
 #playlistSection.expanded {
-  height: 150px; /* Mesmo valor do max-height */
+  display: flex;
   opacity: 1;
-  padding: 10px;
 }
 
 #playlistSection li {
@@ -235,13 +254,39 @@ button {
   background: rgba(255,255,255,0.08);
 }
 
-/* Esconde a barra de rolagem da playlist (Firefox) */
-#playlistSection {
-  overflow: hidden;
-  scrollbar-width: none;
+#playlistCloseButton {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 101;
 }
 
-/* Esconde a barra de rolagem da playlist (Webkit) */
-#playlistSection::-webkit-scrollbar {
-  display: none;
+/* Garante que o player tenha position:relative para o overlay funcionar */
+#playerContainer {
+  position: relative;
+}
+
+.video-player-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin: 24px auto 0 auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-player-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }

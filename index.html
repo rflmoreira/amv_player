@@ -18,21 +18,23 @@
 </head>
 <body>
   <!-- Vídeo de fundo ocupa toda a tela -->
-  <video id="bg-video" autoplay playsinline style="position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1;pointer-events:none;"></video>
+  <video id="bg-video" playsinline style="position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1"></video>
   <main>
     <div class="player">
       <!-- Cabeçalho do player -->
       <div class="player-header">
-        <div class="playlist-toggle-button-container" style="width: 100%; text-align: center; margin-bottom: 8px;">
-          <button id="playlistToggleButton" aria-label="Alternar Playlist" title="Mostrar/Esconder Playlist" style="background: none; border: none; cursor: pointer; padding: 5px; color: inherit;">
-            <i class='bx bx-dots-horizontal-rounded' style="color: #ffffff86; font-size:2rem; vertical-align: middle;"></i>
-          </button>
-        </div>
-
         <div id="playlistSection" style="width: 90%; max-height: 150px; overflow-y: auto; background-color: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: left;">
           <!-- Título da playlist e lista de faixas -->
           <h4 style="color: #ffffff86; margin-top: 0; margin-bottom: 8px; font-weight: normal;">Playlist</h4>
+          <button id="playlistCloseButton" aria-label="Fechar playlist" style="background: none; border: none; cursor: pointer; padding: 5px; color: inherit; display: none;">
+            <i class='bx bx-x' style="color: #ffffff86; font-size:1.5rem;"></i>
+          </button>
           <ul id="playlistItems" style="list-style: none; padding-left: 0; margin: 0;"></ul>
+        </div>
+
+        <!-- Novo player de vídeo -->
+        <div class="video-player-container">
+          <canvas id="sync-canvas" width="640" height="360"></canvas>
         </div>
 
         <div class="current-track-info-wrapper" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -43,7 +45,7 @@
           <button id="fullscreenButton" aria-label="Alternar Tela Cheia" title="Alternar Tela Cheia" style="background: none; border: none; cursor: pointer; color: inherit;">
             <i class="bx bx-fullscreen" style="color: #ffffff86;font-size:2rem"></i>
           </button>
-        </div>
+        </div> 
       </div>
       <div class="footer">
         <div class="progress-bar">
@@ -58,6 +60,12 @@
           <button id="prevButton"><i style="font-size: 3rem;" class='bx bx-skip-previous-circle'></i></button>
           <button id="playPauseButton"><i style="font-size: 4rem;" class='bx bx-play-circle'></i></button>
           <button id="nextButton"><i style="font-size: 3rem;" class='bx bx-skip-next-circle'></i></button>
+        </div>
+        <!-- Botão de alternar playlist movido para cá -->
+        <div class="playlist-toggle-button-container" style="width: 100%; text-align: center; margin: 12px 0 8px 0;">
+          <button id="playlistToggleButton" aria-label="Alternar Playlist" title="Mostrar/Esconder Playlist" style="background: none; border: none; cursor: pointer; padding: 5px; color: inherit;">
+            <i class='bx bx-dots-horizontal-rounded' style="color: #ffffff86; font-size:2rem; vertical-align: middle;"></i>
+          </button>
         </div>
       </div>
     </div>
