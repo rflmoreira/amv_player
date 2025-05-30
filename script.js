@@ -359,15 +359,14 @@ function atualizarBackground() {
 }
 
 // Botão de tela cheia
-document.getElementById('fullscreenButton').addEventListener('click', () => {
-  if (!document.fullscreenElement) {
-    bgVideo.requestFullscreen(); // Fullscreen no vídeo!
-    bgVideo.setAttribute('controls', 'controls');
-    bgVideo.style.pointerEvents = 'auto';
-  } else {
-    document.exitFullscreen();
-    bgVideo.removeAttribute('controls');
-    bgVideo.style.pointerEvents = 'none';
+document.getElementById('fullscreenButton').addEventListener('click', function () {
+  const video = document.getElementById('bg-video');
+  if (video.requestFullscreen) {
+    video.requestFullscreen();
+  } else if (video.webkitRequestFullscreen) { // Safari/iOS
+    video.webkitRequestFullscreen();
+  } else if (video.msRequestFullscreen) { // IE11
+    video.msRequestFullscreen();
   }
 });
 
