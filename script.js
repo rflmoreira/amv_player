@@ -381,18 +381,20 @@ document.getElementById('fullscreenButton').addEventListener('click', function (
 // Evento para todos navegadores
 function exitFullscreenHandler() {
   const video = document.getElementById('bg-video');
-  // Remove controls ao sair do fullscreen
-  if (
-    !document.fullscreenElement &&
-    !document.webkitFullscreenElement &&
-    !document.msFullscreenElement
-  ) {
-    video.removeAttribute('controls');
-    video.style.pointerEvents = 'auto'; // Deixe sempre interativo
-  } else {
-    video.setAttribute('controls', 'controls');
-    video.style.pointerEvents = 'auto';
-  }
+  // Aguarda o navegador atualizar o estado do fullscreen
+  setTimeout(() => {
+    if (
+      !document.fullscreenElement &&
+      !document.webkitFullscreenElement &&
+      !document.msFullscreenElement
+    ) {
+      video.removeAttribute('controls');
+      video.style.pointerEvents = 'auto';
+    } else {
+      video.setAttribute('controls', 'controls');
+      video.style.pointerEvents = 'auto';
+    }
+  }, 100); // 100ms é suficiente
 }
 
 document.addEventListener('fullscreenchange', exitFullscreenHandler);
