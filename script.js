@@ -362,10 +362,11 @@ function atualizarBackground() {
 document.getElementById('fullscreenButton').addEventListener('click', function () {
   const video = document.getElementById('bg-video');
 
-  // Adiciona controles antes de pedir fullscreen (necessário para iOS)
+  // Sempre adiciona controls antes de pedir fullscreen
   video.setAttribute('controls', 'controls');
   video.style.pointerEvents = 'auto';
 
+  // Tenta fullscreen
   if (video.requestFullscreen) {
     video.requestFullscreen();
   } else if (video.webkitEnterFullscreen) { // iOS Safari
@@ -379,16 +380,19 @@ document.getElementById('fullscreenButton').addEventListener('click', function (
 
 // Evento para todos navegadores
 function exitFullscreenHandler() {
+  const video = document.getElementById('bg-video');
+  // Só remove controls se realmente saiu do fullscreen
   if (
     !document.fullscreenElement &&
     !document.webkitFullscreenElement &&
     !document.msFullscreenElement
   ) {
-    bgVideo.removeAttribute('controls');
-    bgVideo.style.pointerEvents = 'none';
+    // Não remova o controls aqui! Apenas desabilite pointerEvents se quiser
+    // video.removeAttribute('controls'); // Remova esta linha
+    video.style.pointerEvents = 'auto'; // Deixe sempre interativo
   } else {
-    bgVideo.setAttribute('controls', 'controls');
-    bgVideo.style.pointerEvents = 'auto';
+    video.setAttribute('controls', 'controls');
+    video.style.pointerEvents = 'auto';
   }
 }
 
