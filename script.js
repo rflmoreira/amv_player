@@ -361,24 +361,40 @@ function atualizarBackground() {
 // Botão de tela cheia
 document.getElementById('fullscreenButton').addEventListener('click', function () {
   const video = document.getElementById('bg-video');
+
+  // Adiciona controles antes de pedir fullscreen (necessário para iOS)
+  video.setAttribute('controls', 'controls');
+  video.style.pointerEvents = 'auto';
+
   if (video.requestFullscreen) {
     video.requestFullscreen();
-  } else if (video.webkitRequestFullscreen) { // Safari/iOS
+  } else if (video.webkitEnterFullscreen) { // iOS Safari
+    video.webkitEnterFullscreen();
+  } else if (video.webkitRequestFullscreen) { // Safari desktop
     video.webkitRequestFullscreen();
   } else if (video.msRequestFullscreen) { // IE11
     video.msRequestFullscreen();
   }
 });
 
-document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement) {
+// Evento para todos navegadores
+function exitFullscreenHandler() {
+  if (
+    !document.fullscreenElement &&
+    !document.webkitFullscreenElement &&
+    !document.msFullscreenElement
+  ) {
     bgVideo.removeAttribute('controls');
     bgVideo.style.pointerEvents = 'none';
   } else {
     bgVideo.setAttribute('controls', 'controls');
     bgVideo.style.pointerEvents = 'auto';
   }
-});
+}
+
+document.addEventListener('fullscreenchange', exitFullscreenHandler);
+document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
+document.addEventListener('msfullscreenchange', exitFullscreenHandler);
 
 // Referências
 const playlistToggleButton = document.getElementById('playlistToggleButton');
