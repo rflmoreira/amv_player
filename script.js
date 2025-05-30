@@ -378,28 +378,30 @@ document.getElementById('fullscreenButton').addEventListener('click', function (
   }
 });
 
-// Evento para todos navegadores
-function exitFullscreenHandler() {
+// Função para esconder os controles quando não estiver em tela cheia
+function hideControlsIfNotFullscreen() {
   const video = document.getElementById('bg-video');
-  // Aguarda o navegador atualizar o estado do fullscreen
-  setTimeout(() => {
-    if (
-      !document.fullscreenElement &&
-      !document.webkitFullscreenElement &&
-      !document.msFullscreenElement
-    ) {
-      video.removeAttribute('controls');
-      video.style.pointerEvents = 'auto';
-    } else {
-      video.setAttribute('controls', 'controls');
-      video.style.pointerEvents = 'auto';
-    }
-  }, 100); // 100ms é suficiente
+  const isFullscreen =
+    document.fullscreenElement === video ||
+    document.webkitFullscreenElement === video ||
+    document.msFullscreenElement === video;
+
+  if (!isFullscreen) {
+    video.removeAttribute('controls');
+  }
+}
+
+// Handler de saída do fullscreen
+function exitFullscreenHandler() {
+  setTimeout(hideControlsIfNotFullscreen, 100);
 }
 
 document.addEventListener('fullscreenchange', exitFullscreenHandler);
 document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
 document.addEventListener('msfullscreenchange', exitFullscreenHandler);
+
+// Sempre que o vídeo for pausado, remove os controles se não estiver em fullscreen
+document.getElementById('bg-video').addEventListener('pause', hideControlsIfNotFullscreen);
 
 // Referências
 const playlistToggleButton = document.getElementById('playlistToggleButton');
