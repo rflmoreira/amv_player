@@ -15,6 +15,11 @@ export default [
     author: "tiff.",
   },
   {
+    src: "src/videos/Goku Vs Jiren  FINAL「AMV」- Fight Back.mp4",
+    name: "Goku Vs Jiren FINAL「AMV」-...",
+    author: "GodAnimeBS",
+  },  
+  {
     src: "",
     name: "AO VIVO",
     author: "",
