@@ -15,10 +15,10 @@ export default [
     author: "tiff.",
   },
   {
-    src: "src/videos/Goku Vs Jiren  FINAL「AMV」- Fight Back.mp4",
-    name: "Goku Vs Jiren FINAL「AMV」-...",
-    author: "GodAnimeBS",
-  },  
+    src: "src/videos/Still Here x Goku vs Jiren - Dragon Ball Hardstyle「AMV」.mp4",
+    name: "Still Here x Goku vs Jiren",
+    author: "Yugoz",
+  },
   {
     src: "",
     name: "AO VIVO",
