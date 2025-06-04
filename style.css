@@ -321,12 +321,13 @@ button {
 }
 
 .pip-btn-icon {
-  font-family: "Fredoka", sans-serif;
+  color: #ffffff86;
+font-family: "Fredoka", sans-serif;
+  font-size: 1rem;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
   font-variation-settings: "wdth" 120;
-  font-size: 1rem;
   vertical-align: middle;
   margin-right: 6px;
 }
