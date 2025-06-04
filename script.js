@@ -476,3 +476,16 @@ function drawToCanvas() {
 bgVideo.addEventListener('play', () => {
   drawToCanvas();
 });
+
+// Picture-in-Picture
+document.getElementById('pipButton').addEventListener('click', async () => {
+  if (document.pictureInPictureElement) {
+    await document.exitPictureInPicture();
+  } else {
+    try {
+      await bgVideo.requestPictureInPicture();
+    } catch (error) {
+      console.error('Erro ao ativar PiP:', error);
+    }
+  }
+});
