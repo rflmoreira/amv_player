@@ -276,8 +276,12 @@ function selectSong(idx) {
   
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
+    // Adicionar reprodução automática
+    bgVideo.play().catch(() => {});
+    playPauseButton.innerHTML = textButtonPause;
   } else {
     setVideoSources('');
+    playPauseButton.innerHTML = textButtonPlay;
   }
   
   atualizarBackground();
