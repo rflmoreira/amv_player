@@ -367,11 +367,21 @@ function handleAoVivoClick(e) {
 
 // Controles de playlist
 playlistToggleButton.addEventListener('click', () => {
-  playlistSection.classList.toggle('expanded');
+  togglePlaylist();
+});
+
+playlistToggleButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  togglePlaylist();
 });
 
 playlistCloseButton.addEventListener('click', () => {
-  playlistSection.classList.remove('expanded');
+  togglePlaylist();
+});
+
+playlistCloseButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  togglePlaylist();
 });
 
 // Canvas drawing
@@ -451,3 +461,25 @@ document.getElementById('pipButton').addEventListener('click', async () => {
     }
   }
 });
+
+// Exemplo de como modificar o JavaScript para usar a animação
+function togglePlaylist() {
+  const playlistSection = document.getElementById('playlistSection');
+  
+  if (playlistSection.classList.contains('expanded')) {
+    // Fechar playlist
+    playlistSection.classList.add('closing');
+    playlistSection.classList.remove('expanded');
+    
+    setTimeout(() => {
+      playlistSection.style.display = 'none';
+      playlistSection.classList.remove('closing');
+    }, 300); // Tempo da transição
+  } else {
+    // Abrir playlist
+    playlistSection.style.display = 'flex';
+    // Força o reflow para garantir que a mudança de display seja aplicada
+    playlistSection.offsetHeight;
+    playlistSection.classList.add('expanded');
+  }
+}
