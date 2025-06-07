@@ -347,6 +347,11 @@ function hideControlsIfNotFullscreen() {
 
   if (!isFullscreen) {
     video.removeAttribute('controls');
+    // Pausar a reprodução ao sair da tela cheia
+    if (!video.paused) {
+      video.pause();
+      playPauseButton.innerHTML = textButtonPlay;
+    }
   }
 }
 
