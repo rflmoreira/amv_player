@@ -5,7 +5,6 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  cursor: default !important; /* Força o cursor padrão em todos os elementos */
 }
 
 /* Centraliza tudo na tela */
@@ -148,6 +147,7 @@ button {
   opacity: 0.5;
   pointer-events: none;
   filter: grayscale(1);
+  cursor: not-allowed !important;
 }
 
 /* Esconde os controles nativos do vídeo de fundo apenas fora do fullscreen */
@@ -300,4 +300,21 @@ button {
   font-weight: 700;
   font-style: normal;
   font-variation-settings: "wdth" 120;
+}
+
+#playPauseButton,
+#prevButton,
+#nextButton,
+#playlistToggleButton,
+#playlistCloseButton,
+#fullscreenButton,
+#pipButton,
+.progress-bar,
+#playlistItems li,
+#btn-ao-vivo {
+  cursor: pointer !important;
+}
+
+.botao-desativado {
+  cursor: not-allowed !important;
 }

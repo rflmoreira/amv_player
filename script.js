@@ -35,6 +35,16 @@ window.addEventListener('DOMContentLoaded', () => {
   updateTime();
   atualizarBotoesAvanco();
   renderPlaylist(0);
+  
+  // Adicionar tooltips nos botões
+  playPauseButton.title = "Reproduzir/Pausar (Espaço)";
+  prevButton.title = "Música anterior (Seta esquerda)";
+  nextButton.title = "Próxima música (Seta direita)";
+  playlistToggleButton.title = "Abrir playlist";
+  playlistCloseButton.title = "Fechar playlist";
+  document.getElementById('fullscreenButton').title = "Tela cheia";
+  document.getElementById('pipButton').title = "Picture-in-Picture";
+  progressBar.title = "Clique para navegar na música";
 });
 
 // Event listeners únicos
@@ -246,7 +256,6 @@ function renderPlaylist(selectedIndex = 1) {
     const li = document.createElement("li");
     li.textContent = song.author ? `${song.name} - ${song.author}` : song.name;
     li.style.padding = "6px 2px";
-    li.style.cursor = "pointer";
     li.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
     if (idx === selectedIndex) {
       li.style.fontWeight = "bold";
