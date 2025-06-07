@@ -52,6 +52,32 @@ prevButton.onclick = () => prevNextMusic("prev");
 nextButton.onclick = () => prevNextMusic();
 playPauseButton.onclick = () => playPause();
 
+// Adicionar eventos touch para iOS
+prevButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  prevNextMusic("prev");
+});
+
+nextButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  prevNextMusic();
+});
+
+playPauseButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  playPause();
+});
+
+playlistToggleButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  playlistSection.classList.toggle('expanded');
+});
+
+playlistCloseButton.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  playlistSection.classList.remove('expanded');
+});
+
 // Atalhos de teclado
 document.addEventListener("keydown", handleKeyPress);
 
@@ -260,13 +286,21 @@ function renderPlaylist(selectedIndex = 1) {
     li.textContent = song.author ? `${song.name} - ${song.author}` : song.name;
     li.style.padding = "6px 2px";
     li.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
+    li.style.cursor = "pointer";
+    li.style.webkitTapHighlightColor = "rgba(255,255,255,0.1)";
+    
     if (idx === selectedIndex) {
       li.style.fontWeight = "bold";
       li.style.background = "rgba(255,255,255,0.08)";
     }
-    li.onclick = () => {
+    
+    // Adicionar eventos click e touch
+    li.onclick = () => selectSong(idx);
+    li.addEventListener('touchend', (e) => {
+      e.preventDefault();
       selectSong(idx);
-    };
+    });
+    
     playlistItems.appendChild(li);
   }
 }
@@ -295,15 +329,26 @@ function selectSong(idx) {
 const formatZero = (n) => (n < 10 ? "0" + n : n);
 
 // Permite clicar na barra de progresso para avançar o vídeo
-progressBar.onclick = (e) => {
-  const newTime = (e.offsetX / progressBar.offsetWidth) * bgVideo.duration;
+progressBar.onclick = handleProgressClick;
+progressBar.addEventListener('touchend', handleProgressClick);
+
+function handleProgressClick(e) {
+  e.preventDefault();
+  const rect = progressBar.getBoundingClientRect();
+  const offsetX = (e.clientX || e.touches?.[0]?.clientX || e.changedTouches?.[0]?.clientX) - rect.left;
+  const newTime = (offsetX / progressBar.offsetWidth) * bgVideo.duration;
   bgVideo.currentTime = newTime;
-};
+}
 
 // Alterna entre a última faixa (ao vivo) e a segunda música ao clicar no botão AO VIVO
-document.addEventListener("click", (e) => {
+document.addEventListener("click", handleAoVivoClick);
+document.addEventListener("touchend", handleAoVivoClick);
+
+function handleAoVivoClick(e) {
   if (e.target && e.target.id === "btn-ao-vivo") {
     e.preventDefault();
+    e.stopPropagation();
+    
     setTimeout(() => {
       if (index === songs.length - 1) {
         index = 1;
@@ -318,7 +363,7 @@ document.addEventListener("click", (e) => {
       renderPlaylist(index);
     }, 10);
   }
-});
+}
 
 // Controles de playlist
 playlistToggleButton.addEventListener('click', () => {

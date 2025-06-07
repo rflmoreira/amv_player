@@ -370,3 +370,29 @@ button {
 .botao-desativado {
   cursor: not-allowed !important;
 }
+
+/* Melhorar responsividade touch no iOS */
+button, .clickable {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Garantir que botões tenham área mínima de toque */
+#playPauseButton, #prevButton, #nextButton, 
+#playlistToggleButton, #playlistCloseButton,
+#fullscreenButton, #pipButton {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+/* Itens da playlist */
+#playlistItems li {
+  touch-action: manipulation;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
