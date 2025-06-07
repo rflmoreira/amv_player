@@ -159,7 +159,7 @@ button {
 /* Permite que o vídeo de fundo não capture eventos do mouse */
 #bg-video {
   pointer-events: none;
-  filter: saturate(1.2); /* Aumenta a saturação em 20% */
+  filter: saturate(1.25); /* Aumenta a saturação em 25% */
 }
 
 /* Permite interação com o vídeo em fullscreen */
