@@ -159,6 +159,7 @@ button {
 /* Permite que o vídeo de fundo não capture eventos do mouse */
 #bg-video {
   pointer-events: none;
+  filter: saturate(1.2); /* Aumenta a saturação em 20% */
 }
 
 /* Permite interação com o vídeo em fullscreen */
@@ -312,6 +313,7 @@ button {
   width: 100%;
   height: 100%;
   display: block;
+  filter: saturate(1.2); /* Aumenta a saturação em 20% */
 }
 
 /* Estilos do botão Picture-in-Picture (PiP) */
