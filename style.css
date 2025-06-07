@@ -31,6 +31,15 @@ section {
   flex-direction: column;
 }
 
+/* Classe comum para elementos com fonte Fredoka */
+.fredoka-font {
+  font-family: "Fredoka", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: "wdth" 120;
+}
+
 /* Área do player com visual moderno */
 .player {
   display: flex;
@@ -41,11 +50,6 @@ section {
   border-radius: 20px;
   box-shadow: 5px 5px 30px 7px #000000;
   backdrop-filter: saturate(180%) blur(13px);
-  font-family: "Fredoka", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 700;
-  font-style: normal;
-  font-variation-settings: "wdth" 120;
   position: fixed;
   left: 50%;
   bottom: 30px;
@@ -192,8 +196,6 @@ button {
   flex: 1;
 }
 
-/* Remove a barra de rolagem da playlistSection em desktop */
-
 /* Estilo para a área da playlist sobrepondo o player */
 #playlistSection {
   position: absolute;
@@ -264,13 +266,7 @@ button {
   display: block;
 }
 
-/* ===========================
-   Estilos do botão Picture-in-Picture (PiP)
-   ===========================
-   .pip-btn-container: Container centralizado do botão PiP no rodapé do player.
-   .pip-btn: Estilização visual do botão PiP, incluindo fonte, cor, padding e transições.
-   .pip-btn-icon: Ícone do botão PiP, alinhamento e espaçamento.
-*/
+/* Estilos do botão Picture-in-Picture (PiP) */
 .pip-btn-container {
   width: 100%;
   text-align: center;
@@ -282,12 +278,7 @@ button {
   border: none;
   cursor: pointer;
   color: #ffffff86;
-  font-family: "Fredoka", sans-serif;
   font-size: 1rem;
-  font-optical-sizing: auto;
-  font-weight: 700;
-  font-style: normal;
-  font-variation-settings: "wdth" 120;
   padding: 8px 18px;
   border-radius: 8px;
   transition: background 0.2s;
@@ -295,12 +286,18 @@ button {
 
 .pip-btn-icon {
   color: #ffffff86;
-font-family: "Fredoka", sans-serif;
   font-size: 1rem;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* Aplicando a fonte Fredoka aos elementos que precisam */
+.player,
+.pip-btn,
+.pip-btn-icon {
+  font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
   font-variation-settings: "wdth" 120;
-  vertical-align: middle;
-  margin-right: 6px;
 }

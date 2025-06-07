@@ -5,49 +5,103 @@ const ctx = syncCanvas.getContext('2d');
 const musicName = document.querySelector("#musicName");
 const musicAuthor = document.querySelector("#musicAuthor");
 const playPauseButton = document.querySelector("#playPauseButton");
-const playPauseIcon = playPauseButton.querySelector('i');
 const prevButton = document.querySelector("#prevButton");
 const nextButton = document.querySelector("#nextButton");
 const currentTime = document.querySelector("#currentTime");
 const duration = document.querySelector("#duration");
 const progressBar = document.querySelector(".progress-bar");
 const progress = document.querySelector(".progress");
+const playlistItems = document.getElementById("playlistItems");
+const playlistToggleButton = document.getElementById('playlistToggleButton');
+const playlistSection = document.getElementById('playlistSection');
+const playlistCloseButton = document.getElementById('playlistCloseButton');
 
 import songs from "./songs.js";
-
-const playlistItems = document.getElementById("playlistItems");
 
 const textButtonPlay = `<i style="font-size: 4rem;" class='bx bx-play-circle'></i>`;
 const textButtonPause = `<i style="font-size: 4rem;" class='bx bx-pause-circle'></i>`;
 
 let index = 0;
 let isPlaying = false;
+let isBuffering = false;
 
-// Ao carregar a página, exiba apenas a capa (index 0), sem tocar nada
+// Inicialização única ao carregar a página
 window.addEventListener('DOMContentLoaded', () => {
   index = 0;
   atualizarBackground();
-  setVideoSources(); // Não passe src na capa
-  musicName.innerHTML = songs[index].name;
-  musicAuthor.textContent = songs[index].author || "";
+  setVideoSources();
+  atualizarFaixa();
   playPauseButton.innerHTML = textButtonPlay;
   updateTime();
-  atualizarBotoesAvanco && atualizarBotoesAvanco();
+  atualizarBotoesAvanco();
+  renderPlaylist(0);
 });
 
-// Botões de avançar e voltar
+// Event listeners únicos
 prevButton.onclick = () => prevNextMusic("prev");
 nextButton.onclick = () => prevNextMusic();
-
 playPauseButton.onclick = () => playPause();
+
+// Atalhos de teclado
+document.addEventListener("keydown", handleKeyPress);
+
+function handleKeyPress(event) {
+  const key = event.key;
+  switch (key) {
+    case " ":
+      playPause();
+      break;
+    case "ArrowRight":
+      prevNextMusic();
+      break;
+    case "ArrowLeft":
+      prevNextMusic("prev");
+      break;
+  }
+}
+
+// Event listeners do vídeo
+bgVideo.ontimeupdate = () => updateTime();
+
+bgVideo.addEventListener('waiting', () => {
+  isBuffering = true;
+  currentTime.textContent = "Buffering...";
+});
+
+bgVideo.addEventListener('playing', () => {
+  isBuffering = false;
+  updateTime();
+});
+
+bgVideo.addEventListener('play', () => {
+  drawToCanvas();
+});
+
+bgVideo.addEventListener('ended', () => {
+  let next = index + 1;
+  while (next < songs.length && !songs[next].src) {
+    next++;
+  }
+  if (next < songs.length) {
+    index = next;
+    setVideoSources(songs[index].src);
+    atualizarFaixa();
+    bgVideo.play().catch(()=>{});
+    playPauseButton.innerHTML = textButtonPause;
+    updateTime();
+    atualizarBotoesAvanco();
+    renderPlaylist(index);
+  }
+});
+
+bgVideo.addEventListener('pause', hideControlsIfNotFullscreen);
 
 // Função para tocar ou pausar
 const playPause = () => {
   if (index === 0) {
     index = 1;
     setVideoSources(songs[index].src);
-    musicName.innerHTML = songs[index].name;
-    musicAuthor.textContent = songs[index].author || "";
+    atualizarFaixa();
     atualizarBackground();
     bgVideo.play();
     playPauseButton.innerHTML = textButtonPause;
@@ -74,37 +128,26 @@ const playPause = () => {
   }
 };
 
-// Atalhos de teclado
-document.addEventListener("keydown", handleKeyPress);
-
-function handleKeyPress(event) {
-  const key = event.key;
-  switch (key) {
-    case " ":
-      playPause();
-      break;
-    case "ArrowRight":
-      prevNextMusic();
-      break;
-    case "ArrowLeft":
-      prevNextMusic("prev");
-      break;
+// Troca de música/vídeo
+const prevNextMusic = (type = "next") => {
+  if (type === "next") {
+    index = (index + 1) % songs.length;
+  } else if (type === "prev") {
+    index = (index - 1 + songs.length) % songs.length;
   }
-}
-
-bgVideo.ontimeupdate = () => updateTime();
-
-let isBuffering = false;
-
-bgVideo.addEventListener('waiting', () => {
-  isBuffering = true;
-  currentTime.textContent = "Buffering...";
-});
-
-bgVideo.addEventListener('playing', () => {
-  isBuffering = false;
+  setVideoSources(songs[index].src);
+  atualizarFaixa();
+  atualizarBackground();
+  if (songs[index].src) {
+    bgVideo.play().catch(()=>{});
+    playPauseButton.innerHTML = textButtonPause;
+  } else {
+    playPauseButton.innerHTML = textButtonPlay;
+  }
   updateTime();
-});
+  atualizarBotoesAvanco();
+  renderPlaylist(index);
+};
 
 // Atualiza tempo e barra de progresso
 const updateTime = () => {
@@ -151,57 +194,13 @@ function setVideoSources(src) {
   }
 }
 
-// Alterna entre a última faixa (ao vivo) e a segunda música ao clicar no botão AO VIVO
-document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "btn-ao-vivo") {
-    e.preventDefault();
-    setTimeout(() => {
-      if (index === songs.length - 1) {
-        index = 1;
-      } else {
-        index = songs.length - 1;
-      }
-      setVideoSources(songs[index].src);
-      musicName.innerHTML = songs[index].name;
-      playPause();
-      updateTime();
-      atualizarBotoesAvanco();
-    }, 10);
-  }
-});
-
-const formatZero = (n) => (n < 10 ? "0" + n : n);
-
-// Permite clicar na barra de progresso para avançar o vídeo
-progressBar.onclick = (e) => {
-  const newTime = (e.offsetX / progressBar.offsetWidth) * bgVideo.duration;
-  bgVideo.currentTime = newTime;
-};
-
-let bgToggle = false;
-
-// Troca de música/vídeo
-const prevNextMusic = (type = "next") => {
-  if (type === "next") {
-    index = (index + 1) % songs.length;
-  } else if (type === "prev") {
-    index = (index - 1 + songs.length) % songs.length;
-  }
-  setVideoSources(songs[index].src);
+// Atualiza nome e autor ao trocar de faixa
+function atualizarFaixa() {
   musicName.innerHTML = songs[index].name;
   musicAuthor.textContent = songs[index].author || "";
-  atualizarBackground();
-  if (songs[index].src) {
-    bgVideo.play().catch(()=>{});
-    playPauseButton.innerHTML = textButtonPause;
-  } else {
-    playPauseButton.innerHTML = textButtonPlay;
-  }
-  updateTime();
-  atualizarBotoesAvanco && atualizarBotoesAvanco();
-};
+}
 
-// Atualiza o estado dos botões de avançar e voltar conforme a música atual
+// Atualiza o estado dos botões de avançar e voltar
 function atualizarBotoesAvanco() {
   if (index === 0) {
     nextButton.disabled = true;
@@ -231,42 +230,6 @@ function atualizarBotoesAvanco() {
   }
 }
 
-// Avança para a próxima faixa ao terminar a reprodução
-bgVideo.addEventListener('ended', () => {
-  let next = index + 1;
-  while (next < songs.length && !songs[next].src) {
-    next++;
-  }
-  if (next < songs.length) {
-    index = next;
-    setVideoSources(songs[index].src);
-    musicName.innerHTML = songs[index].name;
-    bgVideo.play().catch(()=>{});
-    playPauseButton.innerHTML = textButtonPause;
-    updateTime();
-    atualizarBotoesAvanco && atualizarBotoesAvanco();
-  }
-});
-
-// Atualiza nome e autor ao trocar de faixa
-function atualizarFaixa() {
-  musicName.innerHTML = songs[index].name;
-  musicAuthor.textContent = songs[index].author || "";
-}
-
-atualizarFaixa();
-
-window.addEventListener('DOMContentLoaded', () => {
-  index = 0;
-  atualizarBackground();
-  setVideoSources();
-  musicName.innerHTML = songs[index].name;
-  musicAuthor.textContent = songs[index].author || "";
-  playPauseButton.innerHTML = textButtonPlay;
-  updateTime();
-  atualizarBotoesAvanco && atualizarBotoesAvanco();
-});
-
 function atualizarBackground() {
   if (index === 0) {
     document.body.classList.add('body-capa');
@@ -274,70 +237,6 @@ function atualizarBackground() {
     document.body.classList.remove('body-capa');
   }
 }
-
-// Botão de tela cheia
-document.getElementById('fullscreenButton').addEventListener('click', function () {
-  const video = document.getElementById('bg-video');
-
-  // Sempre adiciona controls antes de pedir fullscreen
-  video.setAttribute('controls', 'controls');
-  video.style.pointerEvents = 'auto';
-
-  // Tenta fullscreen
-  if (video.requestFullscreen) {
-    video.requestFullscreen();
-  } else if (video.webkitEnterFullscreen) { // iOS Safari
-    video.webkitEnterFullscreen();
-  } else if (video.webkitRequestFullscreen) { // Safari desktop
-    video.webkitRequestFullscreen();
-  } else if (video.msRequestFullscreen) { // IE11
-    video.msRequestFullscreen();
-  }
-});
-
-// Função para esconder os controles quando não estiver em tela cheia
-function hideControlsIfNotFullscreen() {
-  const video = document.getElementById('bg-video');
-  const isFullscreen =
-    document.fullscreenElement === video ||
-    document.webkitFullscreenElement === video ||
-    document.msFullscreenElement === video;
-
-  if (!isFullscreen) {
-    video.removeAttribute('controls');
-  }
-}
-
-// Handler de saída do fullscreen
-function exitFullscreenHandler() {
-  setTimeout(hideControlsIfNotFullscreen, 100);
-}
-
-document.addEventListener('fullscreenchange', exitFullscreenHandler);
-document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
-document.addEventListener('msfullscreenchange', exitFullscreenHandler);
-
-// Sempre que o vídeo for pausado, remove os controles se não estiver em fullscreen
-document.getElementById('bg-video').addEventListener('pause', hideControlsIfNotFullscreen);
-
-// Referências
-const playlistToggleButton = document.getElementById('playlistToggleButton');
-const playlistSection = document.getElementById('playlistSection');
-const playlistCloseButton = document.getElementById('playlistCloseButton');
-
-// Exibe ou oculta a playlist ao clicar no botão
-playlistToggleButton.addEventListener('click', () => {
-  playlistSection.classList.toggle('expanded');
-});
-
-// Fecha a playlist ao clicar no botão de fechar
-playlistCloseButton.addEventListener('click', () => {
-  playlistSection.classList.remove('expanded');
-});
-
-// --- Playlist ---
-
-let currentSongIndex = 0;
 
 // Renderiza a lista de músicas
 function renderPlaylist(selectedIndex = 1) {
@@ -362,11 +261,9 @@ function renderPlaylist(selectedIndex = 1) {
 
 // Seleciona uma música da playlist
 function selectSong(idx) {
-  currentSongIndex = idx;
   index = idx;
   renderPlaylist(idx);
-  musicName.textContent = songs[idx].name;
-  musicAuthor.textContent = songs[idx].author;
+  atualizarFaixa();
   
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
@@ -379,10 +276,44 @@ function selectSong(idx) {
   atualizarBotoesAvanco();
 }
 
-// Inicializa a playlist e exibe a capa (index 0)
-renderPlaylist(0);
-selectSong(0);
+const formatZero = (n) => (n < 10 ? "0" + n : n);
 
+// Permite clicar na barra de progresso para avançar o vídeo
+progressBar.onclick = (e) => {
+  const newTime = (e.offsetX / progressBar.offsetWidth) * bgVideo.duration;
+  bgVideo.currentTime = newTime;
+};
+
+// Alterna entre a última faixa (ao vivo) e a segunda música ao clicar no botão AO VIVO
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "btn-ao-vivo") {
+    e.preventDefault();
+    setTimeout(() => {
+      if (index === songs.length - 1) {
+        index = 1;
+      } else {
+        index = songs.length - 1;
+      }
+      setVideoSources(songs[index].src);
+      atualizarFaixa();
+      playPause();
+      updateTime();
+      atualizarBotoesAvanco();
+      renderPlaylist(index);
+    }, 10);
+  }
+});
+
+// Controles de playlist
+playlistToggleButton.addEventListener('click', () => {
+  playlistSection.classList.toggle('expanded');
+});
+
+playlistCloseButton.addEventListener('click', () => {
+  playlistSection.classList.remove('expanded');
+});
+
+// Canvas drawing
 function drawToCanvas() {
   if (!bgVideo.paused && !bgVideo.ended) {
     ctx.drawImage(bgVideo, 0, 0, syncCanvas.width, syncCanvas.height);
@@ -390,9 +321,45 @@ function drawToCanvas() {
   requestAnimationFrame(drawToCanvas);
 }
 
-bgVideo.addEventListener('play', () => {
-  drawToCanvas();
+// Função para esconder os controles quando não estiver em tela cheia
+function hideControlsIfNotFullscreen() {
+  const video = document.getElementById('bg-video');
+  const isFullscreen =
+    document.fullscreenElement === video ||
+    document.webkitFullscreenElement === video ||
+    document.msFullscreenElement === video;
+
+  if (!isFullscreen) {
+    video.removeAttribute('controls');
+  }
+}
+
+// Handler de saída do fullscreen
+function exitFullscreenHandler() {
+  setTimeout(hideControlsIfNotFullscreen, 100);
+}
+
+// Botão de tela cheia
+document.getElementById('fullscreenButton').addEventListener('click', function () {
+  const video = document.getElementById('bg-video');
+  video.setAttribute('controls', 'controls');
+  video.style.pointerEvents = 'auto';
+
+  if (video.requestFullscreen) {
+    video.requestFullscreen();
+  } else if (video.webkitEnterFullscreen) {
+    video.webkitEnterFullscreen();
+  } else if (video.webkitRequestFullscreen) {
+    video.webkitRequestFullscreen();
+  } else if (video.msRequestFullscreen) {
+    video.msRequestFullscreen();
+  }
 });
+
+// Event listeners de fullscreen
+document.addEventListener('fullscreenchange', exitFullscreenHandler);
+document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
+document.addEventListener('msfullscreenchange', exitFullscreenHandler);
 
 // Picture-in-Picture
 document.getElementById('pipButton').addEventListener('click', async () => {
