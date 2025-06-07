@@ -5,6 +5,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  cursor: default !important; /* Força o cursor padrão em todos os elementos */
 }
 
 /* Centraliza tudo na tela */
@@ -54,25 +55,6 @@ section {
   min-width: 350px;
   max-width: 350px;
   box-sizing: border-box;
-}
-
-/* Esconde o cursor no fundo (body) e na área do player */
-body,
-.player,
-.player * {
-  cursor: none !important;
-}
-
-/* Exibe o cursor normalmente quando o player está em fullscreen */
-:fullscreen,
-:fullscreen * {
-  cursor: auto !important;
-}
-
-/* Para compatibilidade com navegadores WebKit */
-:-webkit-full-screen .player,
-:-webkit-full-screen .player * {
-  cursor: auto !important;
 }
 
 /* Exibição dos tempos de música */
@@ -162,14 +144,6 @@ button {
   opacity: 0.5;
   pointer-events: none;
   filter: grayscale(1);
-}
-
-/* Esconde o cursor apenas em telas maiores, deixa o cursor padrão no mobile */
-@media (pointer: coarse), (max-width: 900px) {
-  .cursor,
-  .cursor2 {
-    display: none !important;
-  }
 }
 
 /* Esconde os controles nativos do vídeo de fundo apenas fora do fullscreen */
@@ -262,7 +236,6 @@ button {
   border: none;
   color: #fff;
   font-size: 2rem;
-  cursor: pointer;
   z-index: 101;
 }
 

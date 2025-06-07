@@ -201,51 +201,6 @@ const prevNextMusic = (type = "next") => {
   atualizarBotoesAvanco && atualizarBotoesAvanco();
 };
 
-// Cursor customizado
-var cursor = document.querySelector('.cursor');
-var cursorinner = document.querySelector('.cursor2');
-var a = document.querySelectorAll('a');
-var buttons = document.querySelectorAll('button');
-
-document.addEventListener('mousemove', function(e){
-  cursor.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`;
-});
-
-document.addEventListener('mousemove', function(e){
-  var x = e.clientX;
-  var y = e.clientY;
-  cursorinner.style.left = x + 'px';
-  cursorinner.style.top = y + 'px';
-});
-
-document.addEventListener('mousedown', function(){
-  cursor.classList.add('click');
-  cursorinner.classList.add('cursorinnerhover');
-});
-
-document.addEventListener('mouseup', function(){
-  cursor.classList.remove('click');
-  cursorinner.classList.remove('cursorinnerhover');
-});
-
-a.forEach(item => {
-  item.addEventListener('mouseover', () => {
-    cursor.classList.add('hover');
-  });
-  item.addEventListener('mouseleave', () => {
-    cursor.classList.remove('hover');
-  });
-});
-
-buttons.forEach(item => {
-  item.addEventListener('mouseover', () => {
-    cursor.classList.add('hover');
-  });
-  item.addEventListener('mouseleave', () => {
-    cursor.classList.remove('hover');
-  });
-});
-
 // Atualiza o estado dos botões de avançar e voltar conforme a música atual
 function atualizarBotoesAvanco() {
   if (index === 0) {
@@ -275,44 +230,6 @@ function atualizarBotoesAvanco() {
     prevButton.classList.remove('botao-desativado');
   }
 }
-
-// Efeito hover para o botão AO VIVO
-document.addEventListener('mouseover', function(e) {
-  if (e.target && e.target.id === "btn-ao-vivo") {
-    cursor.classList.add('hover');
-  }
-});
-document.addEventListener('mouseout', function(e) {
-  if (e.target && e.target.id === "btn-ao-vivo") {
-    cursor.classList.remove('hover');
-  }
-});
-
-// Efeito hover para o nome da música
-musicName.addEventListener('mouseover', () => {
-  if (index !== 0 && index !== songs.length - 1) {
-    cursor.classList.add('hover');
-    musicName.style.cursor = 'pointer';
-  } else {
-    musicName.style.cursor = 'default';
-  }
-});
-musicName.addEventListener('mouseleave', () => {
-  cursor.classList.remove('hover');
-  musicName.style.cursor = 'default';
-});
-
-// Efeito hover para a barra de progresso
-progressBar.addEventListener('mouseover', () => {
-  if (index !== songs.length - 1) {
-    cursor.classList.add('hover');
-  }
-});
-progressBar.addEventListener('mouseleave', () => {
-  cursor.classList.remove('hover');
-});
-
-bgVideo.removeAttribute('controls');
 
 // Avança para a próxima faixa ao terminar a reprodução
 bgVideo.addEventListener('ended', () => {
