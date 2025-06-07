@@ -19,11 +19,11 @@ export default [
     name: "Pantheon (2022) - AMV",
     author: "Knight Camelot",
   },
-  {
-    src: "src/videos/Still Here x Goku vs Jiren - Dragon Ball Hardstyle「AMV」.mp4",
-    name: "Still Here x Goku vs Jiren",
-    author: "Yugoz",
-  },
+  // {
+  //   src: "src/videos/Still Here x Goku vs Jiren - Dragon Ball Hardstyle「AMV」.mp4",
+  //   name: "Still Here x Goku vs Jiren",
+  //   author: "Yugoz",
+  // },
   {
     src: "",
     name: "AO VIVO",

@@ -196,22 +196,36 @@ button {
   flex: 1;
 }
 
-/* Estilo para a área da playlist sobrepondo o player */
+/* Estilo para a área da playlist na parte inferior */
 #playlistSection {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(24,24,24,0.97);
-  z-index: 100;
+  position: fixed;
+  left: 50%;
+  bottom: 90px; /* Reduzido de 120px para 90px */
+  width: 350px;
+  max-width: 350px;
+  max-height: 60%; /* Reduzido de 70% para 60% */
+  background: rgba(24,24,24,0.3);
+  z-index: 1000;
   display: none;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-top: 40px;
+  padding: 20px 20px 40px 20px;
   overflow-y: auto;
-  transition: opacity 0.2s;
+  transition: opacity 0.3s ease;
+  border-radius: 15px;
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  transform: translateX(-50%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Oculta a barra de rolagem no WebKit (Chrome, Safari) */
+#playlistSection::-webkit-scrollbar {
+  display: none;
 }
 
 #playlistSection.expanded {
@@ -219,10 +233,25 @@ button {
   opacity: 1;
 }
 
+#playlistSection h4 {
+  color: #ffffff86;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-weight: normal;
+  text-align: center;
+  width: 100%;
+}
+
 #playlistSection li {
   color: #ffffff86;
   opacity: 0.85;
   transition: color 0.2s, background 0.2s;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  width: 100%;
+  text-align: left;
+  list-style: none;
 }
 
 #playlistSection li:hover {
@@ -230,15 +259,34 @@ button {
   background: rgba(255,255,255,0.08);
 }
 
+#playlistSection ul {
+  width: 100%;
+  max-width: 280px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 #playlistCloseButton {
   position: absolute;
-  top: 18px;
-  right: 24px;
+  top: 15px;
+  right: 20px;
   background: none;
   border: none;
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   z-index: 101;
+  padding: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#playlistCloseButton:hover {
+  background: rgba(255,255,255,0.1);
 }
 
 /* Garante que o player tenha position:relative para o overlay funcionar */
@@ -294,7 +342,11 @@ button {
 /* Aplicando a fonte Fredoka aos elementos que precisam */
 .player,
 .pip-btn,
-.pip-btn-icon {
+.pip-btn-icon,
+#playlistSection,
+#playlistSection h4,
+#playlistSection li,
+#playlistSection ul {
   font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;

@@ -18,19 +18,20 @@
 <body>
   <!-- Vídeo de fundo ocupa toda a tela -->
   <video id="bg-video" playsinline style="position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1"></video>
+  
+  <!-- Playlist separada do player -->
+  <div id="playlistSection">
+    <button id="playlistCloseButton" aria-label="Fechar playlist">
+      <i class='bx bx-x'></i>
+    </button>
+    <h4>Playlist</h4>
+    <ul id="playlistItems"></ul>
+  </div>
+  
   <main>
     <div class="player">
       <!-- Cabeçalho do player -->
       <div class="player-header">
-        <div id="playlistSection" style="width: 90%; max-height: 150px; overflow-y: auto; background-color: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: left;">
-          <!-- Título da playlist e lista de faixas -->
-          <h4 style="color: #ffffff86; margin-top: 0; margin-bottom: 8px; font-weight: normal;">Playlist</h4>
-          <button id="playlistCloseButton" aria-label="Fechar playlist" style="background: none; border: none; cursor: pointer; padding: 5px; color: inherit; display: none;">
-            <i class='bx bx-x' style="color: #ffffff86; font-size:1.5rem;"></i>
-          </button>
-          <ul id="playlistItems" style="list-style: none; padding-left: 0; margin: 0;"></ul>
-        </div>
-
         <!-- Novo player de vídeo -->
         <div class="video-player-container">
           <canvas id="sync-canvas" width="640" height="360"></canvas>
