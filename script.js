@@ -343,10 +343,13 @@ function hideControlsIfNotFullscreen() {
   const isFullscreen =
     document.fullscreenElement === video ||
     document.webkitFullscreenElement === video ||
-    document.msFullscreenElement === video;
+    document.mozFullScreenElement === video ||
+    document.msFullscreenElement === video ||
+    video.webkitDisplayingFullscreen; // Específico para iOS Safari
 
   if (!isFullscreen) {
     video.removeAttribute('controls');
+    video.style.pointerEvents = 'none';
     // Pausar a reprodução ao sair da tela cheia
     if (!video.paused) {
       video.pause();
@@ -357,7 +360,8 @@ function hideControlsIfNotFullscreen() {
 
 // Handler de saída do fullscreen
 function exitFullscreenHandler() {
-  setTimeout(hideControlsIfNotFullscreen, 100);
+  // Timeout maior para iOS
+  setTimeout(hideControlsIfNotFullscreen, 200);
 }
 
 // Botão de tela cheia
@@ -377,10 +381,18 @@ document.getElementById('fullscreenButton').addEventListener('click', function (
   }
 });
 
-// Event listeners de fullscreen
+// Event listeners de fullscreen (adicionar mais eventos para iOS)
 document.addEventListener('fullscreenchange', exitFullscreenHandler);
 document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
+document.addEventListener('mozfullscreenchange', exitFullscreenHandler);
 document.addEventListener('msfullscreenchange', exitFullscreenHandler);
+
+// Específico para iOS Safari
+bgVideo.addEventListener('webkitendfullscreen', exitFullscreenHandler);
+bgVideo.addEventListener('webkitbeginfullscreen', () => {
+  // Quando entra em fullscreen no iOS
+  bgVideo.setAttribute('controls', 'controls');
+});
 
 // Picture-in-Picture
 document.getElementById('pipButton').addEventListener('click', async () => {
