@@ -101,6 +101,9 @@ bgVideo.addEventListener('ended', () => {
     updateTime();
     atualizarBotoesAvanco();
     renderPlaylist(index);
+  } else {
+    // Adicionar esta linha para mudar o botão para play quando não há próxima música
+    playPauseButton.innerHTML = textButtonPlay;
   }
 });
 
