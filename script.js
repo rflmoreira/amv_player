@@ -68,16 +68,6 @@ playPauseButton.addEventListener('touchend', (e) => {
   playPause();
 });
 
-playlistToggleButton.addEventListener('touchend', (e) => {
-  e.preventDefault();
-  playlistSection.classList.toggle('expanded');
-});
-
-playlistCloseButton.addEventListener('touchend', (e) => {
-  e.preventDefault();
-  playlistSection.classList.remove('expanded');
-});
-
 // Atalhos de teclado
 document.addEventListener("keydown", handleKeyPress);
 
