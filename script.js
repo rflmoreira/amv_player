@@ -1,4 +1,4 @@
-// Seletores dos elementos principais
+// Elementos principais da interface
 const bgVideo = document.getElementById('bg-video');
 const syncCanvas = document.getElementById('sync-canvas');
 const ctx = syncCanvas.getContext('2d');
@@ -25,7 +25,7 @@ let index = 0;
 let isPlaying = false;
 let isBuffering = false;
 
-// Inicialização única ao carregar a página
+// Configuração inicial quando a página carrega
 window.addEventListener('DOMContentLoaded', () => {
   index = 0;
   atualizarBackground();
@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', () => {
   atualizarBotoesAvanco();
   renderPlaylist(0);
   
-  // Adicionar tooltips nos botões
+  // Tooltips nos botões principais
   playPauseButton.title = "Reproduzir/Pausar (Espaço)";
   prevButton.title = "Música anterior (Seta esquerda)";
   nextButton.title = "Próxima música (Seta direita)";
@@ -47,12 +47,12 @@ window.addEventListener('DOMContentLoaded', () => {
   progressBar.title = "Clique para navegar na música";
 });
 
-// Event listeners únicos
+// Eventos dos botões principais
 prevButton.onclick = () => prevNextMusic("prev");
 nextButton.onclick = () => prevNextMusic();
 playPauseButton.onclick = () => playPause();
 
-// Adicionar eventos touch para iOS
+// Suporte touch para dispositivos móveis
 prevButton.addEventListener('touchend', (e) => {
   e.preventDefault();
   prevNextMusic("prev");
@@ -68,7 +68,7 @@ playPauseButton.addEventListener('touchend', (e) => {
   playPause();
 });
 
-// Atalhos de teclado
+// Atalhos do teclado
 document.addEventListener("keydown", handleKeyPress);
 
 function handleKeyPress(event) {
@@ -86,7 +86,7 @@ function handleKeyPress(event) {
   }
 }
 
-// Event listeners do vídeo
+// Eventos do player de vídeo
 bgVideo.ontimeupdate = () => updateTime();
 
 bgVideo.addEventListener('waiting', () => {
@@ -118,14 +118,14 @@ bgVideo.addEventListener('ended', () => {
     atualizarBotoesAvanco();
     renderPlaylist(index);
   } else {
-    // Adicionar esta linha para mudar o botão para play quando não há próxima música
+    // Volta o botão para play quando acaba
     playPauseButton.innerHTML = textButtonPlay;
   }
 });
 
 bgVideo.addEventListener('pause', hideControlsIfNotFullscreen);
 
-// Função para tocar ou pausar
+// Controle principal de play/pause
 const playPause = () => {
   if (index === 0) {
     index = 1;
@@ -157,7 +157,7 @@ const playPause = () => {
   }
 };
 
-// Troca de música/vídeo
+// Navegação entre músicas
 const prevNextMusic = (type = "next") => {
   if (type === "next") {
     index = (index + 1) % songs.length;
@@ -178,7 +178,7 @@ const prevNextMusic = (type = "next") => {
   renderPlaylist(index);
 };
 
-// Atualiza tempo e barra de progresso
+// Atualiza timer e barra de progresso
 const updateTime = () => {
   const durationFormatted = isNaN(bgVideo.duration) ? 0 : bgVideo.duration;
   const progressWidth = durationFormatted
@@ -211,7 +211,7 @@ const updateTime = () => {
   progress.style.width = progressWidth + "%";
 };
 
-// Troca o vídeo de fundo e configurações
+// Configura o vídeo de fundo
 function setVideoSources(src) {
   if (src) {
     bgVideo.src = src;
@@ -223,13 +223,13 @@ function setVideoSources(src) {
   }
 }
 
-// Atualiza nome e autor ao trocar de faixa
+// Atualiza informações da faixa
 function atualizarFaixa() {
   musicName.innerHTML = songs[index].name;
   musicAuthor.textContent = songs[index].author || "";
 }
 
-// Atualiza o estado dos botões de avançar e voltar
+// Controla estado dos botões prev/next
 function atualizarBotoesAvanco() {
   if (index === 0) {
     nextButton.disabled = true;
@@ -267,7 +267,7 @@ function atualizarBackground() {
   }
 }
 
-// Renderiza a lista de músicas
+// Monta a lista de reprodução
 function renderPlaylist(selectedIndex = 1) {
   playlistItems.innerHTML = "";
   for (let idx = 1; idx < songs.length - 1; idx++) {
@@ -284,7 +284,7 @@ function renderPlaylist(selectedIndex = 1) {
       li.style.background = "rgba(255,255,255,0.08)";
     }
     
-    // Adicionar eventos click e touch
+    // Eventos de seleção
     li.onclick = () => selectSong(idx);
     li.addEventListener('touchend', (e) => {
       e.preventDefault();
@@ -295,7 +295,7 @@ function renderPlaylist(selectedIndex = 1) {
   }
 }
 
-// Seleciona uma música da playlist
+// Seleciona música da playlist
 function selectSong(idx) {
   index = idx;
   renderPlaylist(idx);
@@ -303,7 +303,7 @@ function selectSong(idx) {
   
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
-    // Adicionar reprodução automática
+    // Toca automaticamente
     bgVideo.play().catch(() => {});
     playPauseButton.innerHTML = textButtonPause;
   } else {
@@ -318,7 +318,7 @@ function selectSong(idx) {
 
 const formatZero = (n) => (n < 10 ? "0" + n : n);
 
-// Permite clicar na barra de progresso para avançar o vídeo
+// Clique na barra de progresso
 progressBar.onclick = handleProgressClick;
 progressBar.addEventListener('touchend', handleProgressClick);
 
@@ -330,7 +330,7 @@ function handleProgressClick(e) {
   bgVideo.currentTime = newTime;
 }
 
-// Alterna entre a última faixa (ao vivo) e a segunda música ao clicar no botão AO VIVO
+// Botão AO VIVO - alterna entre stream e música normal
 document.addEventListener("click", handleAoVivoClick);
 document.addEventListener("touchend", handleAoVivoClick);
 
@@ -355,7 +355,7 @@ function handleAoVivoClick(e) {
   }
 }
 
-// Controles de playlist
+// Controles da playlist
 playlistToggleButton.addEventListener('click', () => {
   togglePlaylist();
 });
@@ -374,7 +374,7 @@ playlistCloseButton.addEventListener('touchend', (e) => {
   togglePlaylist();
 });
 
-// Canvas drawing
+// Desenha o vídeo no canvas
 function drawToCanvas() {
   if (!bgVideo.paused && !bgVideo.ended) {
     ctx.drawImage(bgVideo, 0, 0, syncCanvas.width, syncCanvas.height);
@@ -382,7 +382,7 @@ function drawToCanvas() {
   requestAnimationFrame(drawToCanvas);
 }
 
-// Função para esconder os controles quando não estiver em tela cheia
+// Esconde controles fora do fullscreen
 function hideControlsIfNotFullscreen() {
   const video = document.getElementById('bg-video');
   const isFullscreen =
@@ -390,12 +390,12 @@ function hideControlsIfNotFullscreen() {
     document.webkitFullscreenElement === video ||
     document.mozFullScreenElement === video ||
     document.msFullscreenElement === video ||
-    video.webkitDisplayingFullscreen; // Específico para iOS Safari
+    video.webkitDisplayingFullscreen; // iOS Safari
 
   if (!isFullscreen) {
     video.removeAttribute('controls');
     video.style.pointerEvents = 'none';
-    // Pausar a reprodução ao sair da tela cheia
+    // Pausa ao sair do fullscreen
     if (!video.paused) {
       video.pause();
       playPauseButton.innerHTML = textButtonPlay;
@@ -403,9 +403,9 @@ function hideControlsIfNotFullscreen() {
   }
 }
 
-// Handler de saída do fullscreen
+// Quando sai do fullscreen
 function exitFullscreenHandler() {
-  // Timeout maior para iOS
+  // Timeout maior pro iOS
   setTimeout(hideControlsIfNotFullscreen, 200);
 }
 
@@ -426,13 +426,13 @@ document.getElementById('fullscreenButton').addEventListener('click', function (
   }
 });
 
-// Event listeners de fullscreen (adicionar mais eventos para iOS)
+// Eventos de fullscreen (incluindo iOS)
 document.addEventListener('fullscreenchange', exitFullscreenHandler);
 document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
 document.addEventListener('mozfullscreenchange', exitFullscreenHandler);
 document.addEventListener('msfullscreenchange', exitFullscreenHandler);
 
-// Específico para iOS Safari
+// iOS Safari específico
 bgVideo.addEventListener('webkitendfullscreen', exitFullscreenHandler);
 bgVideo.addEventListener('webkitbeginfullscreen', () => {
   // Quando entra em fullscreen no iOS
@@ -452,7 +452,6 @@ document.getElementById('pipButton').addEventListener('click', async () => {
   }
 });
 
-// Exemplo de como modificar o JavaScript para usar a animação
 function togglePlaylist() {
   const playlistSection = document.getElementById('playlistSection');
   
