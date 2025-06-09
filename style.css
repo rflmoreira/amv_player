@@ -95,7 +95,8 @@ section {
 .music-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Mudado de center para flex-start */
+  width: 100%;
 }
 
 /* Nome da música centralizado */
@@ -109,6 +110,7 @@ section {
   text-decoration: none;
   color: #ffffff86;
   width: 100%;
+  max-width: 200px; /* Reduzido de 250px para 200px */
 }
 
 /* Novo estilo para o autor */
