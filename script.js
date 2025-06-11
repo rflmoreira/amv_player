@@ -286,10 +286,10 @@ function renderPlaylist(selectedIndex = 1) {
     
     // Eventos de seleção
     li.onclick = () => selectSong(idx);
-    li.addEventListener('touchend', (e) => {
+    /* li.addEventListener('touchend', (e) => {
       e.preventDefault();
       selectSong(idx);
-    });
+    }); */
     
     playlistItems.appendChild(li);
   }
