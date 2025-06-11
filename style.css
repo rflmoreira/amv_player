@@ -296,24 +296,15 @@ button {
   }
 }
 
-/* Mostra a barra de rolagem em dispositivos móveis */
+/* Mostra a barra de rolagem padrão em dispositivos móveis */
 @media (hover: none) and (pointer: coarse) {
+  #playlistSection ul {
+    scrollbar-width: thin; /* Firefox */
+    -ms-overflow-style: auto; /* IE/Edge */
+  }
+  
   #playlistSection ul::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  #playlistSection ul::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-  }
-  
-  #playlistSection ul::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-  }
-  
-  #playlistSection ul::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+    width: 8px; /* Largura padrão */
   }
 }
 
