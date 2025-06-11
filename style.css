@@ -278,6 +278,16 @@ button {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex: 1; /* Ocupa o espaço restante */
+  overflow-y: auto; /* Scroll apenas na lista */
+  padding-bottom: 40px; /* Espaçamento inferior */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Oculta a barra de rolagem no WebKit (Chrome, Safari) */
+#playlistSection ul::-webkit-scrollbar {
+  display: none;
 }
 
 #playlistCloseButton {
