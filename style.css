@@ -203,10 +203,11 @@ button {
 #playlistSection {
   position: fixed;
   left: 50%;
-  bottom: 90px; /* Reduzido de 120px para 90px */
+  bottom: 90px;
   width: 350px;
   max-width: 350px;
-  max-height: 60%; /* Reduzido de 70% para 60% */
+  height: 250px; /* Altura fixa ao invés de max-height calculado */
+  max-height: 250px; /* Mesma altura fixa */
   background: rgba(24,24,24,0.3);
   z-index: 1000;
   display: none;
