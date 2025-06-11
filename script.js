@@ -25,11 +25,6 @@ let index = 0;
 let isPlaying = false;
 let isBuffering = false;
 
-// Variáveis para controle de touch
-let isScrolling = false;
-let touchStartY = 0;
-let touchStartTime = 0;
-
 // Configuração inicial quando a página carrega
 window.addEventListener('DOMContentLoaded', () => {
   index = 0;
@@ -298,7 +293,6 @@ function renderPlaylist(selectedIndex = 1) {
     
     playlistItems.appendChild(li);
   }
-  handlePlaylistTouch();
 }
 
 // Seleciona música da playlist
@@ -477,70 +471,4 @@ function togglePlaylist() {
     playlistSection.offsetHeight;
     playlistSection.classList.add('expanded');
   }
-}
-
-// Função para detectar se é scroll ou clique
-function handlePlaylistTouch() {
-  const playlistItems = document.querySelectorAll('#playlistItems li');
-  
-  playlistItems.forEach((item, itemIndex) => {
-    // Touch start
-    item.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-      touchStartTime = Date.now();
-      isScrolling = false;
-    }, { passive: true });
-    
-    // Touch move
-    item.addEventListener('touchmove', (e) => {
-      const touchY = e.touches[0].clientY;
-      const deltaY = Math.abs(touchY - touchStartY);
-      
-      // Se moveu mais de 10px verticalmente, considera como scroll
-      if (deltaY > 10) {
-        isScrolling = true;
-      }
-    }, { passive: true });
-    
-    // Touch end
-    item.addEventListener('touchend', (e) => {
-      const touchDuration = Date.now() - touchStartTime;
-      
-      // Se não foi scroll e o toque foi rápido (menos de 300ms), executa o clique
-      if (!isScrolling && touchDuration < 300) {
-        e.preventDefault();
-        index = itemIndex;
-        setVideoSources();
-        atualizarFaixa();
-        renderPlaylist(index);
-        closePlaylist();
-      }
-      
-      // Reset das variáveis
-      isScrolling = false;
-      touchStartY = 0;
-      touchStartTime = 0;
-    });
-    
-    // Previne o evento click padrão em dispositivos touch
-    item.addEventListener('click', (e) => {
-      if ('ontouchstart' in window) {
-        e.preventDefault();
-        return false;
-      }
-      // Mantém funcionalidade para desktop
-      index = itemIndex;
-      setVideoSources();
-      atualizarFaixa();
-      renderPlaylist(index);
-      closePlaylist();
-    });
-  });
-}
-
-// Chame esta função após renderizar a playlist
-function renderPlaylist(activeIndex) {
-  // ...existing code...
-  // No final da função, adicione:
-  handlePlaylistTouch();
 }
