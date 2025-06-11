@@ -25,15 +25,10 @@ export default [
     author: "Knight Camelot",
   },
   {
-    src: "src/videos/Anime Mix - Legends Never Die [AMV].mp4",
-    name: "Anime Mix - Legends Never Die [AMV]",
-    author: "Blue Flash",
+    src: "src/videos/Anime Mix「AMV」- Whatever It Takes.mp4",
+    name: "Anime Mix「AMV」- Whatever It Takes",
+    author: "Royal Grindi",
   },
-  // {
-  //   src: "src/videos/Still Here x Goku vs Jiren - Dragon Ball Hardstyle「AMV」.mp4",
-  //   name: "Still Here x Goku vs Jiren",
-  //   author: "Yugoz",
-  // },
   {
     src: "",
     name: "AO VIVO",
