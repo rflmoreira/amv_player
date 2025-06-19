@@ -9,11 +9,11 @@ export default [
     name: "[AMV] - WARRIORS",
     author: "viberonin",
   },
-  // {
-  //   src: "src/videos/Boruto AMV - Ashes~On My Own.mp4",
-  //   name: "Boruto AMV - Ashes~On My Own",
-  //   author: "Indie Otaku",
-  // },
+  {
+    src: "src/videos/AFTER HOURS - TOBI VS KONAN [AMV⧸EDIT].mp4",
+    name: "AFTER HOURS - TOBI VS KONAN [AMV/EDIT]",
+    author: "P H E N I X",
+  },
   {
     src: "src/videos/Skyfall  - Demon Slayer [AMV].mp4",
     name: "Skyfall - Demon Slayer [AMV]",
