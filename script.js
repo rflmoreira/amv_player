@@ -294,7 +294,10 @@ function renderPlaylist(selectedIndex = 1) {
     }
     
     // Eventos de seleção
-    li.onclick = () => selectSong(idx);
+    li.onclick = () => {
+      selectSong(idx); // Garante que a música seja selecionada corretamente
+    };
+
     playlistItems.appendChild(li);
   }
 }
@@ -302,11 +305,16 @@ function renderPlaylist(selectedIndex = 1) {
 // Seleciona música da playlist
 function selectSong(idx) {
   index = idx;
+
+  // Atualiza a playlist imediatamente
   renderPlaylist(idx);
+
+  // Atualiza as informações da faixa
   atualizarFaixa();
-  
+
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
+
     // Toca automaticamente
     bgVideo.play().catch(() => {});
     playPauseButton.innerHTML = textButtonPause;
@@ -314,7 +322,8 @@ function selectSong(idx) {
     setVideoSources('');
     playPauseButton.innerHTML = textButtonPlay;
   }
-  
+
+  // Atualiza o restante da interface
   atualizarBackground();
   updateTime();
   atualizarBotoesAvanco();
