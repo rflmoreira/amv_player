@@ -391,6 +391,14 @@ button {
   color: #ffffff86 !important;
 }
 
+/* Estilos específicos para garantir a cor do ícone PiP */
+#pipButton .bx-window {
+  color: #ffffff86 !important;
+}
+#pipButton .bx-window::before {
+  color: #ffffff86 !important;
+}
+
 /* Aplicando a fonte Fredoka aos elementos que precisam */
 .player,
 .pip-btn,
