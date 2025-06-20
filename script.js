@@ -272,7 +272,8 @@ function atualizarBackground() {
 
 // Monta a lista de reprodução
 function renderPlaylist(selectedIndex = 1) {
-  playlistItems.innerHTML = "";
+  playlistItems.innerHTML = ""; // Limpa a lista para evitar duplicação de eventos
+
   for (let idx = 1; idx < songs.length - 1; idx++) { // Começa em 1 e vai até o penúltimo índice
     const song = songs[idx];
     const li = document.createElement("li");
@@ -293,10 +294,10 @@ function renderPlaylist(selectedIndex = 1) {
       li.style.color = "#ffffff86"; // Reseta a cor para os outros itens
     }
     
-    // Eventos de seleção
-    li.onclick = () => {
-      selectSong(idx); // Garante que a música seja selecionada corretamente
-    };
+    // Adiciona o evento de clique
+    li.addEventListener('click', () => {
+      selectSong(idx); // Seleciona a música ao clicar
+    });
 
     playlistItems.appendChild(li);
   }
