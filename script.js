@@ -317,14 +317,49 @@ function renderPlaylist(selectedIndex = 1) {
       selectSong(songIndex);
     };
     
+    // Variáveis para controlar o toque
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    
     // Eventos específicos para toque
-    li.addEventListener('touchstart', () => {
+    li.addEventListener('touchstart', (e) => {
+      // Guarda a posição inicial do toque
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
       li.style.background = "rgba(255,255,255,0.15)";
+    }, { passive: true });
+    
+    li.addEventListener('touchmove', (e) => {
+      // Detecta movimento vertical maior que 10px
+      const touchMoveY = e.touches[0].clientY;
+      const deltaY = Math.abs(touchMoveY - touchStartY);
+      
+      if (deltaY > 10) {
+        // Se o usuário deslizou mais de 10px, interpreta como scroll
+        li.style.background = idx === selectedIndex ? 
+          "rgba(255,255,255,0.08)" : "transparent";
+      }
     }, { passive: true });
     
     li.addEventListener('touchend', (e) => {
       e.preventDefault();
-      selectSong(songIndex);
+      
+      // Calcula o tempo e a distância do toque
+      const touchEndTime = Date.now();
+      const touchDuration = touchEndTime - touchStartTime;
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = Math.abs(touchEndY - touchStartY);
+      
+      // Considera como seleção apenas se:
+      // 1. O movimento vertical foi menor que 10px (não foi um scroll)
+      // 2. A duração do toque foi menor que 300ms (toque rápido)
+      if (deltaY < 10 && touchDuration < 300) {
+        selectSong(songIndex);
+      } else {
+        // Restaura o estilo se não for selecionado
+        li.style.background = idx === selectedIndex ? 
+          "rgba(255,255,255,0.08)" : "transparent";
+      }
     });
 
     playlistItems.appendChild(li);
