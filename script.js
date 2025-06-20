@@ -91,7 +91,7 @@ bgVideo.ontimeupdate = () => updateTime();
 
 bgVideo.addEventListener('waiting', () => {
   isBuffering = true;
-  currentTime.textContent = "Buffering...";
+  currentTime.textContent = "Carregando...";
 });
 
 bgVideo.addEventListener('playing', () => {
@@ -195,7 +195,7 @@ const updateTime = () => {
     : 0;
 
   if (isBuffering && index !== 0) {
-    currentTime.textContent = "Buffering...";
+    currentTime.textContent = "Carregando...";
     duration.textContent = "-:--";
   } else if (
     !bgVideo.src ||
@@ -223,10 +223,23 @@ const updateTime = () => {
 // Configura o vídeo de fundo
 function setVideoSources(src) {
   if (src) {
+    // Evento para monitorar o carregamento
+    const loadingHandler = () => {
+      currentTime.textContent = "Carregando...";
+    };
+    
+    bgVideo.addEventListener('loadstart', loadingHandler);
+    
     bgVideo.src = src;
     bgVideo.loop = (index === songs.length - 1);
     bgVideo.muted = false;
     bgVideo.load();
+    
+    // Remove o manipulador após o carregamento
+    bgVideo.addEventListener('canplay', () => {
+      bgVideo.removeEventListener('loadstart', loadingHandler);
+      updateTime();
+    }, { once: true });
   } else {
     bgVideo.src = '';
   }
@@ -294,9 +307,24 @@ function renderPlaylist(selectedIndex = 1) {
       li.style.color = "#ffffff86"; // Reseta a cor para os outros itens
     }
     
-    // Adiciona o evento de clique
-    li.addEventListener('click', () => {
-      selectSong(idx); // Seleciona a música ao clicar
+    // Use onclick em vez de addEventListener para evitar potenciais duplicações
+    const songIndex = idx; // Captura o índice em uma constante
+    
+    // Evento de clique para desktop
+    li.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      selectSong(songIndex);
+    };
+    
+    // Eventos específicos para toque
+    li.addEventListener('touchstart', () => {
+      li.style.background = "rgba(255,255,255,0.15)";
+    }, { passive: true });
+    
+    li.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      selectSong(songIndex);
     });
 
     playlistItems.appendChild(li);
@@ -305,36 +333,44 @@ function renderPlaylist(selectedIndex = 1) {
 
 // Seleciona música da playlist
 function selectSong(idx) {
-  // Pausa o vídeo atual antes de mudar
-  bgVideo.pause();
-
-  // Atualiza o índice da música
+  // Feedback visual imediato
+  const oldIndex = index;
   index = idx;
-
+  
   // Atualiza a playlist imediatamente
   renderPlaylist(idx);
-
-  // Atualiza as informações da faixa
+  
+  // Pausa o vídeo atual
+  bgVideo.pause();
+  
+  // Atualiza informações da faixa
   atualizarFaixa();
-
+  atualizarBackground();
+  atualizarBotoesAvanco();
+  
+  // Altera o botão para indicar carregamento
+  playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+  
+  // Configura e carrega o vídeo
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
-
-    // Toca automaticamente
-    bgVideo.play().then(() => {
-      playPauseButton.innerHTML = textButtonPause;
-    }).catch(() => {
-      playPauseButton.innerHTML = textButtonPlay;
-    });
+    
+    // Reproduz o vídeo com tratamento de erros adequado
+    bgVideo.play()
+      .then(() => {
+        playPauseButton.innerHTML = textButtonPause;
+        updateTime();
+      })
+      .catch((error) => {
+        console.error("Erro ao reproduzir:", error);
+        playPauseButton.innerHTML = textButtonPlay;
+        updateTime();
+      });
   } else {
     setVideoSources('');
     playPauseButton.innerHTML = textButtonPlay;
+    updateTime();
   }
-
-  // Atualiza o restante da interface
-  atualizarBackground();
-  updateTime();
-  atualizarBotoesAvanco();
 }
 
 const formatZero = (n) => (n < 10 ? "0" + n : n);
