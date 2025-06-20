@@ -358,51 +358,11 @@ button {
   width: 100%;
   height: 100%;
   display: block;
-  filter: saturate(1.2); /* Aumenta a saturação em 20% */
-}
-
-/* Estilos do botão Picture-in-Picture (PiP) */
-.pip-btn-container {
-  width: 100%;
-  text-align: center;
-  margin: 12px 0 8px 0;
-}
-
-.pip-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #ffffff86 !important;
-  font-size: 1rem;
-  padding: 8px 18px;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-
-.pip-btn-icon {
-  color: #ffffff86 !important;
-  font-size: 1.2rem !important;
-  vertical-align: middle;
-  margin-right: 6px;
-  display: inline-block;
-}
-
-.bx.pip-btn-icon::before {
-  color: #ffffff86 !important;
-}
-
-/* Estilos específicos para garantir a cor do ícone PiP */
-#pipButton .bx-window {
-  color: #ffffff86 !important;
-}
-#pipButton .bx-window::before {
-  color: #ffffff86 !important;
+  filter: saturate(1.2);
 }
 
 /* Aplicando a fonte Fredoka aos elementos que precisam */
 .player,
-.pip-btn,
-.pip-btn-icon,
 #playlistSection,
 #playlistSection h4,
 #playlistSection li,
