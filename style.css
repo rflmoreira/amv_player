@@ -372,7 +372,7 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-  color: #ffffff86;
+  color: #ffffff86 !important;
   font-size: 1rem;
   padding: 8px 18px;
   border-radius: 8px;
