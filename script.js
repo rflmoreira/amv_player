@@ -125,6 +125,36 @@ bgVideo.addEventListener('ended', () => {
 
 bgVideo.addEventListener('pause', hideControlsIfNotFullscreen);
 
+// Atualiza informações da faixa
+function atualizarFaixa() {
+  musicName.innerHTML = songs[index].name;
+  musicAuthor.textContent = songs[index].author || "";
+  
+  // Altera a cor do nome da música
+  changeMusicNameColor();
+}
+
+// Navegação entre músicas
+const prevNextMusic = (type = "next") => {
+  if (type === "next") {
+    index = (index + 1) % songs.length;
+  } else if (type === "prev") {
+    index = (index - 1 + songs.length) % songs.length;
+  }
+  setVideoSources(songs[index].src);
+  atualizarFaixa();
+  atualizarBackground();
+  if (songs[index].src) {
+    bgVideo.play().catch(() => {});
+    playPauseButton.innerHTML = textButtonPause;
+  } else {
+    playPauseButton.innerHTML = textButtonPlay;
+  }
+  updateTime();
+  atualizarBotoesAvanco();
+  renderPlaylist(index);
+};
+
 // Controle principal de play/pause
 const playPause = () => {
   if (index === 0) {
@@ -155,27 +185,6 @@ const playPause = () => {
     bgVideo.pause();
     playPauseButton.innerHTML = textButtonPlay;
   }
-};
-
-// Navegação entre músicas
-const prevNextMusic = (type = "next") => {
-  if (type === "next") {
-    index = (index + 1) % songs.length;
-  } else if (type === "prev") {
-    index = (index - 1 + songs.length) % songs.length;
-  }
-  setVideoSources(songs[index].src);
-  atualizarFaixa();
-  atualizarBackground();
-  if (songs[index].src) {
-    bgVideo.play().catch(()=>{});
-    playPauseButton.innerHTML = textButtonPause;
-  } else {
-    playPauseButton.innerHTML = textButtonPlay;
-  }
-  updateTime();
-  atualizarBotoesAvanco();
-  renderPlaylist(index);
 };
 
 // Atualiza timer e barra de progresso
@@ -223,12 +232,6 @@ function setVideoSources(src) {
   }
 }
 
-// Atualiza informações da faixa
-function atualizarFaixa() {
-  musicName.innerHTML = songs[index].name;
-  musicAuthor.textContent = songs[index].author || "";
-}
-
 // Controla estado dos botões prev/next
 function atualizarBotoesAvanco() {
   if (index === 0) {
@@ -270,7 +273,7 @@ function atualizarBackground() {
 // Monta a lista de reprodução
 function renderPlaylist(selectedIndex = 1) {
   playlistItems.innerHTML = "";
-  for (let idx = 1; idx < songs.length - 1; idx++) {
+  for (let idx = 1; idx < songs.length - 1; idx++) { // Começa em 1 e vai até o penúltimo índice
     const song = songs[idx];
     const li = document.createElement("li");
     li.textContent = song.author ? `${song.name} - ${song.author}` : song.name;
@@ -282,15 +285,16 @@ function renderPlaylist(selectedIndex = 1) {
     if (idx === selectedIndex) {
       li.style.fontWeight = "bold";
       li.style.background = "rgba(255,255,255,0.08)";
+      
+      // Aplica a mesma cor do nome da música
+      const currentColor = musicNameElement.style.color || "#ffffff86";
+      li.style.color = currentColor;
+    } else {
+      li.style.color = "#ffffff86"; // Reseta a cor para os outros itens
     }
     
     // Eventos de seleção
     li.onclick = () => selectSong(idx);
-    /* li.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      selectSong(idx);
-    }); */
-    
     playlistItems.appendChild(li);
   }
 }
@@ -450,6 +454,49 @@ document.getElementById('pipButton').addEventListener('click', async () => {
       console.error('Erro ao ativar PiP:', error);
     }
   }
+});
+
+// Lista de cores da paleta Catppuccin
+const catppuccinColors = [
+  'var(--catppuccin-flamingo)',
+  'var(--catppuccin-pink)',
+  'var(--catppuccin-mauve)',
+  'var(--catppuccin-red)',
+  'var(--catppuccin-maroon)',
+  'var(--catppuccin-peach)',
+  'var(--catppuccin-yellow)',
+  'var(--catppuccin-green)',
+  'var(--catppuccin-teal)',
+  'var(--catppuccin-sky)',
+  'var(--catppuccin-blue)',
+  'var(--catppuccin-lavender)',
+];
+
+// Seleciona o elemento do nome da música
+const musicNameElement = document.getElementById('musicName');
+
+// Função para alterar a cor do nome da música
+function changeMusicNameColor() {
+  // Não altera a cor na primeira faixa
+  if (index === 0) {
+    musicNameElement.style.color = ''; // Reseta para a cor padrão
+    renderPlaylist(index); // Atualiza a playlist
+    return;
+  }
+
+  // Escolhe uma cor aleatória da paleta
+  const randomColor = catppuccinColors[Math.floor(Math.random() * catppuccinColors.length)];
+  
+  // Aplica a cor ao elemento
+  musicNameElement.style.color = randomColor;
+
+  // Atualiza a playlist com a nova cor
+  renderPlaylist(index);
+}
+
+// Exemplo: Chamar a função sempre que a música mudar
+document.getElementById('nextButton').addEventListener('click', () => {
+  changeMusicNameColor();
 });
 
 function togglePlaylist() {

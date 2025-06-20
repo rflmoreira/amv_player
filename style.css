@@ -1,6 +1,22 @@
 /* Fonte principal do projeto */
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
+/* Paleta de cores Catppuccin */
+:root {
+  --catppuccin-flamingo: #f2cdcd;
+  --catppuccin-pink: #f5c2e7;
+  --catppuccin-mauve: #cba6f7;
+  --catppuccin-red: #f38ba8;
+  --catppuccin-maroon: #eba0ac;
+  --catppuccin-peach: #fab387;
+  --catppuccin-yellow: #f9e2af;
+  --catppuccin-green: #a6e3a1;
+  --catppuccin-teal: #94e2d5;
+  --catppuccin-sky: #89dceb;
+  --catppuccin-blue: #89b4fa;
+  --catppuccin-lavender: #b4befe;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -248,15 +264,15 @@ button {
 
 #playlistSection h4 {
   color: #ffffff86;
-  margin-top: 0;
-  margin-bottom: 15px;
+  margin: 0;
   font-weight: normal;
-  text-align: center;
-  width: 100%;
+  text-align: center; /* Centraliza o texto */
+  flex: 1; /* Permite que o título ocupe o espaço restante */
+  margin-left: 12px; /* Move o título um pouco para a direita */
 }
 
 #playlistSection li {
-  color: #ffffff86;
+  color: #ffffff86; /* Cor padrão */
   opacity: 0.85;
   transition: color 0.2s, background 0.2s;
   padding: 8px 12px;
@@ -269,7 +285,7 @@ button {
 
 #playlistSection li:hover {
   color: #ffffff86;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 #playlistSection ul {
@@ -291,14 +307,12 @@ button {
 }
 
 #playlistCloseButton {
-  position: absolute;
-  top: 15px;
-  right: 20px;
+  position: static; /* Remove o posicionamento absoluto */
+  margin-left: auto; /* Empurra o botão para a direita */
   background: none;
   border: none;
-  color: #fff;
+  color: #ffffff86;
   font-size: 1.5rem;
-  z-index: 101;
   padding: 5px;
   border-radius: 50%;
   width: 35px;
@@ -309,7 +323,16 @@ button {
 }
 
 #playlistCloseButton:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Adiciona um container flex para alinhar o título e o botão */
+#playlistSection .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Espaço entre o título e o botão */
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 /* Garante que o player tenha position:relative para o overlay funcionar */
@@ -323,7 +346,7 @@ button {
   max-width: 640px;
   aspect-ratio: 16 / 9;
   margin: 24px auto 0 auto;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #3a3a3a5d;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
