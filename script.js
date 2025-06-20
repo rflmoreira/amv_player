@@ -304,6 +304,10 @@ function renderPlaylist(selectedIndex = 1) {
 
 // Seleciona música da playlist
 function selectSong(idx) {
+  // Pausa o vídeo atual antes de mudar
+  bgVideo.pause();
+
+  // Atualiza o índice da música
   index = idx;
 
   // Atualiza a playlist imediatamente
@@ -316,8 +320,11 @@ function selectSong(idx) {
     setVideoSources(songs[idx].src);
 
     // Toca automaticamente
-    bgVideo.play().catch(() => {});
-    playPauseButton.innerHTML = textButtonPause;
+    bgVideo.play().then(() => {
+      playPauseButton.innerHTML = textButtonPause;
+    }).catch(() => {
+      playPauseButton.innerHTML = textButtonPlay;
+    });
   } else {
     setVideoSources('');
     playPauseButton.innerHTML = textButtonPlay;
