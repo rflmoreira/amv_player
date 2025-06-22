@@ -63,7 +63,7 @@ section {
   padding: 0.2rem 2rem;
   background-color: #00000086;
   border-radius: 20px;
-  box-shadow: 5px 5px 30px 7px #00000098;
+  box-shadow: 5px 5px 30px 7px #0000009f;
   backdrop-filter: saturate(180%) blur(13px);
   position: fixed;
   left: 50%;
@@ -237,7 +237,7 @@ button {
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
   border-radius: 20px;
-  box-shadow: 5px 5px 30px 7px #00000098;
+  box-shadow: 5px 5px 30px 7px #0000009f;
   backdrop-filter: blur(13px) saturate(180%);
   -webkit-backdrop-filter: blur(13px) saturate(180%);
   scrollbar-width: none;
@@ -269,7 +269,7 @@ button {
   flex: 1; /* Permite que o título ocupe o espaço restante */
   margin-left: 0; /* Remove a margem que estava deslocando o texto */
   position: relative;
-  left: 18px; /* Aumentado de 12px para 18px para mover mais para direita */
+  left: 20px; /* Aumentado de 12px para 20px para mover mais para direita */
 }
 
 #playlistSection li {
