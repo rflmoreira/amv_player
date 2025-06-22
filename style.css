@@ -269,7 +269,7 @@ button {
   flex: 1; /* Permite que o título ocupe o espaço restante */
   margin-left: 0; /* Remove a margem que estava deslocando o texto */
   position: relative;
-  left: 12px; /* Compensa o espaço do botão de fechar */
+  left: 18px; /* Aumentado de 12px para 18px para mover mais para direita */
 }
 
 #playlistSection li {
