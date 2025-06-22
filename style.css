@@ -269,7 +269,7 @@ button {
   flex: 1; /* Permite que o título ocupe o espaço restante */
   margin-left: 0; /* Remove a margem que estava deslocando o texto */
   position: relative;
-  left: 20px; /* Aumentado de 12px para 20px para mover mais para direita */
+  left: 23px; /* Aumentado de 12px para 20px para mover mais para direita */
 }
 
 #playlistSection li {
@@ -323,9 +323,9 @@ button {
   justify-content: center;
 }
 
-#playlistCloseButton:hover {
+/* #playlistCloseButton:hover {
   background: rgba(255, 255, 255, 0.1);
-}
+} */
 
 /* Adiciona um container flex para alinhar o título e o botão */
 #playlistSection .header {
