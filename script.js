@@ -156,20 +156,19 @@ const prevNextMusic = (type = "next") => {
     const minLoadingTime = 200;
     const startTime = Date.now();
 
-    bgVideo.oncanplay = null;
-    bgVideo.oncanplay = () => {
+    const canPlayHandler = () => {
       const elapsed = Date.now() - startTime;
       setTimeout(() => {
         playPauseButton.innerHTML = textButtonPause;
         updateTime();
       }, Math.max(0, minLoadingTime - elapsed));
-      bgVideo.oncanplay = null;
     };
+    bgVideo.addEventListener('canplay', canPlayHandler, { once: true });
 
-    bgVideo.play().catch(() => {
+    bgVideo.play().catch((error) => {
+      console.error("Erro ao reproduzir:", error);
       playPauseButton.innerHTML = textButtonPlay;
       updateTime();
-      bgVideo.oncanplay = null;
     });
   } else {
     setVideoSources('');
