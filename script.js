@@ -141,18 +141,41 @@ const prevNextMusic = (type = "next") => {
   } else if (type === "prev") {
     index = (index - 1 + songs.length) % songs.length;
   }
-  setVideoSources(songs[index].src);
+
+  renderPlaylist(index);
+  bgVideo.pause();
   atualizarFaixa();
   atualizarBackground();
-  if (songs[index].src) {
-    bgVideo.play().catch(() => {});
-    playPauseButton.innerHTML = textButtonPause;
-  } else {
-    playPauseButton.innerHTML = textButtonPlay;
-  }
-  updateTime();
   atualizarBotoesAvanco();
-  renderPlaylist(index);
+
+  playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+
+  if (songs[index].src) {
+    setVideoSources(songs[index].src);
+
+    const minLoadingTime = 200;
+    const startTime = Date.now();
+
+    bgVideo.oncanplay = null;
+    bgVideo.oncanplay = () => {
+      const elapsed = Date.now() - startTime;
+      setTimeout(() => {
+        playPauseButton.innerHTML = textButtonPause;
+        updateTime();
+      }, Math.max(0, minLoadingTime - elapsed));
+      bgVideo.oncanplay = null;
+    };
+
+    bgVideo.play().catch(() => {
+      playPauseButton.innerHTML = textButtonPlay;
+      updateTime();
+      bgVideo.oncanplay = null;
+    });
+  } else {
+    setVideoSources('');
+    playPauseButton.innerHTML = textButtonPlay;
+    updateTime();
+  }
 };
 
 // Controle principal de play/pause
