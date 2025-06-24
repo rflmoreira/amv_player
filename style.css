@@ -3,7 +3,7 @@
 
 /* Paleta de cores Catppuccin */
 :root {
-  --catppuccin-flamingo: #f2cdcd;
+  /* Removido: --catppuccin-flamingo: #f2cdcd; */
   --catppuccin-pink: #f5c2e7;
   --catppuccin-mauve: #cba6f7;
   --catppuccin-red: #f38ba8;
@@ -263,31 +263,65 @@ button {
 
 #playlistSection h4 {
   color: #ffffff86;
-  margin: 0;
+  margin: 0 auto;
   font-weight: normal;
-  text-align: center; /* Mantém o texto centralizado */
-  flex: 1; /* Permite que o título ocupe o espaço restante */
-  margin-left: 0; /* Remove a margem que estava deslocando o texto */
+  text-align: center;
+  flex: 0 1 auto;
+  width: 100%;
   position: relative;
-  left: 23px; /* Aumentado de 12px para 20px para mover mais para direita */
+  z-index: 1;
 }
 
 #playlistSection li {
-  color: #ffffff86; /* Cor padrão */
+  color: #ffffff86;
   opacity: 0.85;
-  transition: color 0.2s, background 0.2s;
+  transition: color 0.2s, background 0.2s, border-radius 0.2s;
   padding: 8px 12px;
-  border-radius: 8px;
   margin-bottom: 4px;
   width: 100%;
   text-align: left;
   list-style: none;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+  border-radius: 0; /* padrão */
+  overflow: visible;
 }
 
-#playlistSection li:hover {
-  color: #ffffff86;
-  background: rgba(255, 255, 255, 0.08);
+/* Linha reta entre os itens, exceto no último */
+#playlistSection li:not(:last-child)::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: #ffffff18;
+  border-radius: 0; /* sempre reta */
+  pointer-events: none;
+  z-index: 0;
 }
+
+#playlistSection li:last-child::after {
+  display: none;
+}
+
+/* Aplica border-radius em hover, selecionado e ambos */
+#playlistSection li:hover,
+#playlistSection li.selected,
+#playlistSection li.selected:hover {
+  background: #ffffff10;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+/* Remova estes blocos para não sobrescrever o border-radius:
+#playlistSection li:hover::after,
+#playlistSection li.selected::after,
+#playlistSection li:last-child:hover::after,
+#playlistSection li:last-child.selected::after
+*/
 
 #playlistSection ul {
   width: 100%;
@@ -308,32 +342,36 @@ button {
 }
 
 #playlistCloseButton {
-  position: static; /* Remove o posicionamento absoluto */
-  margin-left: auto; /* Empurra o botão para a direita */
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 2;
   background: none;
   border: none;
   color: #ffffff86;
-  font-size: 1.5rem;
-  padding: 5px;
-  border-radius: 50%;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 24px;
+  min-height: 24px;
+  line-height: 1;
+  padding: 0;
 }
 
 /* #playlistCloseButton:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
 } */
 
 /* Adiciona um container flex para alinhar o título e o botão */
 #playlistSection .header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Espaço entre o título e o botão */
+  justify-content: center; /* Centraliza o conteúdo */
   width: 100%;
   margin-bottom: 15px;
+  position: relative;
 }
 
 /* Garante que o player tenha position:relative para o overlay funcionar */
@@ -383,13 +421,8 @@ button {
 #fullscreenButton,
 #pipButton,
 .progress-bar,
-#playlistItems li,
 #btn-ao-vivo {
   cursor: pointer !important;
-}
-
-.botao-desativado {
-  cursor: not-allowed !important;
 }
 
 /* Melhorar responsividade touch no iOS */
@@ -408,14 +441,6 @@ button, .clickable {
   min-height: 44px;
   min-width: 44px;
   touch-action: manipulation;
-}
-
-/* Itens da playlist */
-#playlistItems li {
-  touch-action: manipulation;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
 }
 
 /* Oculta a barra de rolagem no desktop (WebKit) */

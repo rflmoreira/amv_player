@@ -292,19 +292,20 @@ function renderPlaylist(selectedIndex = 1) {
     const li = document.createElement("li");
     li.textContent = song.author ? `${song.name} - ${song.author}` : song.name;
     li.style.padding = "6px 2px";
-    li.style.borderBottom = "1px solid rgba(255,255,255,0.1)";
     li.style.cursor = "pointer";
     li.style.webkitTapHighlightColor = "rgba(255,255,255,0.1)";
     
     if (idx === selectedIndex) {
       li.style.fontWeight = "bold";
       li.style.background = "rgba(255,255,255,0.08)";
+      li.style.borderRadius = "8px"; // Adiciona borda arredondada
       
       // Aplica a mesma cor do nome da música
       const currentColor = musicNameElement.style.color || "#ffffff86";
       li.style.color = currentColor;
     } else {
       li.style.color = "#ffffff86"; // Reseta a cor para os outros itens
+      li.style.borderRadius = "";   // Remove o border-radius dos não selecionados
     }
     
     // Use onclick em vez de addEventListener para evitar potenciais duplicações
@@ -368,39 +369,40 @@ function renderPlaylist(selectedIndex = 1) {
 
 // Seleciona música da playlist
 function selectSong(idx) {
-  // Feedback visual imediato
-  const oldIndex = index;
   index = idx;
-  
-  // Atualiza a playlist imediatamente
   renderPlaylist(idx);
-  
-  // Pausa o vídeo atual
   bgVideo.pause();
-  
-  // Atualiza informações da faixa
   atualizarFaixa();
   atualizarBackground();
   atualizarBotoesAvanco();
-  
-  // Altera o botão para indicar carregamento
+
   playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
-  
-  // Configura e carrega o vídeo
+
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
-    
-    // Reproduz o vídeo com tratamento de erros adequado
-    bgVideo.play()
-      .then(() => {
+
+    const minLoadingTime = 200;
+    const startTime = Date.now();
+
+    // Remove qualquer listener anterior para evitar múltiplas execuções
+    bgVideo.oncanplay = null;
+
+    bgVideo.oncanplay = () => {
+      const elapsed = Date.now() - startTime;
+      setTimeout(() => {
         playPauseButton.innerHTML = textButtonPause;
         updateTime();
-      })
-      .catch((error) => {
-        console.error("Erro ao reproduzir:", error);
-        playPauseButton.innerHTML = textButtonPlay;
-        updateTime();
-      });
+      }, Math.max(0, minLoadingTime - elapsed));
+      bgVideo.oncanplay = null; // Remove o listener após executar
+    };
+
+    // Tenta dar play, mas só troca o botão no canplay
+    bgVideo.play().catch((error) => {
+      console.error("Erro ao reproduzir:", error);
+      playPauseButton.innerHTML = textButtonPlay;
+      updateTime();
+      bgVideo.oncanplay = null;
+    });
   } else {
     setVideoSources('');
     playPauseButton.innerHTML = textButtonPlay;
@@ -546,7 +548,7 @@ document.getElementById('pipButton').addEventListener('click', async () => {
 
 // Lista de cores da paleta Catppuccin
 const catppuccinColors = [
-  'var(--catppuccin-flamingo)',
+  // Removido: 'var(--catppuccin-flamingo)',
   'var(--catppuccin-pink)',
   'var(--catppuccin-mauve)',
   'var(--catppuccin-red)',
@@ -582,7 +584,7 @@ function changeMusicNameColor() {
   renderPlaylist(index);
 }
 
-// Exemplo: Chamar a função sempre que a música mudar
+// função sempre que a música mudar
 document.getElementById('nextButton').addEventListener('click', () => {
   changeMusicNameColor();
 });
