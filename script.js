@@ -185,9 +185,13 @@ const playPause = () => {
     setVideoSources(songs[index].src);
     atualizarFaixa();
     atualizarBackground();
+    playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+    bgVideo.oncanplay = () => {
+      playPauseButton.innerHTML = textButtonPause;
+      updateTime();
+      bgVideo.oncanplay = null;
+    };
     bgVideo.play();
-    playPauseButton.innerHTML = textButtonPause;
-    updateTime();
     atualizarBotoesAvanco();
     renderPlaylist(index);
     return;
@@ -198,12 +202,17 @@ const playPause = () => {
       setVideoSources(songs[index].src);
       bgVideo.currentTime = 0;
     }
+    playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+    bgVideo.oncanplay = () => {
+      if (index === songs.length - 1) {
+        playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
+      } else {
+        playPauseButton.innerHTML = textButtonPause;
+      }
+      updateTime();
+      bgVideo.oncanplay = null;
+    };
     bgVideo.play();
-    if (index === songs.length - 1) {
-      playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
-    } else {
-      playPauseButton.innerHTML = textButtonPause;
-    }
   } else {
     bgVideo.pause();
     playPauseButton.innerHTML = textButtonPlay;
@@ -620,15 +629,17 @@ function togglePlaylist() {
     playlistSection.classList.add('closing');
     playlistSection.classList.remove('expanded');
     
-    setTimeout(() => {
+    // Só esconde após a transição
+    playlistSection.addEventListener('transitionend', function handler() {
       playlistSection.style.display = 'none';
       playlistSection.classList.remove('closing');
-    }, 300); // Tempo da transição
+      playlistSection.removeEventListener('transitionend', handler);
+    });
   } else {
     // Abrir playlist
     playlistSection.style.display = 'flex';
     // Força o reflow para garantir que a mudança de display seja aplicada
-    playlistSection.offsetHeight;
+    void playlistSection.offsetWidth;
     playlistSection.classList.add('expanded');
   }
 }
