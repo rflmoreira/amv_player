@@ -164,11 +164,14 @@ const prevNextMusic = (type = "next") => {
       }, Math.max(0, minLoadingTime - elapsed));
     };
     bgVideo.addEventListener('canplay', canPlayHandler, { once: true });
+    bgVideo.addEventListener('playing', canPlayHandler, { once: true });
 
     bgVideo.play().catch((error) => {
       console.error("Erro ao reproduzir:", error);
       playPauseButton.innerHTML = textButtonPlay;
       updateTime();
+      bgVideo.removeEventListener('canplay', canPlayHandler);
+      bgVideo.removeEventListener('playing', canPlayHandler);
     });
   } else {
     setVideoSources('');
@@ -185,12 +188,22 @@ const playPause = () => {
     atualizarFaixa();
     atualizarBackground();
     playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
-    bgVideo.oncanplay = () => {
+    
+    const playHandler = () => {
       playPauseButton.innerHTML = textButtonPause;
       updateTime();
-      bgVideo.oncanplay = null;
+      bgVideo.removeEventListener('canplay', playHandler);
+      bgVideo.removeEventListener('playing', playHandler);
     };
-    bgVideo.play();
+    
+    bgVideo.addEventListener('canplay', playHandler, { once: true });
+    bgVideo.addEventListener('playing', playHandler, { once: true });
+    
+    bgVideo.play().catch(() => {
+      playPauseButton.innerHTML = textButtonPlay;
+      bgVideo.removeEventListener('canplay', playHandler);
+      bgVideo.removeEventListener('playing', playHandler);
+    });
     atualizarBotoesAvanco();
     renderPlaylist(index);
     return;
@@ -201,17 +214,42 @@ const playPause = () => {
       setVideoSources(songs[index].src);
       bgVideo.currentTime = 0;
     }
-    playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
-    bgVideo.oncanplay = () => {
+    
+    // Verifica se o vídeo já está pronto para reproduzir
+    if (bgVideo.readyState >= 3) { // HAVE_FUTURE_DATA ou maior
+      // Vídeo já está carregado, pode reproduzir imediatamente
       if (index === songs.length - 1) {
         playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
       } else {
         playPauseButton.innerHTML = textButtonPause;
       }
-      updateTime();
-      bgVideo.oncanplay = null;
-    };
-    bgVideo.play();
+      bgVideo.play().catch(() => {
+        playPauseButton.innerHTML = textButtonPlay;
+      });
+    } else {
+      // Vídeo ainda não está carregado, mostra animação de loading
+      playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+      
+      const playHandler = () => {
+        if (index === songs.length - 1) {
+          playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
+        } else {
+          playPauseButton.innerHTML = textButtonPause;
+        }
+        updateTime();
+        bgVideo.removeEventListener('canplay', playHandler);
+        bgVideo.removeEventListener('playing', playHandler);
+      };
+      
+      bgVideo.addEventListener('canplay', playHandler, { once: true });
+      bgVideo.addEventListener('playing', playHandler, { once: true });
+      
+      bgVideo.play().catch(() => {
+        playPauseButton.innerHTML = textButtonPlay;
+        bgVideo.removeEventListener('canplay', playHandler);
+        bgVideo.removeEventListener('playing', playHandler);
+      });
+    }
   } else {
     bgVideo.pause();
     playPauseButton.innerHTML = textButtonPlay;
@@ -415,24 +453,24 @@ function selectSong(idx) {
     const minLoadingTime = 200;
     const startTime = Date.now();
 
-    // Remove qualquer listener anterior para evitar múltiplas execuções
-    bgVideo.oncanplay = null;
-
-    bgVideo.oncanplay = () => {
+    const playHandler = () => {
       const elapsed = Date.now() - startTime;
       setTimeout(() => {
         playPauseButton.innerHTML = textButtonPause;
         updateTime();
       }, Math.max(0, minLoadingTime - elapsed));
-      bgVideo.oncanplay = null; // Remove o listener após executar
     };
+
+    bgVideo.addEventListener('canplay', playHandler, { once: true });
+    bgVideo.addEventListener('playing', playHandler, { once: true });
 
     // Tenta dar play, mas só troca o botão no canplay
     bgVideo.play().catch((error) => {
       console.error("Erro ao reproduzir:", error);
       playPauseButton.innerHTML = textButtonPlay;
       updateTime();
-      bgVideo.oncanplay = null;
+      bgVideo.removeEventListener('canplay', playHandler);
+      bgVideo.removeEventListener('playing', playHandler);
     });
   } else {
     setVideoSources('');
