@@ -98,6 +98,41 @@ window.addEventListener('DOMContentLoaded', () => {
   if (lastLiveSong !== null && liveExitTime > 0) {
     playPauseButton.title = "Retomar transmissão ao vivo (Espaço)";
   }
+  
+  // configuração dos botões de tela cheia e PiP
+  const fullscreenButton = document.getElementById('fullscreenButton');
+  if (fullscreenButton) {
+    fullscreenButton.addEventListener('click', function () {
+      const video = document.getElementById('bg-video');
+      video.setAttribute('controls', 'controls');
+      video.style.pointerEvents = 'auto';
+
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitEnterFullscreen) {
+        video.webkitEnterFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    });
+  }
+
+  const pipButton = document.getElementById('pipButton');
+  if (pipButton) {
+    pipButton.addEventListener('click', async () => {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+      } else {
+        try {
+          await bgVideo.requestPictureInPicture();
+        } catch (error) {
+          console.error('Erro ao ativar PiP:', error);
+        }
+      }
+    });
+  }
 });
 
 // salva estado ao fechar/recarregar
@@ -1212,23 +1247,6 @@ function exitFullscreenHandler() {
   setTimeout(hideControlsIfNotFullscreen, 200);
 }
 
-// botão de tela cheia
-document.getElementById('fullscreenButton').addEventListener('click', function () {
-  const video = document.getElementById('bg-video');
-  video.setAttribute('controls', 'controls');
-  video.style.pointerEvents = 'auto';
-
-  if (video.requestFullscreen) {
-    video.requestFullscreen();
-  } else if (video.webkitEnterFullscreen) {
-    video.webkitEnterFullscreen();
-  } else if (video.webkitRequestFullscreen) {
-    video.webkitRequestFullscreen();
-  } else if (video.msRequestFullscreen) {
-    video.msRequestFullscreen();
-  }
-});
-
 // eventos de fullscreen (incluindo iOS)
 document.addEventListener('fullscreenchange', exitFullscreenHandler);
 document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
@@ -1240,19 +1258,6 @@ bgVideo.addEventListener('webkitendfullscreen', exitFullscreenHandler);
 bgVideo.addEventListener('webkitbeginfullscreen', () => {
   // quando entra em fullscreen no iOS
   bgVideo.setAttribute('controls', 'controls');
-});
-
-// Picture-in-Picture
-document.getElementById('pipButton').addEventListener('click', async () => {
-  if (document.pictureInPictureElement) {
-    await document.exitPictureInPicture();
-  } else {
-    try {
-      await bgVideo.requestPictureInPicture();
-    } catch (error) {
-      console.error('Erro ao ativar PiP:', error);
-    }
-  }
 });
 
 // cores da paleta Catppuccin
