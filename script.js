@@ -400,20 +400,18 @@ function renderPlaylist(selectedIndex = 1) {
     }, { passive: true });
     
     li.addEventListener('touchmove', (e) => {
-      // Detecta movimento vertical maior que 10px
+      // Detecta movimento vertical maior que 8px
       const touchMoveY = e.touches[0].clientY;
       const deltaY = Math.abs(touchMoveY - touchStartY);
       
-      if (deltaY > 10) {
-        // Se o usuário deslizou mais de 10px, interpreta como scroll
+      if (deltaY > 8) {
+        // Se o usuário deslizou mais de 8px, interpreta como scroll
         li.style.background = idx === selectedIndex ? 
           "rgba(255,255,255,0.08)" : "transparent";
       }
     }, { passive: true });
     
     li.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      
       // Calcula o tempo e a distância do toque
       const touchEndTime = Date.now();
       const touchDuration = touchEndTime - touchStartTime;
@@ -421,12 +419,15 @@ function renderPlaylist(selectedIndex = 1) {
       const deltaY = Math.abs(touchEndY - touchStartY);
       
       // Considera como seleção apenas se:
-      // 1. O movimento vertical foi menor que 10px (não foi um scroll)
+      // 1. O movimento vertical foi menor que 8px (não foi um scroll)
       // 2. A duração do toque foi menor que 300ms (toque rápido)
-      if (deltaY < 10 && touchDuration < 300) {
+      if (deltaY < 8 && touchDuration < 300) {
+        e.preventDefault();
+        e.stopPropagation();
         selectSong(songIndex);
       } else {
-        // Restaura o estilo se não for selecionado
+        // Se foi um scroll, não impede o comportamento padrão
+        // Apenas restaura o estilo se não for selecionado
         li.style.background = idx === selectedIndex ? 
           "rgba(255,255,255,0.08)" : "transparent";
       }
