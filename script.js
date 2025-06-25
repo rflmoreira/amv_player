@@ -363,6 +363,7 @@ function renderPlaylist(selectedIndex = 1) {
     li.style.padding = "6px 2px";
     li.style.cursor = "pointer";
     li.style.webkitTapHighlightColor = "rgba(255,255,255,0.1)";
+    li.style.touchAction = "pan-y"; // Permite scroll vertical
     
     if (idx === selectedIndex) {
       li.style.fontWeight = "bold";
@@ -377,60 +378,70 @@ function renderPlaylist(selectedIndex = 1) {
       li.style.borderRadius = "";   // Remove o border-radius dos não selecionados
     }
     
-    // Use onclick em vez de addEventListener para evitar potenciais duplicações
-    const songIndex = idx; // Captura o índice em uma constante
+    // Captura o índice em uma constante
+    const songIndex = idx;
     
-    // Evento de clique para desktop
-    li.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      selectSong(songIndex);
+    // Variáveis para controlar o toque (declaradas fora dos eventos)
+    let touchData = {
+      startY: 0,
+      startTime: 0,
+      moved: false
     };
     
-    // Variáveis para controlar o toque
-    let touchStartY = 0;
-    let touchStartTime = 0;
-    
-    // Eventos específicos para toque
-    li.addEventListener('touchstart', (e) => {
-      // Guarda a posição inicial do toque
-      touchStartY = e.touches[0].clientY;
-      touchStartTime = Date.now();
-      li.style.background = "rgba(255,255,255,0.15)";
-    }, { passive: true });
-    
-    li.addEventListener('touchmove', (e) => {
-      // Detecta movimento vertical maior que 8px
-      const touchMoveY = e.touches[0].clientY;
-      const deltaY = Math.abs(touchMoveY - touchStartY);
-      
-      if (deltaY > 8) {
-        // Se o usuário deslizou mais de 8px, interpreta como scroll
-        li.style.background = idx === selectedIndex ? 
-          "rgba(255,255,255,0.08)" : "transparent";
+    // Evento único para clique/toque usando pointer events (mais moderno)
+    const handlePointerDown = (e) => {
+      if (e.pointerType === 'touch') {
+        touchData.startY = e.clientY;
+        touchData.startTime = Date.now();
+        touchData.moved = false;
+        li.style.background = "rgba(255,255,255,0.15)";
       }
-    }, { passive: true });
+    };
     
-    li.addEventListener('touchend', (e) => {
-      // Calcula o tempo e a distância do toque
-      const touchEndTime = Date.now();
-      const touchDuration = touchEndTime - touchStartTime;
-      const touchEndY = e.changedTouches[0].clientY;
-      const deltaY = Math.abs(touchEndY - touchStartY);
-      
-      // Considera como seleção apenas se:
-      // 1. O movimento vertical foi menor que 8px (não foi um scroll)
-      // 2. A duração do toque foi menor que 300ms (toque rápido)
-      if (deltaY < 8 && touchDuration < 300) {
+    const handlePointerMove = (e) => {
+      if (e.pointerType === 'touch') {
+        const deltaY = Math.abs(e.clientY - touchData.startY);
+        if (deltaY > 10) {
+          touchData.moved = true;
+          li.style.background = idx === selectedIndex ? 
+            "rgba(255,255,255,0.08)" : "transparent";
+        }
+      }
+    };
+    
+    const handlePointerUp = (e) => {
+      if (e.pointerType === 'touch') {
+        const touchDuration = Date.now() - touchData.startTime;
+        const deltaY = Math.abs(e.clientY - touchData.startY);
+        
+        // Toque rápido e sem movimento = seleção
+        if (!touchData.moved && deltaY < 10 && touchDuration < 250) {
+          e.preventDefault();
+          e.stopPropagation();
+          selectSong(songIndex);
+        } else {
+          // Restaura o estilo
+          li.style.background = idx === selectedIndex ? 
+            "rgba(255,255,255,0.08)" : "transparent";
+        }
+      } else {
+        // Clique do mouse
         e.preventDefault();
         e.stopPropagation();
         selectSong(songIndex);
-      } else {
-        // Se foi um scroll, não impede o comportamento padrão
-        // Apenas restaura o estilo se não for selecionado
-        li.style.background = idx === selectedIndex ? 
-          "rgba(255,255,255,0.08)" : "transparent";
       }
+    };
+    
+    // Usa pointer events que são mais robustos
+    li.addEventListener('pointerdown', handlePointerDown);
+    li.addEventListener('pointermove', handlePointerMove);
+    li.addEventListener('pointerup', handlePointerUp);
+    
+    // Fallback para clique simples em caso de não suporte a pointer events
+    li.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      selectSong(songIndex);
     });
 
     playlistItems.appendChild(li);
@@ -672,6 +683,9 @@ function togglePlaylist() {
       playlistSection.style.display = 'none';
       playlistSection.classList.remove('closing');
       playlistSection.removeEventListener('transitionend', handler);
+      
+      // Limpa a playlist ao fechar para evitar acúmulo de eventos
+      playlistItems.innerHTML = "";
     });
   } else {
     // Abrir playlist
@@ -679,5 +693,10 @@ function togglePlaylist() {
     // Força o reflow para garantir que a mudança de display seja aplicada
     void playlistSection.offsetWidth;
     playlistSection.classList.add('expanded');
+    
+    // Regenera a playlist ao abrir para garantir eventos limpos
+    setTimeout(() => {
+      renderPlaylist(index);
+    }, 50);
   }
 }
