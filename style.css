@@ -1,10 +1,9 @@
-/* Fonte principal do projeto */
+/* fontes */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
-/* Paleta de cores Catppuccin */
+/* cores catppuccin */
 :root {
-  /* Removido: --catppuccin-flamingo: #f2cdcd; */
   --catppuccin-pink: #f5c2e7;
   --catppuccin-mauve: #cba6f7;
   --catppuccin-red: #f38ba8;
@@ -18,27 +17,26 @@
   --catppuccin-lavender: #b4befe;
 }
 
+/* reset básico */
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-/* Centraliza tudo na tela */
 body {
   display: block;
   height: 100vh;
   margin: 0;
-  background: #000000; /* Só o fundo animado aparece */
+  background: #000000;
 }
 
-/* Fundo da capa */
+/* capa de fundo */
 .body-capa {
   background: url('src/capa.jpg') no-repeat center center fixed;
   background-size: cover;
 }
 
-/* Centralização dos elementos principais */
 section {
   display: flex;
   justify-content: center;
@@ -47,7 +45,7 @@ section {
   flex-direction: column;
 }
 
-/* Classe comum para elementos com fonte Fredoka */
+/* fredoka font */
 .fredoka-font {
   font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
@@ -56,7 +54,7 @@ section {
   font-variation-settings: "wdth" 120;
 }
 
-/* Área do player com visual moderno */
+/* player principal */
 .player {
   display: flex;
   flex-direction: column;
@@ -77,7 +75,7 @@ section {
   box-sizing: border-box;
 }
 
-/* Exibição dos tempos de música */
+/* timer da música */
 .time {
   display: flex;
   align-items: center;
@@ -89,12 +87,11 @@ section {
   color: #ffffff86;
 }
 
-/* Rodapé ocupa toda a largura */
 .footer {
   width: 100%;
 }
 
-/* Barra de progresso da música */
+/* barra de progresso */
 .progress-bar {
   height: 8px;
   background-color: #3a3a3a5d;
@@ -108,15 +105,15 @@ section {
   border-radius: 5px;
 }
 
-/* Container das informações da música */
+/* info da música */
 .music-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Mudado de center para flex-start */
+  align-items: flex-start;
   width: 100%;
 }
 
-/* Nome da música centralizado */
+/* nome da música */
 #musicName {
   text-align: left;
   overflow: hidden;
@@ -127,10 +124,10 @@ section {
   text-decoration: none;
   color: #ffffff86;
   width: 100%;
-  max-width: 200px; /* Reduzido de 250px para 200px */
+  max-width: 200px;
 }
 
-/* Novo estilo para o autor */
+/* autor da música */
 .music-author {
   font-size: 0.85rem;
   color: #ffffff86;
@@ -141,7 +138,7 @@ section {
   display: block;
 }
 
-/* Botões alinhados */
+/* botões */
 #container-botoes {
   width: 100%;
   display: flex;
@@ -155,13 +152,12 @@ button {
   padding: 10px;
 }
 
-/* Link sem sublinhado */
 #meuLink {
   text-decoration: none;
   color: inherit;
 }
 
-/* Botão desativado fica apagado e sem interação */
+/* botão desativado */
 .botao-desativado {
   opacity: 0.5;
   pointer-events: none;
@@ -169,26 +165,26 @@ button {
   cursor: not-allowed !important;
 }
 
-/* Esconde os controles nativos do vídeo de fundo apenas fora do fullscreen */
+/* esconde controles do vídeo fora do fullscreen */
 #bg-video:not(:fullscreen)::-webkit-media-controls,
 #bg-video:not(:-webkit-full-screen)::-webkit-media-controls {
   display: none !important;
 }
 
-/* Permite que o vídeo de fundo não capture eventos do mouse */
+/* vídeo de fundo */
 #bg-video {
   pointer-events: none;
-  filter: saturate(1.25); /* Aumenta a saturação em 25% */
+  filter: saturate(1.25);
 }
 
-/* Permite interação com o vídeo em fullscreen */
+/* fullscreen video */
 :fullscreen #bg-video,
 :-webkit-full-screen #bg-video {
   pointer-events: auto !important;
   z-index: 9999 !important;
 }
 
-/* Estilo para o cabeçalho do player */
+/* header do player */
 .player-header {
   display: flex;
   align-items: center;
@@ -198,7 +194,7 @@ button {
   flex-direction: column;
 }
 
-/* Estilo para a seção do autor em tela cheia */
+/* autor em fullscreen */
 .author-fullscreen {
   display: flex;
   align-items: center;
@@ -208,7 +204,7 @@ button {
   gap: 0.5rem;
 }
 
-/* Informações da música (nome e autor) */
+/* info da música */
 .music-info {
   display: flex;
   flex-direction: column;
@@ -216,7 +212,7 @@ button {
   flex: 1;
 }
 
-/* Estilo para a área da playlist na parte inferior */
+/* playlist */
 #playlistSection {
   position: fixed;
   left: 50%;
@@ -243,7 +239,7 @@ button {
   -ms-overflow-style: none;
 }
 
-/* Oculta a barra de rolagem no WebKit (Chrome, Safari) */
+/* esconde scrollbar webkit */
 #playlistSection::-webkit-scrollbar {
   display: none;
 }
@@ -254,7 +250,7 @@ button {
   opacity: 1;
 }
 
-/* Adicionar classe para quando está fechando */
+/* quando fechando */
 #playlistSection.closing {
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
@@ -283,11 +279,11 @@ button {
   background: transparent;
   position: relative;
   z-index: 1;
-  border-radius: 0; /* padrão */
+  border-radius: 0;
   overflow: visible;
 }
 
-/* Linha reta entre os itens, exceto no último */
+/* linha entre itens */
 #playlistSection li:not(:last-child)::after {
   content: "";
   display: block;
@@ -297,7 +293,7 @@ button {
   bottom: 0;
   height: 1px;
   background: #ffffff18;
-  border-radius: 0; /* sempre reta */
+  border-radius: 0;
   pointer-events: none;
   z-index: 0;
 }
@@ -306,7 +302,7 @@ button {
   display: none;
 }
 
-/* Aplica border-radius em hover, selecionado e ambos */
+/* hover e selecionado */
 #playlistSection li:hover,
 #playlistSection li.selected,
 #playlistSection li.selected:hover {
@@ -315,27 +311,20 @@ button {
   z-index: 1;
 }
 
-/* Remova estes blocos para não sobrescrever o border-radius:
-#playlistSection li:hover::after,
-#playlistSection li.selected::after,
-#playlistSection li:last-child:hover::after,
-#playlistSection li:last-child.selected::after
-*/
-
 #playlistSection ul {
   width: 100%;
   max-width: 280px;
   list-style: none;
   padding: 0;
   margin: 0;
-  flex: 1; /* Ocupa o espaço restante */
-  overflow-y: auto; /* Scroll apenas na lista */
-  padding-bottom: 40px; /* Espaçamento inferior */
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 40px;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-/* Oculta a barra de rolagem no WebKit (Chrome, Safari) */
+/* esconde scrollbar webkit */
 #playlistSection ul::-webkit-scrollbar {
   display: none;
 }
@@ -364,22 +353,16 @@ button {
   justify-content: center;
 }
 
-/* #playlistCloseButton:hover {
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-} */
-
-/* Adiciona um container flex para alinhar o título e o botão */
+/* header da playlist */
 #playlistSection .header {
   display: flex;
   align-items: center;
-  justify-content: center; /* Centraliza o conteúdo */
+  justify-content: center;
   width: 100%;
   margin-bottom: 15px;
   position: relative;
 }
 
-/* Garante que o player tenha position:relative para o overlay funcionar */
 #playerContainer {
   position: relative;
 }
@@ -405,7 +388,7 @@ button {
   filter: saturate(1.2);
 }
 
-/* Aplicando a fonte Fredoka aos elementos que precisam */
+/* aplicando fredoka */
 .player,
 #playlistSection,
 #playlistSection h4,
@@ -430,7 +413,7 @@ button {
   cursor: pointer !important;
 }
 
-/* Melhorar responsividade touch no iOS */
+/* touch responsivo iOS */
 button, .clickable {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   -webkit-touch-callout: none;
@@ -439,7 +422,7 @@ button, .clickable {
   cursor: pointer;
 }
 
-/* Garantir que botões tenham área mínima de toque */
+/* área mínima de toque */
 #playPauseButton, #prevButton, #nextButton, 
 #playlistToggleButton, #playlistCloseButton,
 #fullscreenButton, #pipButton {
@@ -448,7 +431,7 @@ button, .clickable {
   touch-action: manipulation;
 }
 
-/* Oculta a barra de rolagem no desktop (WebKit) */
+/* scrollbar desktop */
 @media (hover: hover) and (pointer: fine) {
   #playlistSection ul::-webkit-scrollbar {
     display: none;
@@ -459,14 +442,14 @@ button, .clickable {
   }
 }
 
-/* Mostra a barra de rolagem padrão em dispositivos móveis */
+/* scrollbar mobile */
 @media (hover: none) and (pointer: coarse) {
   #playlistSection ul {
-    scrollbar-width: thin; /* Firefox */
-    -ms-overflow-style: auto; /* IE/Edge */
+    scrollbar-width: thin;
+    -ms-overflow-style: auto;
   }
   
   #playlistSection ul::-webkit-scrollbar {
-    width: 8px; /* Largura padrão */
+    width: 8px;
   }
 }
