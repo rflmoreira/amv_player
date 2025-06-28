@@ -19,11 +19,11 @@ export default [
     name: "Skyfall - Demon Slayer [AMV]",
     author: "tiff.",
   },
-  // {
-  //   src: "src/videos/AMV  Tanjiro (Demon Slayer) - Gasoline (Halsey).mp4",
-  //   name: "AMV  Tanjiro (Demon Slayer) - Gasoline (Halsey)",
-  //   author: "mocha amv",
-  // },
+  {
+    src: "src/videos/running up that hill, a deal with god - evangelion amv.mp4",
+    name: "running up that hill, a deal with god - evangelion amv",
+    author: "lilin",
+  },
   {
     src: "src/videos/Anime Mix「AMV」- Whatever It Takes.mp4",
     name: "Anime Mix「AMV」- Whatever It Takes",
