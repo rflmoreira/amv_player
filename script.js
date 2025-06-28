@@ -31,6 +31,48 @@ let lastLiveSong = null; // última música reproduzida no modo ao vivo
 let lastLiveTime = 0; // tempo da última música no modo ao vivo
 let liveExitTime = 0; // quando saiu do modo ao vivo
 
+// verificações de compatibilidade para dispositivos móveis
+const checkDeviceCapabilities = () => {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  const isMobile = isIOS || isAndroid;
+  
+  console.log('Device capabilities:', {
+    isIOS,
+    isAndroid,
+    isMobile,
+    fullscreenEnabled: document.fullscreenEnabled,
+    pipEnabled: document.pictureInPictureEnabled,
+    webkitFullscreen: !!document.documentElement.webkitRequestFullscreen,
+    videoWebkitEnterFullscreen: !!document.createElement('video').webkitEnterFullscreen
+  });
+  
+  // Atualiza tooltips baseado no dispositivo
+  const fullscreenButton = document.getElementById('fullscreenButton');
+  const pipButton = document.getElementById('pipButton');
+  
+  if (fullscreenButton) {
+    if (isIOS) {
+      fullscreenButton.title = "Tela cheia (requer vídeo ativo)";
+    } else {
+      fullscreenButton.title = "Tela cheia";
+    }
+  }
+  
+  if (pipButton) {
+    if (!document.pictureInPictureEnabled) {
+      pipButton.style.opacity = '0.5';
+      pipButton.title = "Picture-in-Picture não disponível neste dispositivo";
+    } else {
+      pipButton.style.opacity = '1';
+      pipButton.title = "Picture-in-Picture";
+    }
+  }
+  
+  return { isIOS, isAndroid, isMobile };
+};
+
 // salva o estado no localStorage
 const saveLiveState = () => {
   if (isLiveMode) {
@@ -70,6 +112,9 @@ const updatePlayButtonTooltip = () => {
 
 // setup inicial
 window.addEventListener('DOMContentLoaded', () => {
+  // verifica capacidades do dispositivo
+  const deviceInfo = checkDeviceCapabilities();
+  
   // carrega estado salvo do modo ao vivo
   loadLiveState();
   
@@ -102,36 +147,114 @@ window.addEventListener('DOMContentLoaded', () => {
   // configuração dos botões de tela cheia e PiP
   const fullscreenButton = document.getElementById('fullscreenButton');
   if (fullscreenButton) {
-    fullscreenButton.addEventListener('click', function () {
+    const handleFullscreen = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
       const video = document.getElementById('bg-video');
-      video.setAttribute('controls', 'controls');
-      video.style.pointerEvents = 'auto';
+      
+      // Detecta se é dispositivo iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      
+      // Para iOS, precisa verificar se o vídeo tem src e está carregado
+      if (isIOS) {
+        if (!video.src || video.readyState < 2) {
+          console.log('Vídeo não está pronto para fullscreen no iOS');
+          return;
+        }
+        
+        // iOS requer que o vídeo seja "reproduzível" antes do fullscreen
+        video.setAttribute('controls', 'controls');
+        video.style.pointerEvents = 'auto';
+        
+        // No iOS, webkitEnterFullscreen só funciona com interação do usuário
+        if (video.webkitEnterFullscreen && typeof video.webkitEnterFullscreen === 'function') {
+          try {
+            video.webkitEnterFullscreen();
+          } catch (error) {
+            console.error('Erro ao entrar em fullscreen no iOS:', error);
+            // Fallback: tenta webkitRequestFullscreen
+            if (video.webkitRequestFullscreen) {
+              video.webkitRequestFullscreen();
+            }
+          }
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        }
+      } else {
+        // Para outros navegadores
+        video.setAttribute('controls', 'controls');
+        video.style.pointerEvents = 'auto';
 
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitEnterFullscreen) {
-        video.webkitEnterFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        } else if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        }
       }
-    });
+    };
+    
+    fullscreenButton.addEventListener('click', handleFullscreen);
+    fullscreenButton.addEventListener('touchend', handleFullscreen);
   }
 
   const pipButton = document.getElementById('pipButton');
   if (pipButton) {
-    pipButton.addEventListener('click', async () => {
-      if (document.pictureInPictureElement) {
-        await document.exitPictureInPicture();
-      } else {
-        try {
-          await bgVideo.requestPictureInPicture();
-        } catch (error) {
-          console.error('Erro ao ativar PiP:', error);
-        }
+    const handlePiP = async function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Verifica se PiP está disponível
+      if (!document.pictureInPictureEnabled || !bgVideo.requestPictureInPicture) {
+        console.log('Picture-in-Picture não está disponível neste dispositivo');
+        
+        // Mostra feedback visual para o usuário
+        const originalText = pipButton.innerHTML;
+        pipButton.innerHTML = 'PiP não disponível';
+        pipButton.style.opacity = '0.5';
+        
+        setTimeout(() => {
+          pipButton.innerHTML = originalText;
+          pipButton.style.opacity = '1';
+        }, 2000);
+        
+        return;
       }
-    });
+      
+      // Verifica se o vídeo está pronto
+      if (!bgVideo.src || bgVideo.readyState < 2) {
+        console.log('Vídeo não está pronto para PiP');
+        return;
+      }
+      
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          await bgVideo.requestPictureInPicture();
+        }
+      } catch (error) {
+        console.error('Erro ao ativar/desativar PiP:', error);
+        
+        // Mostra feedback de erro para o usuário
+        const originalText = pipButton.innerHTML;
+        pipButton.innerHTML = 'Erro ao ativar PiP';
+        pipButton.style.opacity = '0.5';
+        
+        setTimeout(() => {
+          pipButton.innerHTML = originalText;
+          pipButton.style.opacity = '1';
+        }, 2000);
+      }
+    };
+    
+    pipButton.addEventListener('click', handlePiP);
+    pipButton.addEventListener('touchend', handlePiP);
   }
 });
 
@@ -1223,28 +1346,43 @@ function drawToCanvas() {
 // esconde controles fora do fullscreen
 function hideControlsIfNotFullscreen() {
   const video = document.getElementById('bg-video');
+  
+  // Verifica múltiplas formas de fullscreen, incluindo iOS
   const isFullscreen =
     document.fullscreenElement === video ||
     document.webkitFullscreenElement === video ||
     document.mozFullScreenElement === video ||
     document.msFullscreenElement === video ||
-    video.webkitDisplayingFullscreen; // iOS Safari
+    video.webkitDisplayingFullscreen || // iOS Safari
+    video.webkitCurrentPlaybackTargetIsWireless; // AirPlay no iOS
 
   if (!isFullscreen) {
     video.removeAttribute('controls');
     video.style.pointerEvents = 'none';
-    // pausa ao sair do fullscreen
-    if (!video.paused) {
-      video.pause();
-      playPauseButton.innerHTML = textButtonPlay;
+    
+    // No iOS, não pausa automaticamente ao sair do fullscreen
+    // pois pode estar em modo PiP ou AirPlay
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    if (!isIOS) {
+      // pausa ao sair do fullscreen (apenas em desktop)
+      if (!video.paused) {
+        video.pause();
+        playPauseButton.innerHTML = textButtonPlay;
+      }
     }
   }
 }
 
 // quando sai do fullscreen
 function exitFullscreenHandler() {
-  // timeout maior pro iOS
-  setTimeout(hideControlsIfNotFullscreen, 200);
+  // timeout maior pro iOS e outros dispositivos móveis
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const timeout = isIOS ? 500 : 200;
+  
+  setTimeout(hideControlsIfNotFullscreen, timeout);
 }
 
 // eventos de fullscreen (incluindo iOS)
@@ -1257,7 +1395,28 @@ document.addEventListener('msfullscreenchange', exitFullscreenHandler);
 bgVideo.addEventListener('webkitendfullscreen', exitFullscreenHandler);
 bgVideo.addEventListener('webkitbeginfullscreen', () => {
   // quando entra em fullscreen no iOS
-  bgVideo.setAttribute('controls', 'controls');
+  const video = document.getElementById('bg-video');
+  video.setAttribute('controls', 'controls');
+  video.style.pointerEvents = 'auto';
+  
+  console.log('Entrou em fullscreen no iOS');
+});
+
+// Eventos específicos para Picture-in-Picture
+bgVideo.addEventListener('enterpictureinpicture', () => {
+  console.log('Entrou em Picture-in-Picture');
+  const pipButton = document.getElementById('pipButton');
+  if (pipButton) {
+    pipButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff86;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="9" y="9" width="8" height="8" rx="1" ry="1"></rect></svg>Sair do Picture-in-Picture';
+  }
+});
+
+bgVideo.addEventListener('leavepictureinpicture', () => {
+  console.log('Saiu do Picture-in-Picture');
+  const pipButton = document.getElementById('pipButton');
+  if (pipButton) {
+    pipButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff86;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="9" y="9" width="8" height="8" rx="1" ry="1"></rect></svg>Ativar Picture-in-Picture';
+  }
 });
 
 // cores da paleta Catppuccin
