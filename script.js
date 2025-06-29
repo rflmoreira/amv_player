@@ -832,7 +832,7 @@ const updateTime = () => {
   if (isLiveMode) {
     // no modo ao vivo, desabilita a barra de progresso
     currentTime.innerHTML = `<span style="opacity:0.5">-:--</span>`;
-    duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:0px;margin:3;font:inherit;color:#ff6b6b;cursor:pointer;display:inline-block;font-size:0.9rem;">AO VIVO</button>`;
+    duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ff6b6b;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
     progress.style.width = "0%";
     progressBar.style.pointerEvents = "none";
     progressBar.style.opacity = "0.3";
@@ -871,9 +871,9 @@ const updateTime = () => {
 
   if (!isLiveMode) {
     if (index === songs.length - 1) {
-      duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:0px;margin:3;font:inherit;color:#ff6b6b;cursor:pointer;display:inline-block;font-size:0.9rem;">AO VIVO</button>`;
+      duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ff6b6b;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
     } else {
-      duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:0px;margin:3;font:inherit;color:#ffffff86;opacity: 0.5;cursor:pointer;display:inline-block;font-size:0.9rem;">AO VIVO</button>`;
+      duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ffffff86;opacity: 0.5;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
     }
     
     progress.style.width = progressWidth + "%";
@@ -1118,16 +1118,21 @@ function handleProgressClick(e) {
   bgVideo.currentTime = newTime;
 }
 
-// botão AO VIVO
+// Event delegation robusto para o botão AO VIVO
 document.addEventListener("click", handleAoVivoClick);
 document.addEventListener("touchend", handleAoVivoClick);
 
 function handleAoVivoClick(e) {
-  if (e.target && e.target.id === "btn-ao-vivo") {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    setTimeout(() => {
+  // Verificação robusta do ID do alvo, mesmo quando o botão é recriado dinamicamente
+  const target = e.target;
+  if (!target || target.id !== "btn-ao-vivo") {
+    return; // Não é o botão que queremos
+  }
+  
+  e.preventDefault();
+  e.stopPropagation();
+  
+  setTimeout(() => {
       if (isLiveMode) {
         // Sair do modo ao vivo - volta para música individual
         console.log('Saindo do modo ao vivo. Música atual:', livePlaylistIndex, 'Tempo:', bgVideo.currentTime);
@@ -1317,7 +1322,6 @@ function handleAoVivoClick(e) {
         }
       }
     }, 10);
-  }
 }
 
 // controles da playlist
