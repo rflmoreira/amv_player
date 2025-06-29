@@ -319,7 +319,9 @@ bgVideo.ontimeupdate = () => updateTime();
 
 bgVideo.addEventListener('waiting', () => {
   isBuffering = true;
-  currentTime.textContent = "Carregando...";
+  if (!isLiveMode) {
+    currentTime.textContent = "Carregando...";
+  }
 });
 
 bgVideo.addEventListener('playing', () => {
@@ -835,7 +837,7 @@ const updateTime = () => {
     progressBar.style.pointerEvents = "none";
     progressBar.style.opacity = "0.3";
     progressBar.title = "Transmissão ao vivo - navegação desabilitada";
-  } else if (isBuffering && index !== 0) {
+  } else if (isBuffering && index !== 0 && !isLiveMode) {
     currentTime.textContent = "Carregando...";
     duration.textContent = "-:--";
     progress.style.background = "";
@@ -881,23 +883,25 @@ const updateTime = () => {
 // configura o vídeo de fundo
 function setVideoSources(src) {
   if (src) {
-    // monitora o carregamento
-    const loadingHandler = () => {
-      currentTime.textContent = "Carregando...";
-    };
-    
-    bgVideo.addEventListener('loadstart', loadingHandler);
+    // monitora o carregamento apenas se não estiver no modo ao vivo
+    if (!isLiveMode) {
+      const loadingHandler = () => {
+        currentTime.textContent = "Carregando...";
+      };
+      
+      bgVideo.addEventListener('loadstart', loadingHandler);
+      
+      // remove o manipulador após carregar
+      bgVideo.addEventListener('canplay', () => {
+        bgVideo.removeEventListener('loadstart', loadingHandler);
+        updateTime();
+      }, { once: true });
+    }
     
     bgVideo.src = src;
     bgVideo.loop = (index === songs.length - 1);
     bgVideo.muted = false;
     bgVideo.load();
-    
-    // remove o manipulador após carregar
-    bgVideo.addEventListener('canplay', () => {
-      bgVideo.removeEventListener('loadstart', loadingHandler);
-      updateTime();
-    }, { once: true });
   } else {
     bgVideo.src = '';
   }
