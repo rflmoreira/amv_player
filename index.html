@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title></title>
+  <title>Music Player</title>
   <link rel="icon" type="image/x-icon" href="" />
   <link rel="apple-touch-icon" sizes="180x180" href="" />
   <link rel="icon" type="image/png" sizes="32x32" href="" />
@@ -31,22 +31,31 @@
   </div>
   
   <main>
-    <div class="player">
+    <div class="player" id="main-player">
       <!-- Cabeçalho do player -->
       <div class="player-header">
+        <!-- Botão para minimizar o player -->
+        <button id="minimizeButton" aria-label="Minimizar Player" title="Minimizar Player">
+            <i class='bx bx-chevron-down'></i>
+        </button>
+
         <!-- Novo player de vídeo -->
         <div class="video-player-container">
           <canvas id="sync-canvas" width="640" height="360"></canvas>
         </div>
 
-        <div class="current-track-info-wrapper" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div class="current-track-info-wrapper">
           <div class="music-info">
             <div id="musicName"></div>
             <span class="music-author" id="musicAuthor"></span>
           </div>
-          <button id="fullscreenButton" aria-label="Alternar Tela Cheia" title="Alternar Tela Cheia" style="background: none; border: none; cursor: pointer; color: inherit;">
-            <i class="bx bx-fullscreen" style="color: #ffffff86;font-size:2rem"></i>
-          </button>
+          <!-- Animação de Onda -->
+          <div id="wave-animation">
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+          </div>
         </div> 
       </div>
       <div class="footer">
@@ -81,6 +90,22 @@
       </div>
     </div>
   </main>
+
+  <!-- Mini Player Flutuante (inicialmente escondido) -->
+  <div id="mini-player" class="minimized">
+    <button id="restoreButton" aria-label="Restaurar Player" title="Restaurar Player">
+        <i class='bx bx-chevron-up'></i>
+    </button>
+    <div class="mini-player-content">
+        <div class="mini-player-info">
+            <div id="mini-music-name">Nome da Música</div>
+            <div id="mini-music-author">Autor</div>
+        </div>
+        <div class="mini-player-controls">
+            <button id="mini-play-pause-button" aria-label="Play/Pause/Stop"></button>
+        </div>
+    </div>
+  </div>
   
   <script type="module" src="script.js"></script>
 </body>

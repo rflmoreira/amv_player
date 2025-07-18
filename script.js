@@ -15,12 +15,32 @@ const playlistItems = document.getElementById("playlistItems");
 const playlistToggleButton = document.getElementById('playlistToggleButton');
 const playlistSection = document.getElementById('playlistSection');
 const playlistCloseButton = document.getElementById('playlistCloseButton');
+const waveAnimation = document.getElementById('wave-animation');
+
+// Elementos do Mini Player
+const mainPlayer = document.getElementById('main-player');
+const miniPlayer = document.getElementById('mini-player');
+const minimizeButton = document.getElementById('minimizeButton');
+const restoreButton = document.getElementById('restoreButton');
+const miniPlayPauseButton = document.getElementById('mini-play-pause-button');
+const miniMusicName = document.getElementById('mini-music-name');
+const miniMusicAuthor = document.getElementById('mini-music-author');
+
 
 import songs from "./songs.js";
 
+// Ícones do Player Principal
 const textButtonPlay = `<i style="font-size: 4rem;" class='bx bx-play-circle'></i>`;
 const textButtonPause = `<i style="font-size: 4rem;" class='bx bx-pause-circle'></i>`;
 const textButtonStop = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
+const textButtonLoading = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+
+// Ícones do Mini Player (correspondentes ao principal, sem estilo inline)
+const miniIconPlay = `<i class='bx bx-play-circle'></i>`;
+const miniIconPause = `<i class='bx bx-pause-circle'></i>`;
+const miniIconStop = `<i class='bx bx-stop-circle'></i>`;
+const miniIconLoading = `<i class='bx bx-loader-alt bx-spin'></i>`;
+
 
 let index = 0;
 let isPlaying = false;
@@ -42,23 +62,11 @@ const checkDeviceCapabilities = () => {
     isIOS,
     isAndroid,
     isMobile,
-    fullscreenEnabled: document.fullscreenEnabled,
     pipEnabled: document.pictureInPictureEnabled,
-    webkitFullscreen: !!document.documentElement.webkitRequestFullscreen,
-    videoWebkitEnterFullscreen: !!document.createElement('video').webkitEnterFullscreen
   });
   
   // Atualiza tooltips baseado no dispositivo
-  const fullscreenButton = document.getElementById('fullscreenButton');
   const pipButton = document.getElementById('pipButton');
-  
-  if (fullscreenButton) {
-    if (isIOS) {
-      fullscreenButton.title = "Tela cheia (requer vídeo ativo)";
-    } else {
-      fullscreenButton.title = "Tela cheia";
-    }
-  }
   
   if (pipButton) {
     if (!document.pictureInPictureEnabled) {
@@ -123,6 +131,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setVideoSources();
   atualizarFaixa();
   playPauseButton.innerHTML = textButtonPlay;
+  miniPlayPauseButton.innerHTML = miniIconPlay;
   updateTime();
   atualizarBotoesAvanco();
   renderPlaylist(0);
@@ -133,7 +142,6 @@ window.addEventListener('DOMContentLoaded', () => {
   nextButton.title = "Próxima música (Seta direita)";
   playlistToggleButton.title = "Abrir playlist";
   playlistCloseButton.title = "Fechar playlist";
-  document.getElementById('fullscreenButton').title = "Tela cheia";
   document.getElementById('pipButton').title = "Picture-in-Picture";
   progressBar.title = "Clique para navegar na música";
   
@@ -144,65 +152,7 @@ window.addEventListener('DOMContentLoaded', () => {
     playPauseButton.title = "Retomar transmissão ao vivo (Espaço)";
   }
   
-  // configuração dos botões de tela cheia e PiP
-  const fullscreenButton = document.getElementById('fullscreenButton');
-  if (fullscreenButton) {
-    const handleFullscreen = function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const video = document.getElementById('bg-video');
-      
-      // Detecta se é dispositivo iOS
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      
-      // Para iOS, precisa verificar se o vídeo tem src e está carregado
-      if (isIOS) {
-        if (!video.src || video.readyState < 2) {
-          console.log('Vídeo não está pronto para fullscreen no iOS');
-          return;
-        }
-        
-        // iOS requer que o vídeo seja "reproduzível" antes do fullscreen
-        video.setAttribute('controls', 'controls');
-        video.style.pointerEvents = 'auto';
-        
-        // No iOS, webkitEnterFullscreen só funciona com interação do usuário
-        if (video.webkitEnterFullscreen && typeof video.webkitEnterFullscreen === 'function') {
-          try {
-            video.webkitEnterFullscreen();
-          } catch (error) {
-            console.error('Erro ao entrar em fullscreen no iOS:', error);
-            // Fallback: tenta webkitRequestFullscreen
-            if (video.webkitRequestFullscreen) {
-              video.webkitRequestFullscreen();
-            }
-          }
-        } else if (video.webkitRequestFullscreen) {
-          video.webkitRequestFullscreen();
-        }
-      } else {
-        // Para outros navegadores
-        video.setAttribute('controls', 'controls');
-        video.style.pointerEvents = 'auto';
-
-        if (video.requestFullscreen) {
-          video.requestFullscreen();
-        } else if (video.webkitRequestFullscreen) {
-          video.webkitRequestFullscreen();
-        } else if (video.msRequestFullscreen) {
-          video.msRequestFullscreen();
-        } else if (video.webkitEnterFullscreen) {
-          video.webkitEnterFullscreen();
-        }
-      }
-    };
-    
-    fullscreenButton.addEventListener('click', handleFullscreen);
-    fullscreenButton.addEventListener('touchend', handleFullscreen);
-  }
-
+  // configuração do botão PiP
   const pipButton = document.getElementById('pipButton');
   if (pipButton) {
     const handlePiP = async function (e) {
@@ -275,6 +225,19 @@ setInterval(() => {
   }
 }, 5000);
 
+// --- Controles do Mini Player ---
+minimizeButton.onclick = () => {
+    mainPlayer.classList.add('minimized');
+    miniPlayer.classList.remove('minimized');
+};
+
+restoreButton.onclick = () => {
+    mainPlayer.classList.remove('minimized');
+    miniPlayer.classList.add('minimized');
+};
+
+miniPlayPauseButton.onclick = () => playPause();
+
 // botões principais
 prevButton.onclick = () => prevNextMusic("prev");
 nextButton.onclick = () => prevNextMusic();
@@ -326,10 +289,18 @@ bgVideo.addEventListener('waiting', () => {
 
 bgVideo.addEventListener('playing', () => {
   isBuffering = false;
+  isPlaying = true;
+  waveAnimation.classList.add('playing');
+  playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
+  miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
   updateTime();
 });
 
 bgVideo.addEventListener('play', () => {
+  isPlaying = true;
+  waveAnimation.classList.add('playing');
+  playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
+  miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
   // se estiver no modo ao vivo e dar play, simula que a transmissão continuou
   if (isLiveMode && lastLiveSong !== null && liveExitTime > 0) {
     const timeAway = (Date.now() - liveExitTime) / 1000;
@@ -396,6 +367,7 @@ bgVideo.addEventListener('play', () => {
 });
 
 bgVideo.addEventListener('ended', () => {
+  waveAnimation.classList.remove('playing');
   if (isLiveMode) {
     // modo ao vivo: vai para próxima música
     livePlaylistIndex++;
@@ -441,6 +413,7 @@ bgVideo.addEventListener('ended', () => {
       bgVideo.addEventListener('canplay', startFromBeginningHandler, { once: true });
       bgVideo.play().catch(()=>{});
       playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
+      miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
       updateTime();
       atualizarBotoesAvanco();
       renderPlaylist(index);
@@ -457,17 +430,24 @@ bgVideo.addEventListener('ended', () => {
       atualizarFaixa();
       bgVideo.play().catch(()=>{});
       playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
+      miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
       updateTime();
       atualizarBotoesAvanco();
       renderPlaylist(index);
     } else {
       // quando acaba tudo, volta o botão para play
       playPauseButton.innerHTML = textButtonPlay;
+      miniPlayPauseButton.innerHTML = miniIconPlay;
     }
   }
 });
 
 bgVideo.addEventListener('pause', () => {
+  isPlaying = false;
+  waveAnimation.classList.remove('playing');
+  playPauseButton.innerHTML = textButtonPlay;
+  miniPlayPauseButton.innerHTML = miniIconPlay;
+
   // se estiver no modo ao vivo e pausar, salva o estado
   if (isLiveMode) {
     lastLiveSong = livePlaylistIndex;
@@ -476,21 +456,26 @@ bgVideo.addEventListener('pause', () => {
     saveLiveState();
     console.log('Pausado no modo ao vivo. Salvando estado:', lastLiveSong, lastLiveTime);
   }
-  
-  hideControlsIfNotFullscreen();
 });
 
 // atualiza informações da música
 function atualizarFaixa() {
+  const currentSong = songs[index];
+  const songName = currentSong.name;
+  const songAuthor = currentSong.author || "";
+
   if (isLiveMode && index > 0 && index < songs.length - 1) {
-    // no modo ao vivo, mostra a música atual
-    musicName.innerHTML = songs[index].name;
-    musicAuthor.textContent = songs[index].author || "";
+    musicName.innerHTML = songName;
+    musicAuthor.textContent = songAuthor;
   } else {
-    musicName.innerHTML = songs[index].name;
-    musicAuthor.textContent = songs[index].author || "";
+    musicName.innerHTML = songName;
+    musicAuthor.textContent = songAuthor;
   }
   
+  // Atualiza mini player
+  miniMusicName.textContent = songName;
+  miniMusicAuthor.textContent = songAuthor;
+
   changeMusicNameColor();
 }
 
@@ -520,7 +505,8 @@ const prevNextMusic = (type = "next") => {
   atualizarBackground();
   atualizarBotoesAvanco();
 
-  playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+  playPauseButton.innerHTML = textButtonLoading;
+  miniPlayPauseButton.innerHTML = miniIconLoading;
 
   if (songs[index].src) {
     setVideoSources(songs[index].src);
@@ -532,6 +518,7 @@ const prevNextMusic = (type = "next") => {
       const elapsed = Date.now() - startTime;
       setTimeout(() => {
         playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
+        miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
         updateTime();
       }, Math.max(0, minLoadingTime - elapsed));
     };
@@ -541,6 +528,7 @@ const prevNextMusic = (type = "next") => {
     bgVideo.play().catch((error) => {
       console.error("Erro ao reproduzir:", error);
       playPauseButton.innerHTML = textButtonPlay;
+      miniPlayPauseButton.innerHTML = miniIconPlay;
       updateTime();
       bgVideo.removeEventListener('canplay', canPlayHandler);
       bgVideo.removeEventListener('playing', canPlayHandler);
@@ -548,6 +536,7 @@ const prevNextMusic = (type = "next") => {
   } else {
     setVideoSources('');
     playPauseButton.innerHTML = textButtonPlay;
+    miniPlayPauseButton.innerHTML = miniIconPlay;
     updateTime();
   }
 };
@@ -576,7 +565,8 @@ const playPause = () => {
         atualizarBackground();
         bgVideo.loop = false;
         
-        playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+        playPauseButton.innerHTML = textButtonLoading;
+        miniPlayPauseButton.innerHTML = miniIconLoading;
         
         const resumeHandler = () => {
           if (bgVideo.duration && !isNaN(bgVideo.duration)) {
@@ -620,6 +610,7 @@ const playPause = () => {
                   bgVideo.currentTime = Math.max(0, newTime);
                 }
                 playPauseButton.innerHTML = textButtonStop;
+                miniPlayPauseButton.innerHTML = miniIconStop;
                 updateTime();
                 atualizarBotoesAvanco();
                 renderPlaylist(index);
@@ -633,6 +624,7 @@ const playPause = () => {
               // continua na mesma música, mas em ponto mais avançado
               bgVideo.currentTime = Math.min(projectedTime, bgVideo.duration * 0.95);
               playPauseButton.innerHTML = textButtonStop;
+              miniPlayPauseButton.innerHTML = miniIconStop;
               updateTime();
               atualizarBotoesAvanco();
               renderPlaylist(index);
@@ -674,7 +666,8 @@ const playPause = () => {
     atualizarBackground();
     bgVideo.loop = false;
     
-    playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+    playPauseButton.innerHTML = textButtonLoading;
+    miniPlayPauseButton.innerHTML = miniIconLoading;
     
     const playHandler = () => {
       // define um tempo aleatório na música (entre 0% e 80%)
@@ -684,6 +677,7 @@ const playPause = () => {
       }
       
       playPauseButton.innerHTML = textButtonStop;
+      miniPlayPauseButton.innerHTML = miniIconStop;
       updateTime();
       atualizarBotoesAvanco();
       renderPlaylist(index);
@@ -697,6 +691,7 @@ const playPause = () => {
     
     bgVideo.play().catch(() => {
       playPauseButton.innerHTML = textButtonPlay;
+      miniPlayPauseButton.innerHTML = miniIconPlay;
       bgVideo.removeEventListener('canplay', playHandler);
       bgVideo.removeEventListener('playing', playHandler);
     });
@@ -753,6 +748,7 @@ const playPause = () => {
             bgVideo.currentTime = Math.max(0, newTime);
           }
           playPauseButton.innerHTML = textButtonStop;
+          miniPlayPauseButton.innerHTML = miniIconStop;
           updateTime();
           atualizarBotoesAvanco();
           renderPlaylist(index);
@@ -762,6 +758,7 @@ const playPause = () => {
         bgVideo.addEventListener('canplay', nextSongHandler, { once: true });
         bgVideo.play().catch(() => {
           playPauseButton.innerHTML = textButtonPlay;
+          miniPlayPauseButton.innerHTML = miniIconPlay;
         });
         return;
       } else if (bgVideo.duration && !isNaN(bgVideo.duration)) {
@@ -774,26 +771,34 @@ const playPause = () => {
     if (bgVideo.readyState >= 3) {
       // vídeo já carregado, pode reproduzir
       if (index === songs.length - 1) {
-        playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
+        playPauseButton.innerHTML = textButtonStop;
+        miniPlayPauseButton.innerHTML = miniIconStop;
       } else if (isLiveMode) {
         playPauseButton.innerHTML = textButtonStop;
+        miniPlayPauseButton.innerHTML = miniIconStop;
       } else {
         playPauseButton.innerHTML = textButtonPause;
+        miniPlayPauseButton.innerHTML = miniIconPause;
       }
       bgVideo.play().catch(() => {
         playPauseButton.innerHTML = textButtonPlay;
+        miniPlayPauseButton.innerHTML = miniIconPlay;
       });
     } else {
       // vídeo ainda não carregado, mostra loading
-      playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+      playPauseButton.innerHTML = textButtonLoading;
+      miniPlayPauseButton.innerHTML = miniIconLoading;
       
       const playHandler = () => {
         if (index === songs.length - 1) {
-          playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
+          playPauseButton.innerHTML = textButtonStop;
+           miniPlayPauseButton.innerHTML = miniIconStop;
         } else if (isLiveMode) {
           playPauseButton.innerHTML = textButtonStop;
+          miniPlayPauseButton.innerHTML = miniIconStop;
         } else {
           playPauseButton.innerHTML = textButtonPause;
+          miniPlayPauseButton.innerHTML = miniIconPause;
         }
         updateTime();
         bgVideo.removeEventListener('canplay', playHandler);
@@ -805,6 +810,7 @@ const playPause = () => {
       
       bgVideo.play().catch(() => {
         playPauseButton.innerHTML = textButtonPlay;
+        miniPlayPauseButton.innerHTML = miniIconPlay;
         bgVideo.removeEventListener('canplay', playHandler);
         bgVideo.removeEventListener('playing', playHandler);
       });
@@ -819,6 +825,7 @@ const playPause = () => {
     }
     bgVideo.pause();
     playPauseButton.innerHTML = textButtonPlay;
+    miniPlayPauseButton.innerHTML = miniIconPlay;
   }
 };
 
@@ -940,8 +947,13 @@ function atualizarBotoesAvanco() {
 function atualizarBackground() {
   if (index === 0) {
     document.body.classList.add('body-capa');
+    // Adiciona o background diretamente para garantir que o caminho esteja correto,
+    // corrigindo o problema da imagem não aparecer.
+    document.body.style.backgroundImage = "url('src/capa.jpg')";
   } else {
     document.body.classList.remove('body-capa');
+    // Remove o background para que o vídeo de fundo das outras faixas possa ser exibido.
+    document.body.style.backgroundImage = 'none';
   }
 }
 
@@ -967,7 +979,7 @@ function renderPlaylist(selectedIndex = 1) {
       li.style.borderRadius = "8px";
       
       // aplica a mesma cor do nome da música
-      const currentColor = musicNameElement.style.color || "#ffffff86";
+      const currentColor = musicName.style.color || "#ffffff86";
       li.style.color = currentColor;
     } else {
       li.style.color = "#ffffff86";
@@ -1065,7 +1077,8 @@ function selectSong(idx) {
   atualizarBackground();
   atualizarBotoesAvanco();
 
-  playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+  playPauseButton.innerHTML = textButtonLoading;
+  miniPlayPauseButton.innerHTML = miniIconLoading;
 
   if (songs[idx].src) {
     setVideoSources(songs[idx].src);
@@ -1077,6 +1090,7 @@ function selectSong(idx) {
       const elapsed = Date.now() - startTime;
       setTimeout(() => {
         playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
+        miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
         updateTime();
       }, Math.max(0, minLoadingTime - elapsed));
     };
@@ -1088,6 +1102,7 @@ function selectSong(idx) {
     bgVideo.play().catch((error) => {
       console.error("Erro ao reproduzir:", error);
       playPauseButton.innerHTML = textButtonPlay;
+      miniPlayPauseButton.innerHTML = miniIconPlay;
       updateTime();
       bgVideo.removeEventListener('canplay', playHandler);
       bgVideo.removeEventListener('playing', playHandler);
@@ -1095,6 +1110,7 @@ function selectSong(idx) {
   } else {
     setVideoSources('');
     playPauseButton.innerHTML = textButtonPlay;
+    miniPlayPauseButton.innerHTML = miniIconPlay;
     updateTime();
   }
 }
@@ -1164,10 +1180,12 @@ function handleAoVivoClick(e) {
         
         // Reproduz automaticamente a música do índice 1
         if (songs[index].src) {
-          playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+          playPauseButton.innerHTML = textButtonLoading;
+          miniPlayPauseButton.innerHTML = miniIconLoading;
           
           const autoPlayHandler = () => {
             playPauseButton.innerHTML = textButtonPause;
+            miniPlayPauseButton.innerHTML = miniIconPause;
             updateTime();
             bgVideo.removeEventListener('canplay', autoPlayHandler);
           };
@@ -1177,6 +1195,7 @@ function handleAoVivoClick(e) {
           bgVideo.play().catch((error) => {
             console.error("Erro ao reproduzir automaticamente:", error);
             playPauseButton.innerHTML = textButtonPlay;
+            miniPlayPauseButton.innerHTML = miniIconPlay;
             bgVideo.removeEventListener('canplay', autoPlayHandler);
           });
         }
@@ -1230,6 +1249,7 @@ function handleAoVivoClick(e) {
                       bgVideo.currentTime = Math.max(0, newTime);
                     }
                     playPauseButton.innerHTML = textButtonStop;
+                    miniPlayPauseButton.innerHTML = miniIconStop;
                     updateTime();
                     atualizarBotoesAvanco();
                     renderPlaylist(index);
@@ -1242,6 +1262,7 @@ function handleAoVivoClick(e) {
                   // Continua na mesma música, mas em ponto mais avançado
                   bgVideo.currentTime = Math.min(projectedTime, bgVideo.duration * 0.95);
                   playPauseButton.innerHTML = textButtonStop;
+                  miniPlayPauseButton.innerHTML = miniIconStop;
                   updateTime();
                   atualizarBotoesAvanco();
                   renderPlaylist(index);
@@ -1289,7 +1310,8 @@ function handleAoVivoClick(e) {
           bgVideo.loop = false; // Não faz loop individual, mas continua para próxima
           
           // Inicia a reprodução automaticamente
-          playPauseButton.innerHTML = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
+          playPauseButton.innerHTML = textButtonLoading;
+          miniPlayPauseButton.innerHTML = miniIconLoading;
           
           const playHandler = () => {
             // Define um tempo aleatório na música (entre 0% e 80% da duração)
@@ -1299,6 +1321,7 @@ function handleAoVivoClick(e) {
             }
             
             playPauseButton.innerHTML = textButtonStop;
+            miniPlayPauseButton.innerHTML = miniIconStop;
             updateTime();
             bgVideo.removeEventListener('canplay', playHandler);
             bgVideo.removeEventListener('playing', playHandler);
@@ -1310,6 +1333,7 @@ function handleAoVivoClick(e) {
           bgVideo.play().catch((error) => {
             console.error("Erro ao reproduzir:", error);
             playPauseButton.innerHTML = textButtonPlay;
+            miniPlayPauseButton.innerHTML = miniIconPlay;
             updateTime();
             bgVideo.removeEventListener('canplay', playHandler);
             bgVideo.removeEventListener('playing', playHandler);
@@ -1350,65 +1374,6 @@ function drawToCanvas() {
   }
   requestAnimationFrame(drawToCanvas);
 }
-
-// esconde controles fora do fullscreen
-function hideControlsIfNotFullscreen() {
-  const video = document.getElementById('bg-video');
-  
-  // Verifica múltiplas formas de fullscreen, incluindo iOS
-  const isFullscreen =
-    document.fullscreenElement === video ||
-    document.webkitFullscreenElement === video ||
-    document.mozFullScreenElement === video ||
-    document.msFullscreenElement === video ||
-    video.webkitDisplayingFullscreen || // iOS Safari
-    video.webkitCurrentPlaybackTargetIsWireless; // AirPlay no iOS
-
-  if (!isFullscreen) {
-    video.removeAttribute('controls');
-    video.style.pointerEvents = 'none';
-    
-    // No iOS, não pausa automaticamente ao sair do fullscreen
-    // pois pode estar em modo PiP ou AirPlay
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    
-    if (!isIOS) {
-      // pausa ao sair do fullscreen (apenas em desktop)
-      if (!video.paused) {
-        video.pause();
-        playPauseButton.innerHTML = textButtonPlay;
-      }
-    }
-  }
-}
-
-// quando sai do fullscreen
-function exitFullscreenHandler() {
-  // timeout maior pro iOS e outros dispositivos móveis
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const timeout = isIOS ? 500 : 200;
-  
-  setTimeout(hideControlsIfNotFullscreen, timeout);
-}
-
-// eventos de fullscreen (incluindo iOS)
-document.addEventListener('fullscreenchange', exitFullscreenHandler);
-document.addEventListener('webkitfullscreenchange', exitFullscreenHandler);
-document.addEventListener('mozfullscreenchange', exitFullscreenHandler);
-document.addEventListener('msfullscreenchange', exitFullscreenHandler);
-
-// iOS Safari específico
-bgVideo.addEventListener('webkitendfullscreen', exitFullscreenHandler);
-bgVideo.addEventListener('webkitbeginfullscreen', () => {
-  // quando entra em fullscreen no iOS
-  const video = document.getElementById('bg-video');
-  video.setAttribute('controls', 'controls');
-  video.style.pointerEvents = 'auto';
-  
-  console.log('Entrou em fullscreen no iOS');
-});
 
 // Eventos específicos para Picture-in-Picture
 bgVideo.addEventListener('enterpictureinpicture', () => {
@@ -1452,15 +1417,19 @@ function changeMusicNameColor() {
   if (index === 0) {
     musicNameElement.style.color = '';
     musicAuthorElement.style.color = '';
+    miniMusicName.style.color = '';
+    miniMusicAuthor.style.color = '';
     return;
   }
 
   // escolhe cor aleatória da paleta
   const randomColor = catppuccinColors[Math.floor(Math.random() * catppuccinColors.length)];
   
-  // aplica a mesma cor no nome e autor
+  // aplica a mesma cor no nome e autor de ambos os players
   musicNameElement.style.color = randomColor;
   musicAuthorElement.style.color = randomColor;
+  miniMusicName.style.color = randomColor;
+  miniMusicAuthor.style.color = randomColor;
 }
 
 // quando a música mudar
