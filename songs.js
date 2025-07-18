@@ -10,11 +10,6 @@ export default [
     author: "viberonin",
   },
   {
-    src: "src/videos/AFTER HOURS - TOBI VS KONAN [AMV⧸EDIT].mp4",
-    name: "AFTER HOURS - TOBI VS KONAN [AMV/EDIT]",
-    author: "P H E N I X",
-  },
-  {
     src: "src/videos/Skyfall  - Demon Slayer [AMV].mp4",
     name: "Skyfall - Demon Slayer [AMV]",
     author: "tiff.",
@@ -28,6 +23,11 @@ export default [
     src: "src/videos/Anime Mix「AMV」- Whatever It Takes.mp4",
     name: "Anime Mix「AMV」- Whatever It Takes",
     author: "Royal Grindi",
+  },
+  {
+    src: "src/videos/AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey).mp4",
+    name: "AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey)",
+    author: "mocha amv",
   },
   {
     src: "",
