@@ -33,7 +33,7 @@ body {
 
 /* capa de fundo */
 .body-capa {
-  background: url('src/capa.jpg') no-repeat center center fixed;
+  background: url('capa.jpg') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -73,7 +73,15 @@ section {
   min-width: 350px;
   max-width: 350px;
   box-sizing: border-box;
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
+
+.player.minimized {
+    transform: translateX(-50%) translateY(150%);
+    opacity: 0;
+    pointer-events: none;
+}
+
 
 /* timer da música */
 .time {
@@ -120,7 +128,8 @@ section {
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0 0 0.1rem 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
   text-decoration: none;
   color: #ffffff86;
   width: 100%;
@@ -129,13 +138,14 @@ section {
 
 /* autor da música */
 .music-author {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #ffffff86;
   margin-bottom: 0;
   margin-left: 0;
   text-align: left;
   width: 100%;
   display: block;
+  opacity: 0.8;
 }
 
 /* botões */
@@ -192,6 +202,36 @@ button {
   width: 100%;
   gap: 1rem;
   flex-direction: column;
+  position: relative;
+}
+
+/* Botão de minimizar */
+#minimizeButton {
+    position: absolute;
+    top: -10px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    z-index: 11;
+}
+
+#minimizeButton i {
+    font-size: 2.5rem;
+}
+
+.current-track-info-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0; /* Espaçamento vertical adicionado */
 }
 
 /* autor em fullscreen */
@@ -269,7 +309,7 @@ button {
 
 #playlistSection li {
   color: #ffffff86;
-  opacity: 0.85;
+  opacity: 0.8;
   transition: color 0.2s, background 0.2s, border-radius 0.2s;
   padding: 8px 12px;
   margin-bottom: 4px;
@@ -280,7 +320,11 @@ button {
   position: relative;
   z-index: 1;
   border-radius: 0;
-  overflow: visible;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 400;
 }
 
 /* linha entre itens */
@@ -309,6 +353,7 @@ button {
   background: #ffffff10;
   border-radius: 8px;
   z-index: 1;
+  opacity: 1;
 }
 
 #playlistSection ul {
@@ -372,7 +417,7 @@ button {
   width: 100%;
   max-width: 640px;
   aspect-ratio: 16 / 9;
-  margin: 24px auto 0 auto;
+  margin: 35px auto 0 auto;
   background-color: #3a3a3a5d;
   border-radius: 8px;
   overflow: hidden;
@@ -393,7 +438,8 @@ button {
 #playlistSection,
 #playlistSection h4,
 #playlistSection li,
-#playlistSection ul {
+#playlistSection ul,
+#mini-player { /* Adicionado para garantir a fonte */
   font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
@@ -406,7 +452,6 @@ button {
 #nextButton,
 #playlistToggleButton,
 #playlistCloseButton,
-#fullscreenButton,
 #pipButton,
 .progress-bar,
 #btn-ao-vivo {
@@ -425,11 +470,155 @@ button, .clickable {
 /* área mínima de toque */
 #playPauseButton, #prevButton, #nextButton, 
 #playlistToggleButton, #playlistCloseButton,
-#fullscreenButton, #pipButton {
+#pipButton, #minimizeButton, #restoreButton {
   min-height: 44px;
   min-width: 44px;
   touch-action: manipulation;
 }
+
+/* --- Mini Player Styles --- */
+#mini-player {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    width: 260px; /* Mais compacto */
+    height: auto;
+    padding: 8px 12px; /* Padding lateral revertido */
+    padding-top: 20px; /* Espaço para o botão de restaurar */
+    background-color: #00000086;
+    backdrop-filter: saturate(180%) blur(13px);
+    border-radius: 20px;
+    box-shadow: 5px 5px 30px 7px #0000009f;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff86;
+    transform: translateX(-50%);
+    opacity: 1;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+#mini-player.minimized {
+    transform: translateX(-50%) translateY(150%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#restoreButton {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent; 
+    border-radius: 50%;
+    width: 40px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    z-index: 21;
+}
+
+#restoreButton i {
+    font-size: 2rem;
+}
+
+.mini-player-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.mini-player-info {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+    /* margin-right removido para alinhamento perfeito */
+}
+
+#mini-music-name {
+    font-size: 0.9rem; /* Tamanho da fonte ajustado */
+    font-weight: 700;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#mini-music-author {
+    font-size: 0.8rem; /* Tamanho da fonte ajustado */
+    opacity: 0.8;
+}
+
+.mini-player-controls button {
+    background: none;
+    border: none;
+    color: #ffffff86;
+    padding: 0; /* Padding zerado para controle preciso */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#mini-play-pause-button i {
+    font-size: 2.3rem; /* Tamanho do ícone ajustado sutilmente */
+}
+
+/* --- Wave Animation Styles --- */
+#wave-animation {
+    display: flex;
+    align-items: flex-end;
+    height: 24px;
+    gap: 4px;
+}
+
+.wave-bar {
+    width: 4px;
+    height: 100%;
+    background-color: #ffffff86;
+    border-radius: 2px;
+    transform-origin: bottom;
+    transform: scaleY(0.1);
+    transition: transform 0.2s ease-out;
+}
+
+#wave-animation.playing .wave-bar {
+    animation: wave 1.2s ease-in-out infinite;
+}
+
+#wave-animation.playing .wave-bar:nth-child(2) {
+    animation-delay: -1.0s;
+}
+
+#wave-animation.playing .wave-bar:nth-child(3) {
+    animation-delay: -0.8s;
+}
+
+#wave-animation.playing .wave-bar:nth-child(4) {
+    animation-delay: -0.6s;
+}
+
+@keyframes wave {
+    0% {
+        transform: scaleY(0.1);
+    }
+    25% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(0.4);
+    }
+    75% {
+        transform: scaleY(0.8);
+    }
+    100% {
+        transform: scaleY(0.1);
+    }
+}
+
 
 /* scrollbar desktop */
 @media (hover: hover) and (pointer: fine) {
