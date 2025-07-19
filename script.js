@@ -1,6 +1,8 @@
 // Elementos da interface
 const bgVideo = document.getElementById('bg-video');
 const syncCanvas = document.getElementById('sync-canvas');
+const verticalCover = document.getElementById('vertical-cover');
+const horizontalCover = document.getElementById('horizontal-cover');
 const ctx = syncCanvas.getContext('2d');
 const musicName = document.querySelector("#musicName");
 const musicAuthor = document.querySelector("#musicAuthor");
@@ -135,6 +137,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateTime();
   atualizarBotoesAvanco();
   renderPlaylist(0);
+  atualizarVerticalCover();
   
   // tooltips dos botões
   playPauseButton.title = "Reproduzir/Pausar (Espaço)";
@@ -477,7 +480,35 @@ function atualizarFaixa() {
   miniMusicAuthor.textContent = songAuthor;
 
   changeMusicNameColor();
+  atualizarVerticalCover();
 }
+
+// Exibe a capa vertical apenas se não houver vídeo válido
+function atualizarVerticalCover() {
+  if (!verticalCover || !horizontalCover) return;
+  // Considera que a faixa 0 é "capa" (sem vídeo), demais faixas têm vídeo
+  const isNoVideo = songs[index] && (!songs[index].src || songs[index].src === '' || songs[index].isCover);
+  const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+  if (isNoVideo) {
+    if (isPortrait) {
+      verticalCover.style.display = 'block';
+      horizontalCover.style.display = 'none';
+    } else {
+      verticalCover.style.display = 'none';
+      horizontalCover.style.display = 'block';
+    }
+    bgVideo.style.display = 'none';
+  } else {
+    verticalCover.style.display = 'none';
+    horizontalCover.style.display = 'none';
+    bgVideo.style.display = '';
+  }
+}
+
+// Atualiza capa ao mudar orientação
+window.addEventListener('orientationchange', atualizarVerticalCover);
+window.addEventListener('resize', atualizarVerticalCover);
+//
 
 // navegar entre músicas
 const prevNextMusic = (type = "next") => {
@@ -502,6 +533,7 @@ const prevNextMusic = (type = "next") => {
   renderPlaylist(index);
   bgVideo.pause();
   atualizarFaixa();
+  atualizarVerticalCover();
   atualizarBackground();
   atualizarBotoesAvanco();
 
@@ -1435,6 +1467,7 @@ function changeMusicNameColor() {
 // quando a música mudar
 document.getElementById('nextButton').addEventListener('click', () => {
   changeMusicNameColor();
+  atualizarVerticalCover();
 });
 
 function togglePlaylist() {

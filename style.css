@@ -1,3 +1,25 @@
+/* Capa horizontal: só aparece em telas horizontais e quando não houver vídeo */
+#horizontal-cover {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+}
+/* Capa vertical: oculta por padrão, só aparece via JS quando não houver vídeo */
+#vertical-cover {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+}
 /* fontes */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
