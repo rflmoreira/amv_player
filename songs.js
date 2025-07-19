@@ -1,8 +1,8 @@
 export default [
   {
     src: "",
-    name: "Não Reproduzindo",
-    author: "",
+    name: "faixa 404",
+    author: "artista sumido",
   },
   {
     src: "src/videos/[AMV] - WARRIORS.mp4",

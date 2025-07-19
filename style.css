@@ -24,10 +24,16 @@
   box-sizing: border-box;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Impede barras de rolagem */
+}
+
 body {
   display: block;
-  height: 100vh;
-  margin: 0;
   background: #000000;
 }
 
@@ -59,7 +65,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.2rem 2rem;
+  padding: 1rem 2rem 0.2rem 2rem; /* Margem superior aumentada */
   background-color: #00000086;
   border-radius: 20px;
   box-shadow: 5px 5px 30px 7px #0000009f;
@@ -474,6 +480,47 @@ button, .clickable {
   min-height: 44px;
   min-width: 44px;
   touch-action: manipulation;
+}
+
+.footer-button-container {
+    width: 100%;
+    text-align: center;
+    margin: 4px 0; /* Margens verticais reduzidas */
+}
+
+#playlistToggleButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: inherit;
+}
+
+#playlistToggleButton i {
+    color: #ffffff86;
+    font-size: 2rem;
+    vertical-align: middle;
+}
+
+#pipButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 8px 18px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    font-family: 'Fredoka', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: 'wdth' 120;
+    color: #ffffff86; /* Garante a cor do texto e do ícone */
+}
+
+#pipButton svg {
+    vertical-align: middle; /* Alinha o ícone com o texto */
+    margin-right: 8px; /* Espaço entre o ícone e o texto */
 }
 
 /* --- Mini Player Styles --- */
