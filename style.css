@@ -60,16 +60,18 @@ section {
   font-variation-settings: "wdth" 120;
 }
 
-/* player principal */
+/* player principal - Estilo Liquid Glass */
 .player {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem 2rem 0.2rem 2rem; /* Margem superior aumentada */
-  background-color: #00000086;
-  border-radius: 20px;
-  box-shadow: 5px 5px 30px 7px #0000009f;
-  backdrop-filter: saturate(180%) blur(13px);
+  padding: 1rem 2rem 0.2rem 2rem;
+  background: rgba(35, 35, 35, 0.6); /* Cor de fundo semitransparente */
+  border-radius: 28px; /* Bordas mais arredondadas */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
+  backdrop-filter: blur(30px) saturate(180%); /* Efeito de desfoque vítreo */
+  -webkit-backdrop-filter: blur(30px) saturate(180%); /* Para compatibilidade com Safari */
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
   position: fixed;
   left: 50%;
   bottom: 30px;
@@ -81,6 +83,7 @@ section {
   box-sizing: border-box;
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
+
 
 .player.minimized {
     transform: translateX(-50%) translateY(150%);
@@ -258,7 +261,7 @@ button {
   flex: 1;
 }
 
-/* playlist */
+/* playlist - Estilo Liquid Glass */
 #playlistSection {
   position: fixed;
   left: 50%;
@@ -266,7 +269,7 @@ button {
   width: 350px;
   max-width: 350px;
   height: 250px;
-  background: rgba(24,24,24,0.3);
+  background: rgba(35, 35, 35, 0.6); /* Cor de fundo semitransparente */
   z-index: 1000;
   display: none;
   flex-direction: column;
@@ -277,13 +280,15 @@ button {
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
-  border-radius: 20px;
-  box-shadow: 5px 5px 30px 7px #0000009f;
-  backdrop-filter: blur(13px) saturate(180%);
-  -webkit-backdrop-filter: blur(13px) saturate(180%);
+  border-radius: 28px; /* Bordas mais arredondadas */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
+  backdrop-filter: blur(30px) saturate(180%); /* Efeito de desfoque vítreo */
+  -webkit-backdrop-filter: blur(30px) saturate(180%); /* Para compatibilidade com Safari */
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
 
 /* esconde scrollbar webkit */
 #playlistSection::-webkit-scrollbar {
@@ -523,19 +528,21 @@ button, .clickable {
     margin-right: 8px; /* Espaço entre o ícone e o texto */
 }
 
-/* --- Mini Player Styles --- */
+/* --- Mini Player Styles - Estilo Liquid Glass --- */
 #mini-player {
     position: fixed;
     bottom: 20px;
     left: 50%;
     width: 260px; /* Mais compacto */
     height: auto;
-    padding: 10px 15px; /* Padding aumentado */
-    padding-top: 20px; /* Espaço para o botão de restaurar */
-    background-color: #00000086;
-    backdrop-filter: saturate(180%) blur(13px);
-    border-radius: 20px;
-    box-shadow: 5px 5px 30px 7px #0000009f;
+    padding: 10px 15px;
+    padding-top: 20px;
+    background: rgba(35, 35, 35, 0.6); /* Cor de fundo semitransparente */
+    backdrop-filter: blur(30px) saturate(180%); /* Efeito de desfoque vítreo */
+    -webkit-backdrop-filter: blur(30px) saturate(180%); /* Para compatibilidade com Safari */
+    border-radius: 28px; /* Bordas mais arredondadas */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
+    border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
     z-index: 20;
     display: flex;
     flex-direction: column;
@@ -545,6 +552,7 @@ button, .clickable {
     opacity: 1;
     transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
+
 
 #mini-player.minimized {
     transform: translateX(-50%) translateY(150%);

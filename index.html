@@ -31,7 +31,8 @@
   </div>
   
   <main>
-    <div class="player" id="main-player">
+    <!-- O player principal agora começa minimizado -->
+    <div class="player minimized" id="main-player">
       <!-- Cabeçalho do player -->
       <div class="player-header">
         <!-- Botão para minimizar o player -->
@@ -91,8 +92,8 @@
     </div>
   </main>
 
-  <!-- Mini Player Flutuante (inicialmente escondido) -->
-  <div id="mini-player" class="minimized">
+  <!-- Mini Player Flutuante (inicialmente visível) -->
+  <div id="mini-player">
     <button id="restoreButton" aria-label="Restaurar Player" title="Restaurar Player">
         <i class='bx bx-chevron-up'></i>
     </button>
