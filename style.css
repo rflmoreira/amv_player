@@ -436,7 +436,7 @@ button {
   width: 100%;
   height: 100%;
   display: block;
-  filter: saturate(1.2);
+  filter: saturate(1.25);
 }
 
 /* aplicando fredoka */
@@ -530,7 +530,7 @@ button, .clickable {
     left: 50%;
     width: 260px; /* Mais compacto */
     height: auto;
-    padding: 8px 12px; /* Padding lateral revertido */
+    padding: 10px 15px; /* Padding aumentado */
     padding-top: 20px; /* Espaço para o botão de restaurar */
     background-color: #00000086;
     backdrop-filter: saturate(180%) blur(13px);

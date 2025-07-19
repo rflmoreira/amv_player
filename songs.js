@@ -1,8 +1,8 @@
 export default [
   {
     src: "",
-    name: "faixa 404",
-    author: "artista sumido",
+    name: " faixa 404",
+    author: " artista sumido",
   },
   {
     src: "src/videos/[AMV] - WARRIORS.mp4",
