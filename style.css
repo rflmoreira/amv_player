@@ -119,8 +119,8 @@ section {
   background: rgba(35, 35, 35, 0.6); /* Cor de fundo semitransparente */
   border-radius: 28px; /* Bordas mais arredondadas */
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
-  backdrop-filter: blur(30px) saturate(180%); /* Efeito de desfoque vítreo */
-  -webkit-backdrop-filter: blur(30px) saturate(180%); /* Para compatibilidade com Safari */
+  backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
+  -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
   border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
   position: fixed;
   left: 50%;
@@ -332,8 +332,8 @@ button {
   opacity: 0;
   border-radius: 28px; /* Bordas mais arredondadas */
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
-  backdrop-filter: blur(30px) saturate(180%); /* Efeito de desfoque vítreo */
-  -webkit-backdrop-filter: blur(30px) saturate(180%); /* Para compatibilidade com Safari */
+  backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
+  -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
   border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -588,8 +588,8 @@ button, .clickable {
     padding: 10px 15px;
     padding-top: 20px;
     background: rgba(35, 35, 35, 0.6); /* Cor de fundo semitransparente */
-    backdrop-filter: blur(30px) saturate(180%); /* Efeito de desfoque vítreo */
-    -webkit-backdrop-filter: blur(30px) saturate(180%); /* Para compatibilidade com Safari */
+    backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
+    -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
     border-radius: 28px; /* Bordas mais arredondadas */
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
     border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
