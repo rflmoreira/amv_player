@@ -132,12 +132,12 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
   position: fixed;
   left: 50%;
-  bottom: 30px;
+  bottom: 50px; /* Aumentado para dar espaço ao rodapé */
   transform: translateX(-50%);
   z-index: 10;
-  width: 350px;
-  min-width: 350px;
-  max-width: 350px;
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
   box-sizing: border-box;
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -158,7 +158,7 @@ section {
 }
 
 .time span {
-  font-size: 16px;
+  font-size: 14px;
   color: #ffffff86;
 }
 
@@ -195,17 +195,17 @@ section {
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0 0 0.1rem 0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 700;
   text-decoration: none;
   color: #ffffff86;
   width: 100%;
-  max-width: 200px;
+  max-width: 180px;
 }
 
 /* autor da música */
 .music-author {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #ffffff86;
   margin-bottom: 0;
   margin-left: 0;
@@ -220,6 +220,7 @@ section {
   width: 100%;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
   
 button {
@@ -285,7 +286,7 @@ button {
 }
 
 #minimizeButton i {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
 }
 
 .current-track-info-wrapper {
@@ -319,9 +320,9 @@ button {
   position: fixed;
   left: 50%;
   bottom: 90px;
-  width: 350px;
-  max-width: 350px;
-  height: 250px;
+  width: 320px;
+  max-width: 320px;
+  height: 220px;
   background: rgba(25, 25, 25, 0.7); /* Cor de fundo semitransparente */
   z-index: 1000;
   display: none;
@@ -387,7 +388,7 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 400;
 }
 
@@ -556,7 +557,7 @@ button, .clickable {
 
 #playlistToggleButton i {
     color: #ffffff86;
-    font-size: 2rem;
+    font-size: 1.8rem;
     vertical-align: middle;
 }
 
@@ -564,7 +565,7 @@ button, .clickable {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 8px 18px;
     border-radius: 8px;
     transition: background 0.2s;
@@ -584,9 +585,9 @@ button, .clickable {
 /* --- Mini Player Styles - Estilo Liquid Glass --- */
 #mini-player {
     position: fixed;
-    bottom: 20px;
+    bottom: 50px; /* Aumentado para dar espaço ao rodapé */
     left: 50%;
-    width: 260px; /* Mais compacto */
+    width: 240px; /* Mais compacto */
     height: auto;
     padding: 10px 15px;
     padding-top: 20px;
@@ -631,7 +632,7 @@ button, .clickable {
 }
 
 #restoreButton i {
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 #minimizeButton:hover,
@@ -656,14 +657,14 @@ button, .clickable {
 }
 
 #mini-music-name {
-    font-size: 0.9rem; /* Tamanho da fonte ajustado */
+    font-size: 0.85rem; /* Tamanho da fonte ajustado */
     font-weight: 700;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
 #mini-music-author {
-    font-size: 0.8rem; /* Tamanho da fonte ajustado */
+    font-size: 0.75rem; /* Tamanho da fonte ajustado */
     opacity: 0.8;
 }
 
@@ -678,19 +679,19 @@ button, .clickable {
 }
 
 #mini-play-pause-button i {
-    font-size: 2.3rem; /* Tamanho do ícone ajustado sutilmente */
+    font-size: 2.1rem; /* Tamanho do ícone ajustado sutilmente */
 }
 
 /* --- Wave Animation Styles --- */
 #wave-animation {
     display: flex;
     align-items: flex-end;
-    height: 24px;
-    gap: 4px;
+    height: 20px;
+    gap: 3px;
 }
 
 .wave-bar {
-    width: 4px;
+    width: 3px;
     height: 100%;
     background-color: #ffffff86;
     border-radius: 2px;
@@ -751,4 +752,30 @@ button, .clickable {
   #playlistSection ul::-webkit-scrollbar {
     width: 8px;
   }
+}
+
+/* --- Footer Styles --- */
+footer {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  padding: 0 1rem;
+  text-align: center;
+  font-family: "Fredoka", sans-serif;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+  z-index: 5;
+  line-height: 1.5;
+  pointer-events: none; /* Permite cliques através do rodapé */
+}
+
+footer a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  pointer-events: auto; /* Garante que o link seja clicável */
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
