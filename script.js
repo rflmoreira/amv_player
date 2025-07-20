@@ -239,6 +239,19 @@ restoreButton.onclick = () => {
     miniPlayer.classList.add('minimized');
 };
 
+// Suporte a toque para minimizar/restaurar
+minimizeButton.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    mainPlayer.classList.add('minimized');
+    miniPlayer.classList.remove('minimized');
+});
+
+restoreButton.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    mainPlayer.classList.remove('minimized');
+    miniPlayer.classList.add('minimized');
+});
+
 miniPlayPauseButton.onclick = () => playPause();
 
 // botões principais
