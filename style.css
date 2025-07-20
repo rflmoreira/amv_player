@@ -691,15 +691,15 @@ button, .clickable {
 }
 
 #wave-animation.playing .wave-bar {
-    animation: wave 1.2s ease-in-out infinite;
+    animation: wave 1.5s ease-in-out infinite;
 }
 
 #wave-animation.playing .wave-bar:nth-child(2) {
-    animation-delay: -1.0s;
+    animation-delay: -1.2s;
 }
 
 #wave-animation.playing .wave-bar:nth-child(3) {
-    animation-delay: -0.8s;
+    animation-delay: -0.9s;
 }
 
 #wave-animation.playing .wave-bar:nth-child(4) {
@@ -707,21 +707,17 @@ button, .clickable {
 }
 
 @keyframes wave {
-    0% {
-        transform: scaleY(0.1);
-    }
-    25% {
-        transform: scaleY(1);
-    }
-    50% {
-        transform: scaleY(0.4);
-    }
-    75% {
-        transform: scaleY(0.8);
-    }
-    100% {
-        transform: scaleY(0.1);
-    }
+    0% { transform: scaleY(0.1); }
+    10% { transform: scaleY(0.3); }
+    20% { transform: scaleY(0.9); }
+    30% { transform: scaleY(0.4); }
+    40% { transform: scaleY(0.7); }
+    50% { transform: scaleY(1.0); }
+    60% { transform: scaleY(0.2); }
+    70% { transform: scaleY(0.8); }
+    80% { transform: scaleY(0.5); }
+    90% { transform: scaleY(0.7); }
+    100% { transform: scaleY(0.1); }
 }
 
 

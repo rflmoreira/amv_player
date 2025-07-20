@@ -30,6 +30,11 @@ export default [
     author: "mocha amv",
   },
   {
+    src: "src/videos/Anime Mix - Legends Never Die [AMV].mp4",
+    name: "Anime Mix - Legends Never Die [AMV]",
+    author: "Blue Flash",
+  },
+  {
     src: "",
     name: "AO VIVO",
     author: "",
