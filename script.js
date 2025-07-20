@@ -53,6 +53,29 @@ let lastLiveSong = null; // última música reproduzida no modo ao vivo
 let lastLiveTime = 0; // tempo da última música no modo ao vivo
 let liveExitTime = 0; // quando saiu do modo ao vivo
 
+// NOVA FUNÇÃO: Ajusta o tamanho do vídeo de fundo para preencher a tela
+const adjustVideoSize = () => {
+    // Sai se o elemento de vídeo não existir ou se os metadados ainda não foram carregados
+    if (!bgVideo || bgVideo.videoWidth === 0) {
+        return;
+    }
+
+    const videoRatio = bgVideo.videoWidth / bgVideo.videoHeight;
+    const windowRatio = window.innerWidth / window.innerHeight;
+
+    // Reseta os estilos para recalcular
+    bgVideo.style.width = 'auto';
+    bgVideo.style.height = 'auto';
+
+    if (windowRatio > videoRatio) {
+        // Se a janela for mais "larga" que o vídeo, a largura do vídeo deve preencher a janela
+        bgVideo.style.width = '100vw';
+    } else {
+        // Se a janela for mais "alta" que o vídeo, a altura do vídeo deve preencher a janela
+        bgVideo.style.height = '100vh';
+    }
+};
+
 // verificações de compatibilidade para dispositivos móveis
 const checkDeviceCapabilities = () => {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
@@ -138,6 +161,7 @@ window.addEventListener('DOMContentLoaded', () => {
   atualizarBotoesAvanco();
   renderPlaylist(0);
   atualizarVerticalCover();
+  adjustVideoSize(); // Chama a função de ajuste no carregamento inicial
   
   // tooltips dos botões
   playPauseButton.title = "Reproduzir/Pausar (Espaço)";
@@ -210,6 +234,11 @@ window.addEventListener('DOMContentLoaded', () => {
     pipButton.addEventListener('touchend', handlePiP);
   }
 });
+
+// Eventos para redimensionamento do vídeo
+window.addEventListener('resize', adjustVideoSize);
+bgVideo.addEventListener('loadedmetadata', adjustVideoSize);
+
 
 // salva estado ao fechar/recarregar
 window.addEventListener('beforeunload', () => {
@@ -501,17 +530,13 @@ function atualizarVerticalCover() {
   if (!verticalCover || !horizontalCover) return;
   // Considera que a faixa 0 é "capa" (sem vídeo), demais faixas têm vídeo
   const isNoVideo = songs[index] && (!songs[index].src || songs[index].src === '' || songs[index].isCover);
-  const isPortrait = window.matchMedia('(orientation: portrait)').matches;
   if (isNoVideo) {
-    if (isPortrait) {
-      verticalCover.style.display = 'block';
-      horizontalCover.style.display = 'none';
-    } else {
-      verticalCover.style.display = 'none';
-      horizontalCover.style.display = 'block';
-    }
+    // Deixa o CSS controlar qual capa mostrar
+    verticalCover.style.display = '';
+    horizontalCover.style.display = '';
     bgVideo.style.display = 'none';
   } else {
+    // Oculta ambas as capas, mostra o vídeo
     verticalCover.style.display = 'none';
     horizontalCover.style.display = 'none';
     bgVideo.style.display = '';
