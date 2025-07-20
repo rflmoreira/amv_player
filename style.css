@@ -630,6 +630,11 @@ button, .clickable {
     font-size: 2rem;
 }
 
+#minimizeButton:hover,
+#restoreButton:hover {
+    background: transparent;
+}
+
 .mini-player-content {
     display: flex;
     align-items: center;
