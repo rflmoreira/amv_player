@@ -75,10 +75,10 @@ video#bg-video {
 
 html, body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Impede barras de rolagem */
+  overflow-x: hidden; /* Permite rolagem vertical, impede horizontal */
 }
 
 body {
@@ -130,10 +130,8 @@ section {
   backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
   -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
   border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
-  position: fixed;
-  left: 50%;
-  bottom: 50px; /* Aumentado para dar espaço ao rodapé */
-  transform: translateX(-50%);
+  position: relative; /* Alterado de fixed para relative */
+  margin: 50px auto; /* Adicionado para centralizar e dar espaçamento */
   z-index: 10;
   width: 320px;
   min-width: 320px;
@@ -142,9 +140,8 @@ section {
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
 
-
 .player.minimized {
-    transform: translateX(-50%) translateY(150%);
+    transform: scale(0.95); /* Animação de saída alterada */
     opacity: 0;
     pointer-events: none;
 }
