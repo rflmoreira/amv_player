@@ -334,25 +334,22 @@ button {
   bottom: 90px;
   width: 320px;
   max-width: 320px;
-  height: 220px;
-  background: rgba(25, 25, 25, 0.55); /* Cor de fundo com menor opacidade */
+  height: 250px; /* Aumentar a altura para caber melhor os itens com thumbnail */
+  background: rgba(25, 25, 25, 0.55);
   z-index: 1000;
   display: none;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 20px 40px 20px;
+  padding: 20px 10px 10px 10px; /* Ajustar padding */
   overflow-y: auto;
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
   border-radius: 28px;
-  /* Sombra e brilho melhorados */
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
-  /* Efeito de vidro melhorado */
   backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
   -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
-  /* Borda mais clara */
   border: 1px solid rgba(255, 255, 255, 0.18);
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -387,72 +384,107 @@ button {
   z-index: 1;
 }
 
-#playlistSection li {
-  color: #ffffff86;
-  opacity: 0.8;
-  transition: color 0.2s, background 0.2s, border-radius 0.2s;
-  padding: 8px 12px;
-  margin-bottom: 4px;
-  width: 100%;
-  text-align: left;
-  list-style: none;
-  background: transparent;
-  position: relative;
-  z-index: 1;
-  border-radius: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.8rem;
-  font-weight: 400;
-}
-
-/* linha entre itens */
-#playlistSection li:not(:last-child)::after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: #ffffff18;
-  border-radius: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-#playlistSection li:last-child::after {
-  display: none;
-}
-
-/* hover e selecionado */
-#playlistSection li:hover,
-#playlistSection li.selected,
-#playlistSection li.selected:hover {
-  background: #ffffff10;
-  border-radius: 8px;
-  z-index: 1;
-  opacity: 1;
-}
-
 #playlistSection ul {
   width: 100%;
-  max-width: 280px;
   list-style: none;
   padding: 0;
   margin: 0;
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 40px;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-/* esconde scrollbar webkit */
 #playlistSection ul::-webkit-scrollbar {
   display: none;
 }
+
+/* New Playlist Item Styles */
+.playlist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+}
+
+.playlist-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.playlist-item.selected {
+    background-color: rgba(137, 180, 250, 0.15); /* A subtle blue glow */
+}
+
+.thumbnail-container {
+    position: relative;
+    width: 96px; 
+    height: 54px; /* 16:9 aspect ratio */
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #24273a; /* catppuccin crust */
+}
+
+.thumbnail-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-size: 1.8rem;
+    color: white;
+}
+
+.playlist-item.selected .thumbnail-overlay {
+    opacity: 1;
+}
+
+.song-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    gap: 2px;
+}
+
+.song-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #cad3f5; /* catppuccin text */
+}
+
+.song-author {
+    font-size: 0.7rem;
+    color: #a6adc8; /* catppuccin subtext0 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist-item.selected .song-name {
+  font-weight: 700;
+}
+
 
 #playlistCloseButton {
   position: absolute;
@@ -517,14 +549,16 @@ button {
 .player,
 #playlistSection,
 #playlistSection h4,
-#playlistSection li,
-#playlistSection ul,
 #mini-player { /* Adicionado para garantir a fonte */
   font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
   font-variation-settings: "wdth" 120;
+}
+
+.song-details {
+  font-family: "Fredoka", sans-serif;
 }
 
 #playPauseButton,

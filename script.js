@@ -1034,91 +1034,34 @@ function renderPlaylist(selectedIndex = 1) {
   for (let idx = 1; idx < songs.length - 1; idx++) { // do primeiro até o penúltimo
     const song = songs[idx];
     const li = document.createElement("li");
-    
-    const songText = song.author ? `${song.name} - ${song.author}` : song.name;
-    li.textContent = songText;
-    
-    li.style.padding = "6px 2px";
-    li.style.cursor = "pointer";
-    li.style.webkitTapHighlightColor = "rgba(255,255,255,0.1)";
-    li.style.touchAction = "pan-y"; // permite scroll vertical
+    li.className = 'playlist-item';
     
     if (idx === selectedIndex) {
-      li.style.fontWeight = "bold";
-      li.style.background = "rgba(255,255,255,0.08)";
-      li.style.borderRadius = "8px";
-      
-      // aplica a mesma cor do nome da música
-      const currentColor = musicName.style.color || "#ffffff86";
-      li.style.color = currentColor;
-    } else {
-      li.style.color = "#ffffff86";
-      li.style.borderRadius = "";
+      li.classList.add('selected');
     }
-    
-    // captura o índice
+
+    // Create the inner HTML structure
+    li.innerHTML = `
+      <div class="thumbnail-container">
+        <img 
+          src="${song.thumbnail || 'https://placehold.co/96x54/11111b/cdd6f4?text=???'}" 
+          alt="Thumbnail for ${song.name}" 
+          onerror="this.onerror=null;this.src='https://placehold.co/96x54/11111b/cdd6f4?text=Error';"
+          loading="lazy"
+        >
+        <div class="thumbnail-overlay">
+            <i class='bx bx-play'></i>
+        </div>
+      </div>
+      <div class="song-details">
+        <span class="song-name">${song.name}</span>
+        <span class="song-author">${song.author || ''}</span>
+      </div>
+    `;
+
+    // Add a simple click listener
     const songIndex = idx;
-    
-    // controle de toque
-    let touchData = {
-      startY: 0,
-      startTime: 0,
-      moved: false
-    };
-    
-    // eventos pointer (mais robustos)
-    const handlePointerDown = (e) => {
-      if (e.pointerType === 'touch') {
-        touchData.startY = e.clientY;
-        touchData.startTime = Date.now();
-        touchData.moved = false;
-        li.style.background = "rgba(255,255,255,0.15)";
-      }
-    };
-    
-    const handlePointerMove = (e) => {
-      if (e.pointerType === 'touch') {
-        const deltaY = Math.abs(e.clientY - touchData.startY);
-        if (deltaY > 10) {
-          touchData.moved = true;
-          li.style.background = idx === selectedIndex ? 
-            "rgba(255,255,255,0.08)" : "transparent";
-        }
-      }
-    };
-    
-    const handlePointerUp = (e) => {
-      if (e.pointerType === 'touch') {
-        const touchDuration = Date.now() - touchData.startTime;
-        const deltaY = Math.abs(e.clientY - touchData.startY);
-        
-        // Toque rápido e sem movimento = seleção
-        if (!touchData.moved && deltaY < 10 && touchDuration < 250) {
-          e.preventDefault();
-          e.stopPropagation();
-          selectSong(songIndex);
-        } else {
-          // Restaura o estilo
-          li.style.background = idx === selectedIndex ? 
-            "rgba(255,255,255,0.08)" : "transparent";
-        }
-      } else {
-        // Clique do mouse
-        e.preventDefault();
-        e.stopPropagation();
-        selectSong(songIndex);
-      }
-    };
-    
-    // usa pointer events
-    li.addEventListener('pointerdown', handlePointerDown);
-    li.addEventListener('pointermove', handlePointerMove);
-    li.addEventListener('pointerup', handlePointerUp);
-    
-    // fallback para clique simples
-    li.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    li.addEventListener('click', () => {
       selectSong(songIndex);
     });
 
