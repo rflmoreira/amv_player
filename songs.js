@@ -35,6 +35,11 @@ export default [
     author: "cloudcore.",
   },
   {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Perturbator%20-%20Humans%20Are%20Such%20Easy%20Prey%20(Unofficial%20Videoclip).mp4",
+    name: "Perturbator - Humans Are Such Easy Prey (Unofficial Videoclip)",
+    author: "Jack Box",
+  },
+  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Cyberpunk%EF%BC%9A%20Edgerunners%20AMV%20-%20After%20Dark%20x%20Sweater%20Weather.mp4",
     name: "Cyberpunk： Edgerunners AMV - After Dark x Sweater Weather",
     author: "Lifes Studioz",
@@ -43,6 +48,11 @@ export default [
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Darkside%E3%80%8CAMV%E3%80%8DAnime%20Mix.mp4",
     name: "Darkside「AMV」Anime Mix",
     author: "UnClonable",
+  },
+  {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/BOKU%20NO%20HERO%20ACADEMIA%E3%80%8CAMV%E3%80%8D%E2%96%AA%20IN%20THE%20END%20(2018)%20%E2%96%AA%20(HD).mp4",
+    name: "BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD)",
+    author: "Dark AMVs",
   },
   {
     src: "",
