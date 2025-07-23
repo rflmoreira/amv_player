@@ -30,6 +30,16 @@ export default [
     author: "mocha amv",
   },
   {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%EF%BC%82its%20JUST%20an%20ANIME%EF%BC%82%20%EF%BD%9C%204K%20AMV%E2%A7%B8Edit.mp4",
+    name: "＂its JUST an ANIME＂ ｜ 4K AMV⧸Edit",
+    author: "cloudcore.",
+  },
+  {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Cyberpunk%EF%BC%9A%20Edgerunners%20AMV%20-%20After%20Dark%20x%20Sweater%20Weather.mp4",
+    name: "Cyberpunk： Edgerunners AMV - After Dark x Sweater Weather",
+    author: "Lifes Studioz",
+  },
+  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Darkside%E3%80%8CAMV%E3%80%8DAnime%20Mix.mp4",
     name: "Darkside「AMV」Anime Mix",
     author: "UnClonable",

@@ -129,20 +129,23 @@ section {
   font-variation-settings: "wdth" 120;
 }
 
-/* player principal - Estilo Liquid Glass */
+/* player principal - Estilo Liquid Glass Melhorado */
 .player {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem 2rem 0.2rem 2rem;
-  background: rgba(25, 25, 25, 0.7); /* Cor de fundo semitransparente */
-  border-radius: 28px; /* Bordas mais arredondadas */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
-  backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
-  -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
-  border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
-  position: relative; /* Voltado para relative, para fazer parte do fluxo da página */
-  margin: 0; /* A margem é controlada pelo container 'main' */
+  background: rgba(25, 25, 25, 0.55); /* Cor de fundo com menor opacidade para realçar o vidro */
+  border-radius: 28px;
+  /* Sombra mais suave e profunda, brilho interno mais nítido */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
+  /* Efeito de desfoque mais intenso, cores mais vibrantes e um leve brilho */
+  backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1); /* Para compatibilidade com Safari */
+  /* Borda mais clara para definir melhor as arestas do vidro */
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  margin: 0;
   z-index: 10;
   width: 320px;
   min-width: 320px;
@@ -150,6 +153,7 @@ section {
   box-sizing: border-box;
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
+
 
 .player.minimized {
     transform: scale(0.95); /* Animação de saída sem translateX */
@@ -177,7 +181,7 @@ section {
 /* barra de progresso */
 .progress-bar {
   height: 8px;
-  background-color: #3a3a3a5d;
+  background-color: #3a3a3a2a;
   margin-bottom: 5px;
   border-radius: 5px;
 }
@@ -323,7 +327,7 @@ button {
   flex: 1;
 }
 
-/* playlist - Estilo Liquid Glass */
+/* playlist - Estilo Liquid Glass Melhorado */
 #playlistSection {
   position: fixed;
   left: 50%;
@@ -331,7 +335,7 @@ button {
   width: 320px;
   max-width: 320px;
   height: 220px;
-  background: rgba(25, 25, 25, 0.7); /* Cor de fundo semitransparente */
+  background: rgba(25, 25, 25, 0.55); /* Cor de fundo com menor opacidade */
   z-index: 1000;
   display: none;
   flex-direction: column;
@@ -342,11 +346,14 @@ button {
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
-  border-radius: 28px; /* Bordas mais arredondadas */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
-  backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
-  -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
-  border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
+  border-radius: 28px;
+  /* Sombra e brilho melhorados */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
+  /* Efeito de vidro melhorado */
+  backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  /* Borda mais clara */
+  border: 1px solid rgba(255, 255, 255, 0.18);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -491,7 +498,7 @@ button {
   max-width: 640px;
   aspect-ratio: 16 / 9;
   margin: 35px auto 0 auto;
-  background-color: #3a3a3a5d;
+  background-color: #3a3a3a2a;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -590,21 +597,24 @@ button, .clickable {
     margin-right: 8px; /* Espaço entre o ícone e o texto */
 }
 
-/* --- Mini Player Styles - Estilo Liquid Glass --- */
+/* --- Mini Player Styles - Estilo Liquid Glass Melhorado --- */
 #mini-player {
     position: fixed;
-    bottom: 50px; /* Aumentado para dar espaço ao rodapé */
+    bottom: 50px;
     left: 50%;
-    width: 240px; /* Mais compacto */
+    width: 240px;
     height: auto;
     padding: 10px 15px;
     padding-top: 20px;
-    background: rgba(25, 25, 25, 0.7); /* Cor de fundo semitransparente */
-    backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
-    -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
-    border-radius: 28px; /* Bordas mais arredondadas */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 2px rgba(255, 255, 255, 0.2) inset; /* Sombra mais suave e brilho interno */
-    border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
+    background: rgba(25, 25, 25, 0.55); /* Cor de fundo com menor opacidade */
+    /* Efeito de vidro melhorado */
+    backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+    -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+    border-radius: 28px;
+    /* Sombra e brilho melhorados */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
+    /* Borda mais clara */
+    border: 1px solid rgba(255, 255, 255, 0.18);
     z-index: 20;
     display: flex;
     flex-direction: column;
@@ -706,6 +716,8 @@ button, .clickable {
     transform-origin: bottom;
     transform: scaleY(0.1);
     transition: transform 0.2s ease-out;
+    opacity: 0.5;
+    filter: grayscale(1);
 }
 
 #wave-animation.playing .wave-bar {
