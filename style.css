@@ -75,16 +75,27 @@ video#bg-video {
 
 html, body {
   width: 100%;
-  min-height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Permite rolagem vertical, impede horizontal */
 }
 
 body {
-  display: block;
+  display: flex; /* Alterado para flex para controlar o layout principal */
+  flex-direction: column; /* Organiza os itens (main, footer) verticalmente */
+  min-height: 100vh; /* Garante que o corpo ocupe pelo menos a altura total da tela */
   background: #000000;
+  overflow-x: hidden; /* Impede a rolagem horizontal */
 }
+
+/* Nova regra para o container principal */
+main {
+  flex-grow: 1; /* Faz com que a área principal cresça e ocupe o espaço disponível */
+  display: flex;
+  justify-content: center; /* Centraliza o player horizontalmente */
+  align-items: flex-end; /* Alinha o player na parte de baixo da área principal */
+  padding-bottom: 3rem; /* Cria um espaço entre o player e o rodapé */
+}
+
 
 body::before {
   content: "";
@@ -130,8 +141,8 @@ section {
   backdrop-filter: blur(15px) saturate(180%); /* Efeito de desfoque vítreo */
   -webkit-backdrop-filter: blur(15px) saturate(180%); /* Para compatibilidade com Safari */
   border: 1px solid rgba(255, 255, 255, 0.12); /* Borda sutil para efeito de vidro */
-  position: relative; /* Alterado de fixed para relative */
-  margin: 50px auto; /* Adicionado para centralizar e dar espaçamento */
+  position: relative; /* Voltado para relative, para fazer parte do fluxo da página */
+  margin: 0; /* A margem é controlada pelo container 'main' */
   z-index: 10;
   width: 320px;
   min-width: 320px;
@@ -141,7 +152,7 @@ section {
 }
 
 .player.minimized {
-    transform: scale(0.95); /* Animação de saída alterada */
+    transform: scale(0.95); /* Animação de saída sem translateX */
     opacity: 0;
     pointer-events: none;
 }
