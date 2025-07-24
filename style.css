@@ -1,4 +1,4 @@
-/* Capa horizontal: só aparece em telas horizontais e quando não houver vídeo */
+/* A capa horizontal só aparece em paisagem e se não tiver vídeo. */
 #horizontal-cover {
   position: fixed;
   top: 0;
@@ -7,10 +7,10 @@
   height: 100vh;
   object-fit: cover;
   z-index: -2;
-  display: block; /* Padrão para paisagem */
+  display: block; /* Começa visível por padrão */
   pointer-events: none;
 }
-/* Capa vertical ocupa toda a tela em modo retrato */
+/* A capa vertical é para o modo retrato. */
 #vertical-cover {
   position: fixed;
   top: 0;
@@ -19,11 +19,11 @@
   height: 100vh;
   object-fit: cover;
   z-index: -2;
-  display: none; /* Padrão escondido */
+  display: none; /* Começa escondida */
   pointer-events: none;
 }
 
-/* Mostra a capa correta conforme a orientação, sem !important */
+/* Ajusta a capa certa dependendo da orientação. */
 @media (orientation: portrait) {
   #horizontal-cover {
     display: none;
@@ -33,13 +33,13 @@
   }
 }
 
-/* Vídeo de fundo ocupa toda a tela */
+/* O vídeo de fundo precisa preencher a tela. */
 video#bg-video {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* O JavaScript definirá largura/altura, mas min-width/height é um bom fallback */
+  /* O JS cuida do tamanho, mas isso aqui garante que não quebre. */
   min-width: 100vw;
   min-height: 100vh;
   pointer-events: none;
@@ -47,11 +47,11 @@ video#bg-video {
   filter: saturate(1.35) !important;
 }
 
-/* fontes */
+/* Fontes que estou usando. */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
-/* cores catppuccin */
+/* Minha paleta de cores, Catppuccin. */
 :root {
   --catppuccin-pink: #f5c2e7;
   --catppuccin-mauve: #cba6f7;
@@ -66,7 +66,7 @@ video#bg-video {
   --catppuccin-lavender: #b4befe;
 }
 
-/* reset básico */
+/* Reset básico pra evitar bagunça. */
 * {
   padding: 0;
   margin: 0;
@@ -80,20 +80,20 @@ html, body {
 }
 
 body {
-  display: flex; /* Alterado para flex para controlar o layout principal */
-  flex-direction: column; /* Organiza os itens (main, footer) verticalmente */
-  min-height: 100vh; /* Garante que o corpo ocupe pelo menos a altura total da tela */
+  display: flex; 
+  flex-direction: column; 
+  min-height: 100vh; /* O body precisa ocupar a tela toda. */
   background: #000000;
-  overflow-x: hidden; /* Impede a rolagem horizontal */
+  overflow-x: hidden;
 }
 
-/* Nova regra para o container principal */
+/* Container principal. */
 main {
-  flex-grow: 1; /* Faz com que a área principal cresça e ocupe o espaço disponível */
+  flex-grow: 1; /* Faz o main crescer e empurrar o footer pra baixo. */
   display: flex;
-  justify-content: center; /* Centraliza o player horizontalmente */
-  align-items: flex-end; /* Alinha o player na parte de baixo da área principal */
-  padding-bottom: 3rem; /* Cria um espaço entre o player e o rodapé */
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 3rem; /* Espaço entre o player e o rodapé. */
 }
 
 
@@ -109,9 +109,6 @@ body::before {
   pointer-events: none !important;
 }
 
-/* capa de fundo */
-
-
 section {
   display: flex;
   justify-content: center;
@@ -120,7 +117,6 @@ section {
   flex-direction: column;
 }
 
-/* fredoka font */
 .fredoka-font {
   font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
@@ -129,20 +125,17 @@ section {
   font-variation-settings: "wdth" 120;
 }
 
-/* player principal - Estilo Liquid Glass Melhorado */
+/* Estilo do player principal, com efeito de vidro. */
 .player {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 1rem 2rem 0.2rem 2rem;
-  background: rgba(25, 25, 25, 0.55); /* Cor de fundo com menor opacidade para realçar o vidro */
+  background: rgba(25, 25, 25, 0.55);
   border-radius: 28px;
-  /* Sombra mais suave e profunda, brilho interno mais nítido */
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
-  /* Efeito de desfoque mais intenso, cores mais vibrantes e um leve brilho */
   backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
-  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1); /* Para compatibilidade com Safari */
-  /* Borda mais clara para definir melhor as arestas do vidro */
+  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1); /* Compatibilidade com Safari */
   border: 1px solid rgba(255, 255, 255, 0.18);
   position: relative;
   margin: 0;
@@ -156,13 +149,13 @@ section {
 
 
 .player.minimized {
-    transform: scale(0.95); /* Animação de saída sem translateX */
+    transform: scale(0.95);
     opacity: 0;
     pointer-events: none;
 }
 
 
-/* timer da música */
+/* Timer da música. */
 .time {
   display: flex;
   align-items: center;
@@ -178,7 +171,7 @@ section {
   width: 100%;
 }
 
-/* barra de progresso */
+/* Barra de progresso. */
 .progress-bar {
   height: 8px;
   background-color: #3a3a3a2a;
@@ -192,7 +185,7 @@ section {
   border-radius: 5px;
 }
 
-/* info da música */
+/* Informações da música. */
 .music-container {
   display: flex;
   flex-direction: column;
@@ -200,7 +193,6 @@ section {
   width: 100%;
 }
 
-/* nome da música */
 #musicName {
   text-align: left;
   overflow: hidden;
@@ -215,7 +207,6 @@ section {
   max-width: 180px;
 }
 
-/* autor da música */
 .music-author {
   font-size: 0.75rem;
   color: #ffffff86;
@@ -227,7 +218,7 @@ section {
   opacity: 0.8;
 }
 
-/* botões */
+/* Controles. */
 #container-botoes {
   width: 100%;
   display: flex;
@@ -247,7 +238,7 @@ button {
   color: inherit;
 }
 
-/* botão desativado */
+/* Estilo para botões desativados. */
 .botao-desativado {
   opacity: 0.5;
   pointer-events: none;
@@ -255,20 +246,19 @@ button {
   cursor: not-allowed !important;
 }
 
-/* esconde controles do vídeo fora do fullscreen */
+/* Escondo os controles do vídeo se não estiver em tela cheia. */
 #bg-video:not(:fullscreen)::-webkit-media-controls,
 #bg-video:not(:-webkit-full-screen)::-webkit-media-controls {
   display: none !important;
 }
 
-/* fullscreen video */
+/* Ajustes para o vídeo em tela cheia. */
 :fullscreen #bg-video,
 :-webkit-full-screen #bg-video {
   pointer-events: auto !important;
   z-index: 9999 !important;
 }
 
-/* header do player */
 .player-header {
   display: flex;
   align-items: center;
@@ -279,7 +269,7 @@ button {
   position: relative;
 }
 
-/* Botão de minimizar */
+/* Botão de minimizar. */
 #minimizeButton {
     position: absolute;
     top: -10px; 
@@ -306,10 +296,9 @@ button {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 10px 0; /* Espaçamento vertical adicionado */
+    padding: 10px 0;
 }
 
-/* autor em fullscreen */
 .author-fullscreen {
   display: flex;
   align-items: center;
@@ -319,7 +308,6 @@ button {
   gap: 0.5rem;
 }
 
-/* info da música */
 .music-info {
   display: flex;
   flex-direction: column;
@@ -327,21 +315,21 @@ button {
   flex: 1;
 }
 
-/* playlist - Estilo Liquid Glass Melhorado */
+/* Estilo da playlist, também com efeito de vidro. */
 #playlistSection {
   position: fixed;
   left: 50%;
   bottom: 90px;
   width: 320px;
   max-width: 320px;
-  height: 250px; /* Aumentar a altura para caber melhor os itens com thumbnail */
+  height: 250px;
   background: rgba(25, 25, 25, 0.55);
   z-index: 1000;
   display: none;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 10px 10px 10px; /* Ajustar padding */
+  padding: 20px 10px 10px 10px;
   overflow-y: auto;
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
   transform: translateX(-50%) translateY(100%);
@@ -356,7 +344,7 @@ button {
 }
 
 
-/* esconde scrollbar webkit */
+/* Escondo a barra de rolagem. */
 #playlistSection::-webkit-scrollbar {
   display: none;
 }
@@ -367,7 +355,7 @@ button {
   opacity: 1;
 }
 
-/* quando fechando */
+/* Animação de fechamento. */
 #playlistSection.closing {
   transform: translateX(-50%) translateY(100%);
   opacity: 0;
@@ -399,7 +387,7 @@ button {
   display: none;
 }
 
-/* New Playlist Item Styles */
+/* Novos estilos para os itens da playlist. */
 .playlist-item {
     display: flex;
     align-items: center;
@@ -417,17 +405,17 @@ button {
 }
 
 .playlist-item.selected {
-    background-color: rgba(137, 180, 250, 0.15); /* A subtle blue glow */
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .thumbnail-container {
     position: relative;
     width: 96px; 
-    height: 54px; /* 16:9 aspect ratio */
+    height: 54px;
     flex-shrink: 0;
     border-radius: 4px;
     overflow: hidden;
-    background-color: #24273a; /* catppuccin crust */
+    background-color: #3a3a3a2a;
 }
 
 .thumbnail-container img {
@@ -452,6 +440,7 @@ button {
     color: white;
 }
 
+
 .playlist-item.selected .thumbnail-overlay {
     opacity: 1;
 }
@@ -470,15 +459,16 @@ button {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #cad3f5; /* catppuccin text */
+    color: #ffffff86;
 }
 
 .song-author {
     font-size: 0.7rem;
-    color: #a6adc8; /* catppuccin subtext0 */
+    color: #ffffff86;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    opacity: 0.8;
 }
 
 .playlist-item.selected .song-name {
@@ -510,7 +500,6 @@ button {
   justify-content: center;
 }
 
-/* header da playlist */
 #playlistSection .header {
   display: flex;
   align-items: center;
@@ -545,11 +534,11 @@ button {
   filter: saturate(1.35) !important;
 }
 
-/* aplicando fredoka */
+/* Aplicando a fonte Fredoka em vários lugares. */
 .player,
 #playlistSection,
 #playlistSection h4,
-#mini-player { /* Adicionado para garantir a fonte */
+#mini-player {
   font-family: "Fredoka", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
@@ -572,7 +561,7 @@ button {
   cursor: pointer !important;
 }
 
-/* touch responsivo iOS */
+/* Melhorando a resposta ao toque no iOS. */
 button, .clickable {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   -webkit-touch-callout: none;
@@ -581,7 +570,7 @@ button, .clickable {
   cursor: pointer;
 }
 
-/* área mínima de toque */
+/* Garanto uma área mínima de toque para botões importantes. */
 #playPauseButton, #prevButton, #nextButton, 
 #playlistToggleButton, #playlistCloseButton,
 #pipButton, #minimizeButton, #restoreButton {
@@ -593,7 +582,7 @@ button, .clickable {
 .footer-button-container {
     width: 100%;
     text-align: center;
-    margin: 4px 0; /* Margens verticais reduzidas */
+    margin: 4px 0;
 }
 
 #playlistToggleButton {
@@ -623,15 +612,15 @@ button, .clickable {
     font-weight: 700;
     font-style: normal;
     font-variation-settings: 'wdth' 120;
-    color: #ffffff86; /* Garante a cor do texto e do ícone */
+    color: #ffffff86;
 }
 
 #pipButton svg {
-    vertical-align: middle; /* Alinha o ícone com o texto */
-    margin-right: 8px; /* Espaço entre o ícone e o texto */
+    vertical-align: middle;
+    margin-right: 8px;
 }
 
-/* --- Mini Player Styles - Estilo Liquid Glass Melhorado --- */
+/* --- Estilos do Mini Player --- */
 #mini-player {
     position: fixed;
     bottom: 50px;
@@ -640,14 +629,11 @@ button, .clickable {
     height: auto;
     padding: 10px 15px;
     padding-top: 20px;
-    background: rgba(25, 25, 25, 0.55); /* Cor de fundo com menor opacidade */
-    /* Efeito de vidro melhorado */
+    background: rgba(25, 25, 25, 0.55);
     backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
     -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
     border-radius: 28px;
-    /* Sombra e brilho melhorados */
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
-    /* Borda mais clara */
     border: 1px solid rgba(255, 255, 255, 0.18);
     z-index: 20;
     display: flex;
@@ -705,18 +691,17 @@ button, .clickable {
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: left;
-    /* margin-right removido para alinhamento perfeito */
 }
 
 #mini-music-name {
-    font-size: 0.85rem; /* Tamanho da fonte ajustado */
+    font-size: 0.85rem;
     font-weight: 700;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
 #mini-music-author {
-    font-size: 0.75rem; /* Tamanho da fonte ajustado */
+    font-size: 0.75rem;
     opacity: 0.8;
 }
 
@@ -724,51 +709,71 @@ button, .clickable {
     background: none;
     border: none;
     color: #ffffff86;
-    padding: 0; /* Padding zerado para controle preciso */
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 #mini-play-pause-button i {
-    font-size: 2.1rem; /* Tamanho do ícone ajustado sutilmente */
+    font-size: 2.1rem;
 }
 
-/* --- Wave Animation Styles --- */
-#wave-animation {
+/* --- Animação da Onda --- */
+#wave-animation, .playlist-wave-animation {
     display: flex;
     align-items: flex-end;
-    height: 20px;
     gap: 3px;
+}
+
+#wave-animation {
+    height: 20px;
+}
+
+.playlist-wave-animation {
+    height: 22px;
 }
 
 .wave-bar {
     width: 3px;
     height: 100%;
-    background-color: #ffffff86;
+    background-color: #ffffff;
     border-radius: 2px;
     transform-origin: bottom;
     transform: scaleY(0.1);
     transition: transform 0.2s ease-out;
+}
+
+/* A onda do player principal é mais sutil. */
+#wave-animation .wave-bar {
     opacity: 0.5;
     filter: grayscale(1);
 }
 
-#wave-animation.playing .wave-bar {
+/* A cor da onda na playlist muda com a música (via JS). */
+
+/* Ativo a animação quando a música está tocando. */
+#wave-animation.playing .wave-bar,
+.playlist-wave-animation.playing .wave-bar {
     animation: wave 1.5s ease-in-out infinite;
 }
 
-#wave-animation.playing .wave-bar:nth-child(2) {
+/* Delays para cada barrinha da onda. */
+#wave-animation.playing .wave-bar:nth-child(2),
+.playlist-wave-animation.playing .wave-bar:nth-child(2) {
     animation-delay: -1.2s;
 }
 
-#wave-animation.playing .wave-bar:nth-child(3) {
+#wave-animation.playing .wave-bar:nth-child(3),
+.playlist-wave-animation.playing .wave-bar:nth-child(3) {
     animation-delay: -0.9s;
 }
 
-#wave-animation.playing .wave-bar:nth-child(4) {
+#wave-animation.playing .wave-bar:nth-child(4),
+.playlist-wave-animation.playing .wave-bar:nth-child(4) {
     animation-delay: -0.6s;
 }
+
 
 @keyframes wave {
     0% { transform: scaleY(0.1); }
@@ -785,7 +790,7 @@ button, .clickable {
 }
 
 
-/* scrollbar desktop */
+/* Scrollbar para desktop (escondida). */
 @media (hover: hover) and (pointer: fine) {
   #playlistSection ul::-webkit-scrollbar {
     display: none;
@@ -796,7 +801,7 @@ button, .clickable {
   }
 }
 
-/* scrollbar mobile */
+/* Scrollbar para mobile (visível e fina). */
 @media (hover: none) and (pointer: coarse) {
   #playlistSection ul {
     scrollbar-width: thin;
@@ -808,7 +813,7 @@ button, .clickable {
   }
 }
 
-/* --- Footer Styles --- */
+/* --- Estilos do Rodapé --- */
 footer {
   position: fixed;
   bottom: 10px;
@@ -821,13 +826,13 @@ footer {
   color: rgba(255, 255, 255, 0.5);
   z-index: 5;
   line-height: 1.5;
-  pointer-events: none; /* Permite cliques através do rodapé */
+  pointer-events: none; /* Deixa clicar através dele. */
 }
 
 footer a {
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  pointer-events: auto; /* Garante que o link seja clicável */
+  pointer-events: auto; /* Mas o link precisa ser clicável. */
 }
 
 footer a:hover {

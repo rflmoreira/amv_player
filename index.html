@@ -17,14 +17,14 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Vídeo de fundo (estilo inline removido) -->
+  <!-- Vídeo de fundo. O estilo agora está no CSS. -->
   <video id="bg-video" playsinline></video>
-  <!-- Imagem de capa para telas verticais -->
+  <!-- Capa para quando a tela estiver na vertical. -->
   <img id="vertical-cover" src="src/capa-vertical.jpg" alt="Capa Vertical" />
-  <!-- Imagem de capa para telas horizontais -->
+  <!-- Capa para quando a tela estiver na horizontal. -->
   <img id="horizontal-cover" src="src/capa.jpg" alt="Capa Horizontal" />
   
-  <!-- Playlist separada do player -->
+  <!-- A playlist fica aqui, separada do player. -->
   <div id="playlistSection">
     <div class="header">
       <h4>Playlist</h4>
@@ -36,16 +36,14 @@
   </div>
   
   <main>
-    <!-- O player principal agora começa minimizado -->
+    <!-- O player principal. -->
     <div class="player minimized" id="main-player">
-      <!-- Cabeçalho do player -->
       <div class="player-header">
-        <!-- Botão para minimizar o player -->
         <button id="minimizeButton" aria-label="Minimizar Player" title="Minimizar Player">
             <i class='bx bx-chevron-down'></i>
         </button>
 
-        <!-- Novo player de vídeo -->
+        <!-- Onde o vídeo é renderizado, no canvas. -->
         <div class="video-player-container">
           <canvas id="sync-canvas" width="640" height="360"></canvas>
         </div>
@@ -55,7 +53,7 @@
             <div id="musicName"></div>
             <span class="music-author" id="musicAuthor"></span>
           </div>
-          <!-- Animação de Onda -->
+          <!-- Animação da ondinha. -->
           <div id="wave-animation">
               <span class="wave-bar"></span>
               <span class="wave-bar"></span>
@@ -72,13 +70,12 @@
           <span id="currentTime">0:00</span>
           <span id="duration">0:00</span>
         </div>
-        <!-- Controles do player -->
         <div id="container-botoes">
           <button id="prevButton"><i style="font-size: 3rem;" class='bx bx-skip-previous-circle'></i></button>
           <button id="playPauseButton"><i style="font-size: 4rem;" class='bx bx-play-circle'></i></button>
           <button id="nextButton"><i style="font-size: 3rem;" class='bx bx-skip-next-circle'></i></button>
         </div>
-        <!-- Botão de alternar playlist movido para cá -->
+        <!-- Botão para abrir e fechar a playlist. -->
         <div class="footer-button-container">
           <button id="playlistToggleButton" aria-label="Alternar Playlist" title="Mostrar/Esconder Playlist">
             <i class='bx bx-dots-horizontal-rounded'></i>
@@ -97,7 +94,7 @@
     </div>
   </main>
 
-  <!-- Mini Player Flutuante (inicialmente visível) -->
+  <!-- Mini player que aparece quando o principal é minimizado. -->
   <div id="mini-player">
     <button id="restoreButton" aria-label="Restaurar Player" title="Restaurar Player">
         <i class='bx bx-chevron-up'></i>
