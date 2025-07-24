@@ -17,14 +17,46 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Vídeo de fundo. O estilo agora está no CSS. -->
   <video id="bg-video" playsinline></video>
-  <!-- Capa para quando a tela estiver na vertical. -->
-  <img id="vertical-cover" src="src/capa-vertical.jpg" alt="Capa Vertical" />
-  <!-- Capa para quando a tela estiver na horizontal. -->
-  <img id="horizontal-cover" src="src/capa.jpg" alt="Capa Horizontal" />
+  <img id="custom-bg" alt="Background" style="position: fixed; inset: 0; z-index: -2; width: 100vw; height: 100vh; object-fit: cover; object-position: center; opacity: 1; pointer-events: none;" />
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const backgrounds = [
+        {
+          path: 'src/background/photo-1618519764620-7403abdbdfe9.jpg',
+          sourceUrl: 'https://unsplash.com/pt-br/fotografias/o-dvd-da-teoria-do-big-bang-27kCu7bXGEI'
+        },
+        {
+          path: 'src/background/photo-1625895197185-efcec01cffe0.jpg',
+          sourceUrl: 'https://unsplash.com/pt-br/fotografias/mulher-de-cabelo-preto-na-estatueta-do-vestido-branco-e-vermelho-49X42qrgUmQ'
+        },
+        {
+          path: 'src/background/photo-1613376023733-0a73315d9b06.jpg',
+          sourceUrl: 'https://unsplash.com/pt-br/fotografias/foto-de-colagem-de-personagem-de-anime-na-prateleira-de-madeira-preta-IxDPZ-AHfoI'
+        },
+        {
+          path: 'src/background/photo-1620336655055-088d06e36bf0.jpg',
+          sourceUrl: 'https://unsplash.com/pt-br/fotografias/uma-pilha-de-historias-em-quadrinhos-sentada-em-cima-de-uma-mesa-OQgpRHFJwbQ'
+        }
+      ];
+
+      const randomBgInfo = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+      const bgImg = document.getElementById('custom-bg');
+      const bgLink = document.getElementById('bg-photo-link');
+
+      if (bgImg) {
+        bgImg.src = randomBgInfo.path;
+      }
+
+      if (bgLink && randomBgInfo.sourceUrl) {
+        bgLink.href = randomBgInfo.sourceUrl;
+      } else if (bgLink) {
+        bgLink.style.display = 'none';
+      }
+    });
+  </script>
   
-  <!-- A playlist fica aqui, separada do player. -->
   <div id="playlistSection">
     <div class="header">
       <h4>Playlist</h4>
@@ -36,14 +68,12 @@
   </div>
   
   <main>
-    <!-- O player principal. -->
     <div class="player minimized" id="main-player">
       <div class="player-header">
         <button id="minimizeButton" aria-label="Minimizar Player" title="Minimizar Player">
             <i class='bx bx-chevron-down'></i>
         </button>
 
-        <!-- Onde o vídeo é renderizado, no canvas. -->
         <div class="video-player-container">
           <canvas id="sync-canvas" width="640" height="360"></canvas>
         </div>
@@ -53,7 +83,6 @@
             <div id="musicName"></div>
             <span class="music-author" id="musicAuthor"></span>
           </div>
-          <!-- Animação da ondinha. -->
           <div id="wave-animation">
               <span class="wave-bar"></span>
               <span class="wave-bar"></span>
@@ -75,7 +104,6 @@
           <button id="playPauseButton"><i style="font-size: 4rem;" class='bx bx-play-circle'></i></button>
           <button id="nextButton"><i style="font-size: 3rem;" class='bx bx-skip-next-circle'></i></button>
         </div>
-        <!-- Botão para abrir e fechar a playlist. -->
         <div class="footer-button-container">
           <button id="playlistToggleButton" aria-label="Alternar Playlist" title="Mostrar/Esconder Playlist">
             <i class='bx bx-dots-horizontal-rounded'></i>
@@ -94,7 +122,6 @@
     </div>
   </main>
 
-  <!-- Mini player que aparece quando o principal é minimizado. -->
   <div id="mini-player">
     <button id="restoreButton" aria-label="Restaurar Player" title="Restaurar Player">
         <i class='bx bx-chevron-up'></i>
@@ -112,7 +139,9 @@
 
 <footer>
   <div class="copyright">
-    <p>&copy; 2025 | Desenvolvido por <a href="https://github.com/rflmoreira" target="_blank" rel="noopener noreferrer">Rafael Moreira <i class='bx bx-link-external'></i></a></p>
+    <p>&copy; 2025 | Desenvolvido por <a href="https://github.com/rflmoreira" target="_blank" rel="noopener noreferrer">Rafael Moreira <i class='bx bx-link-external'></i></a> |
+      <a id="bg-photo-link" href="" target="_blank" rel="noopener noreferrer">Foto de fundo <i class='bx bx-link-external'></i></a>
+    </p>
   </div>
   <div class="legal-disclaimer">
     <p><strong>Aviso Legal:</strong> Este site não hospeda arquivos em seus servidores. Todo o conteúdo é disponibilizado por terceiros não afiliados.</p>

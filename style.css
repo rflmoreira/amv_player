@@ -1,37 +1,4 @@
-/* A capa horizontal só aparece em paisagem e se não tiver vídeo. */
-#horizontal-cover {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -2;
-  display: block; /* Começa visível por padrão */
-  pointer-events: none;
-}
-/* A capa vertical é para o modo retrato. */
-#vertical-cover {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -2;
-  display: none; /* Começa escondida */
-  pointer-events: none;
-}
 
-/* Ajusta a capa certa dependendo da orientação. */
-@media (orientation: portrait) {
-  #horizontal-cover {
-    display: none;
-  }
-  #vertical-cover {
-    display: block;
-  }
-}
 
 /* O vídeo de fundo precisa preencher a tela. */
 video#bg-video {
@@ -140,9 +107,9 @@ section {
   position: relative;
   margin: 0;
   z-index: 10;
-  width: 320px;
-  min-width: 320px;
-  max-width: 320px;
+  width: 335px;
+  min-width: 335px;
+  max-width: 335px;
   box-sizing: border-box;
   transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
@@ -183,6 +150,8 @@ section {
   height: 8px;
   background-color: #ff6b6b;
   border-radius: 5px;
+  transition: width 0.2s ease;
+  opacity: 0.8;
 }
 
 /* Informações da música. */

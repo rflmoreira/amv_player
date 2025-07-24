@@ -1,8 +1,6 @@
 // Elementos que vou usar na interface.
 const bgVideo = document.getElementById('bg-video');
 const syncCanvas = document.getElementById('sync-canvas');
-const verticalCover = document.getElementById('vertical-cover');
-const horizontalCover = document.getElementById('horizontal-cover');
 const ctx = syncCanvas.getContext('2d');
 const musicName = document.querySelector("#musicName");
 const musicAuthor = document.querySelector("#musicAuthor");
@@ -152,7 +150,6 @@ window.addEventListener('DOMContentLoaded', () => {
   updateTime();
   atualizarBotoesAvanco();
   renderPlaylist(0);
-  atualizarVerticalCover();
   adjustVideoSize();
   
   // Dicas dos botões.
@@ -459,27 +456,10 @@ function atualizarFaixa() {
   miniMusicAuthor.textContent = author || "";
 
   changeMusicNameColor();
-  atualizarVerticalCover();
 }
 
-// Mostra a capa certa se não tiver vídeo.
-function atualizarVerticalCover() {
-  if (!verticalCover || !horizontalCover) return;
-  const isNoVideo = songs[index] && (!songs[index].src || songs[index].isCover);
-  if (isNoVideo) {
-    verticalCover.style.display = '';
-    horizontalCover.style.display = '';
-    bgVideo.style.display = 'none';
-  } else {
-    verticalCover.style.display = 'none';
-    horizontalCover.style.display = 'none';
-    bgVideo.style.display = '';
-  }
-}
 
 // Atualiza a capa ao mudar a orientação.
-window.addEventListener('orientationchange', atualizarVerticalCover);
-window.addEventListener('resize', atualizarVerticalCover);
 
 // Navega entre as músicas.
 const prevNextMusic = (type = "next") => {
@@ -502,7 +482,6 @@ const prevNextMusic = (type = "next") => {
   bgVideo.pause();
   atualizarFaixa();
   renderPlaylist(index);
-  atualizarVerticalCover();
   atualizarBackground();
   atualizarBotoesAvanco();
 
@@ -813,11 +792,8 @@ function atualizarBotoesAvanco() {
 }
 
 function atualizarBackground() {
-  if (index === 0) {
-    document.body.style.backgroundImage = "url('src/capa.jpg')";
-  } else {
-    document.body.style.backgroundImage = 'none';
-  }
+  // Não faz mais nada, o background é fixo no HTML
+  document.body.style.backgroundImage = '';
 }
 
 // Monta a lista de músicas.
@@ -1146,7 +1122,6 @@ function changeMusicNameColor() {
 
 document.getElementById('nextButton').addEventListener('click', () => {
   changeMusicNameColor();
-  atualizarVerticalCover();
 });
 
 function togglePlaylist() {

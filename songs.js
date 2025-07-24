@@ -4,7 +4,7 @@ export default [
     name: " faixa 404",
     author: " artista sumido",
     thumbnail: "https://placehold.co/96x54/11111b/cdd6f4?text=404",
-    isCover: true,
+    isCover: true
   },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%5BAMV%5D%20-%20WARRIORS.mp4",
