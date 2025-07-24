@@ -322,7 +322,7 @@ button {
   bottom: 90px;
   width: 360px;
   max-width: 360px;
-  height: 300px;
+  height: 280px;
   background: rgba(25, 25, 25, 0.55);
   z-index: 1000;
   display: none;
