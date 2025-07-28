@@ -62,7 +62,11 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: url('src/background/1029232.jpg') no-repeat center center fixed;
+  /* Usa uma variável CSS para a imagem, com um fallback */
+  background-image: var(--bg-image, url('src/background/1328396.png'));
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
   background-size: cover;
   /* Fica atrás do conteúdo principal, mas na frente do vídeo */
   z-index: -1;

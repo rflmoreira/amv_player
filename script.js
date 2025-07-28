@@ -41,6 +41,27 @@ const miniIconPause = `<i class='bx bx-pause-circle'></i>`;
 const miniIconStop = `<i class='bx bx-stop-circle'></i>`;
 const miniIconLoading = `<i class='bx bx-loader-alt bx-spin'></i>`;
 
+// --- NOVO: LÓGICA PARA FUNDO ALEATÓRIO ---
+// Array com os caminhos das imagens de fundo.
+// Adicione ou remova imagens aqui conforme necessário.
+const backgroundImages = [
+    'src/background/1029232.jpg',
+    'src/background/1328396.png'
+    // Ex: 'src/background/outra-imagem.jpg',
+];
+
+// Função para definir uma imagem de fundo aleatória
+const setRandomBackground = () => {
+    // Escolhe um índice aleatório do array de imagens
+    const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+    // Pega o caminho da imagem correspondente
+    const randomImage = backgroundImages[randomIndex];
+    // Define a variável CSS '--bg-image' no elemento raiz (<html>), que será usada pelo style.css
+    document.documentElement.style.setProperty('--bg-image', `url('${randomImage}')`);
+};
+// --- FIM DA NOVA LÓGICA ---
+
+
 // Variáveis de estado.
 let index = 0;
 let isPlaying = false;
@@ -138,6 +159,7 @@ const updatePlayButtonTooltip = () => {
 
 // Configuração inicial quando a página carrega.
 window.addEventListener('DOMContentLoaded', () => {
+  setRandomBackground(); // Define o fundo aleatório ao carregar
   checkDeviceCapabilities();
   loadLiveState();
   
