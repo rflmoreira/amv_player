@@ -142,7 +142,6 @@ window.addEventListener('DOMContentLoaded', () => {
   loadLiveState();
   
   index = 0;
-  atualizarBackground();
   setVideoSources();
   atualizarFaixa();
   playPauseButton.innerHTML = textButtonPlay;
@@ -322,6 +321,8 @@ bgVideo.addEventListener('playing', () => {
 });
 
 bgVideo.addEventListener('play', () => {
+  // Adiciona a classe para mostrar o vídeo e esconder a capa
+  document.body.classList.add('video-reproduzindo');
   isPlaying = true;
   waveAnimation.classList.add('playing');
   playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
@@ -350,7 +351,6 @@ bgVideo.addEventListener('play', () => {
         index = livePlaylistIndex;
         setVideoSources(songs[index].src);
         atualizarFaixa();
-        atualizarBackground();
         
         const nextSongHandler = () => {
           if (bgVideo.duration && !isNaN(bgVideo.duration)) {
@@ -377,6 +377,8 @@ bgVideo.addEventListener('play', () => {
 });
 
 bgVideo.addEventListener('ended', () => {
+  // Remove a classe para mostrar a capa novamente
+  document.body.classList.remove('video-reproduzindo');
   waveAnimation.classList.remove('playing');
   if (isLiveMode) {
     livePlaylistIndex++;
@@ -394,7 +396,6 @@ bgVideo.addEventListener('ended', () => {
       index = livePlaylistIndex;
       setVideoSources(songs[index].src);
       atualizarFaixa();
-      atualizarBackground();
       
       const startFromBeginningHandler = () => {
         if (bgVideo.duration && !isNaN(bgVideo.duration)) bgVideo.currentTime = 0;
@@ -431,6 +432,10 @@ bgVideo.addEventListener('ended', () => {
 });
 
 bgVideo.addEventListener('pause', () => {
+  // Remove a classe para mostrar a capa novamente
+  if (bgVideo.currentTime !== bgVideo.duration) {
+      document.body.classList.remove('video-reproduzindo');
+  }
   isPlaying = false;
   waveAnimation.classList.remove('playing');
   playPauseButton.innerHTML = textButtonPlay;
@@ -458,9 +463,6 @@ function atualizarFaixa() {
   changeMusicNameColor();
 }
 
-
-// Atualiza a capa ao mudar a orientação.
-
 // Navega entre as músicas.
 const prevNextMusic = (type = "next") => {
   if (isLiveMode) {
@@ -482,7 +484,6 @@ const prevNextMusic = (type = "next") => {
   bgVideo.pause();
   atualizarFaixa();
   renderPlaylist(index);
-  atualizarBackground();
   atualizarBotoesAvanco();
 
   playPauseButton.innerHTML = textButtonLoading;
@@ -537,7 +538,6 @@ const playPause = () => {
         index = livePlaylistIndex;
         setVideoSources(songs[index].src);
         atualizarFaixa();
-        atualizarBackground();
         bgVideo.loop = false;
         
         playPauseButton.innerHTML = textButtonLoading;
@@ -556,7 +556,6 @@ const playPause = () => {
               index = livePlaylistIndex;
               setVideoSources(songs[index].src);
               atualizarFaixa();
-              atualizarBackground();
               
               const nextSongHandler = () => {
                 if (bgVideo.duration && !isNaN(bgVideo.duration)) {
@@ -600,7 +599,6 @@ const playPause = () => {
     index = livePlaylistIndex;
     setVideoSources(songs[index].src);
     atualizarFaixa();
-    atualizarBackground();
     bgVideo.loop = false;
     
     playPauseButton.innerHTML = textButtonLoading;
@@ -654,7 +652,6 @@ const playPause = () => {
         index = livePlaylistIndex;
         setVideoSources(songs[index].src);
         atualizarFaixa();
-        atualizarBackground();
         
         const nextSongHandler = () => {
           if (bgVideo.duration && !isNaN(bgVideo.duration)) {
@@ -779,6 +776,8 @@ function setVideoSources(src) {
     bgVideo.load();
   } else {
     bgVideo.src = '';
+    // Garante que a capa seja mostrada se não houver vídeo
+    document.body.classList.remove('video-reproduzindo');
   }
 }
 
@@ -789,11 +788,6 @@ function atualizarBotoesAvanco() {
   prevButton.disabled = desativado;
   nextButton.classList.toggle('botao-desativado', desativado);
   prevButton.classList.toggle('botao-desativado', desativado);
-}
-
-function atualizarBackground() {
-  // Não faz mais nada, o background é fixo no HTML
-  document.body.style.backgroundImage = '';
 }
 
 // Monta a lista de músicas.
@@ -856,7 +850,6 @@ function selectSong(idx) {
   bgVideo.pause();
   atualizarFaixa();
   renderPlaylist(idx);
-  atualizarBackground();
   atualizarBotoesAvanco();
 
   playPauseButton.innerHTML = textButtonLoading;
@@ -930,7 +923,6 @@ function handleAoVivoClick(e) {
         bgVideo.loop = false;
         setVideoSources(songs[index].src);
         atualizarFaixa();
-        atualizarBackground();
         atualizarBotoesAvanco();
         updateTime();
         updatePlayButtonTooltip();
@@ -977,7 +969,6 @@ function handleAoVivoClick(e) {
                   index = livePlaylistIndex;
                   setVideoSources(songs[index].src);
                   atualizarFaixa();
-                  atualizarBackground();
                   
                   const nextSongHandler = () => {
                     if (bgVideo.duration && !isNaN(bgVideo.duration)) {
@@ -1007,7 +998,6 @@ function handleAoVivoClick(e) {
             };
             bgVideo.addEventListener('canplay', resumeHandler, { once: true });
             atualizarFaixa();
-            atualizarBackground();
             return;
           }
         }
@@ -1020,7 +1010,6 @@ function handleAoVivoClick(e) {
           index = livePlaylistIndex;
           setVideoSources(songs[index].src);
           atualizarFaixa();
-          atualizarBackground();
           bgVideo.loop = false;
           
           playPauseButton.innerHTML = textButtonLoading;

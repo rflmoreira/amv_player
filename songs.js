@@ -34,7 +34,7 @@ export default [
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/AMV%20%EF%BD%9C%20Tanjiro%20(Demon%20Slayer)%20-%20Gasoline%20(Halsey).mp4",
     name: "AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey)",
     author: "mocha amv",
-    thumbnail: "src/miniaturas de vídeo/AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey).jpg",
+    thumbnail: "src/miniaturas de vídeo/AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey).gif",
   },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%EF%BC%82its%20JUST%20an%20ANIME%EF%BC%82%20%EF%BD%9C%204K%20AMV%E2%A7%B8Edit.mp4",

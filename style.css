@@ -1,16 +1,14 @@
-
-
 /* O vídeo de fundo precisa preencher a tela. */
 video#bg-video {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* O JS cuida do tamanho, mas isso aqui garante que não quebre. */
   min-width: 100vw;
   min-height: 100vh;
   pointer-events: none;
-  z-index: -1;
+  /* Colocado na camada mais profunda para não cobrir a imagem de capa */
+  z-index: -2;
   filter: saturate(1.35) !important;
 }
 
@@ -50,9 +48,33 @@ body {
   display: flex; 
   flex-direction: column; 
   min-height: 100vh; /* O body precisa ocupar a tela toda. */
+  /* Cor de fundo de fallback */
   background: #000000;
   overflow-x: hidden;
+  position: relative; /* Necessário para o z-index do ::before funcionar corretamente */
 }
+
+/* Fundo da capa aplicado a um pseudo-elemento para melhor controle de camadas */
+.body-capa::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('src/background/1029232.jpg') no-repeat center center fixed;
+  background-size: cover;
+  /* Fica atrás do conteúdo principal, mas na frente do vídeo */
+  z-index: -1;
+  /* Adiciona uma transição para suavizar a troca */
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Oculta a imagem de capa quando o vídeo estiver tocando */
+body.video-reproduzindo::before {
+  opacity: 0;
+}
+
 
 /* Container principal. */
 main {
@@ -61,19 +83,6 @@ main {
   justify-content: center;
   align-items: flex-end;
   padding-bottom: 3rem; /* Espaço entre o player e o rodapé. */
-}
-
-
-body::before {
-  content: "";
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: #000000 !important;
-  z-index: -9999 !important;
-  pointer-events: none !important;
 }
 
 section {

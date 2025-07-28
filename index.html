@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="AniTune é um site dedicado à reprodução de músicas e vídeos AMV (Anime Music Video), oferecendo uma experiência imersiva para fãs de anime." />
-  <title>anitune - amv player 🎧</title>
+  <title>AniTune - amv player 🎧</title>
   <link rel="icon" type="image/png" href="src/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="src/favicon/favicon.svg" />
   <link rel="shortcut icon" href="src/favicon/favicon.ico" />
@@ -16,46 +16,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<!-- A classe "body-capa" foi adicionada aqui -->
+<body class="body-capa">
   <video id="bg-video" playsinline></video>
-  <img id="custom-bg" alt="Background" style="position: fixed; inset: 0; z-index: -2; width: 100vw; height: 100vh; object-fit: cover; object-position: center; opacity: 1; pointer-events: none;" />
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const backgrounds = [
-        {
-          path: 'src/background/photo-1618519764620-7403abdbdfe9.jpg',
-          sourceUrl: 'https://unsplash.com/pt-br/fotografias/o-dvd-da-teoria-do-big-bang-27kCu7bXGEI'
-        },
-        {
-          path: 'src/background/photo-1625895197185-efcec01cffe0.jpg',
-          sourceUrl: 'https://unsplash.com/pt-br/fotografias/mulher-de-cabelo-preto-na-estatueta-do-vestido-branco-e-vermelho-49X42qrgUmQ'
-        },
-        {
-          path: 'src/background/photo-1613376023733-0a73315d9b06.jpg',
-          sourceUrl: 'https://unsplash.com/pt-br/fotografias/foto-de-colagem-de-personagem-de-anime-na-prateleira-de-madeira-preta-IxDPZ-AHfoI'
-        },
-        {
-          path: 'src/background/photo-1620336655055-088d06e36bf0.jpg',
-          sourceUrl: 'https://unsplash.com/pt-br/fotografias/uma-pilha-de-historias-em-quadrinhos-sentada-em-cima-de-uma-mesa-OQgpRHFJwbQ'
-        }
-      ];
-
-      const randomBgInfo = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-      const bgImg = document.getElementById('custom-bg');
-      const bgLink = document.getElementById('bg-photo-link');
-
-      if (bgImg) {
-        bgImg.src = randomBgInfo.path;
-      }
-
-      if (bgLink && randomBgInfo.sourceUrl) {
-        bgLink.href = randomBgInfo.sourceUrl;
-      } else if (bgLink) {
-        bgLink.style.display = 'none';
-      }
-    });
-  </script>
   
   <div id="playlistSection">
     <div class="header">
@@ -138,15 +101,24 @@
   </div>
 
 <footer>
-  <div class="copyright">
-    <p>&copy; 2025 | Desenvolvido por <a href="https://github.com/rflmoreira" target="_blank" rel="noopener noreferrer">Rafael Moreira <i class='bx bx-link-external'></i></a> |
-      <a id="bg-photo-link" href="" target="_blank" rel="noopener noreferrer">Foto de fundo <i class='bx bx-link-external'></i></a>
+<div class="copyright">
+  <p>
+    &copy; 2025 · <strong>AniTune</strong> — Projetado & Desenvolvido por 
+    <a href="https://github.com/rflmoreira" target="_blank" rel="noopener noreferrer">
+      Rafael Moreira <i class='bx bx-link-external' aria-hidden="true"></i>
+      <span class="sr-only">(link externo)</span>
+    </a>
+  </p>
+</div>
+
+  <div class="legal-disclaimer">
+    <p>
+      <strong>Aviso legal:</strong> Este site não hospeda nenhum conteúdo diretamente. 
+      Os arquivos são fornecidos por fontes de terceiros, sem qualquer vínculo com este projeto.
     </p>
   </div>
-  <div class="legal-disclaimer">
-    <p><strong>Aviso Legal:</strong> Este site não hospeda arquivos em seus servidores. Todo o conteúdo é disponibilizado por terceiros não afiliados.</p>
-  </div>
 </footer>
+
   
   <script type="module" src="script.js"></script>
 </body>
