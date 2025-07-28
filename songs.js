@@ -16,7 +16,7 @@ export default [
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Skyfall%20%20-%20Demon%20Slayer%20%5BAMV%5D.mp4",
     name: "Skyfall - Demon Slayer [AMV]",
     author: "tiff.",
-    thumbnail: "src/miniaturas de vídeo/Skyfall - Demon Slayer [AMV].jpg",
+    thumbnail: "src/miniaturas de vídeo/Skyfall - Demon Slayer [AMV].gif",
   },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/running%20up%20that%20hill%2C%20a%20deal%20with%20god%20-%20evangelion%20amv.mp4",
