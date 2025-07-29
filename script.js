@@ -41,13 +41,13 @@ const miniIconPause = `<i class='bx bx-pause-circle'></i>`;
 const miniIconStop = `<i class='bx bx-stop-circle'></i>`;
 const miniIconLoading = `<i class='bx bx-loader-alt bx-spin'></i>`;
 
-// --- NOVO: LÓGICA PARA FUNDO ALEATÓRIO ---
-// Array com os caminhos das imagens de fundo.
-// Adicione ou remova imagens aqui conforme necessário.
+// --- novo: lógica fundo aleatório ---
+// array com os caminhos das imagens de fundo
 const backgroundImages = [
     'src/background/1029232.jpg',
-    'src/background/1328396.png'
-    // Ex: 'src/background/outra-imagem.jpg',
+    'src/background/1328396.png',
+    'src/background/1311951.jpg',
+    'src/background/thumb-1920-532559.jpg',
 ];
 
 // Função para definir uma imagem de fundo aleatória
@@ -747,7 +747,7 @@ const updateTime = () => {
 
   if (isLiveMode) {
     currentTime.innerHTML = `<span style="opacity:0.5">-:--</span>`;
-    duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ff6b6b;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
+    duration.innerHTML = `<button type="button" class="btn-ao-vivo" style="background-color:rgba(255, 255, 255, 0.1);transition: background-color 0.2s ease;border-radius:15px;padding:4px 8px;margin:3;font:inherit;color:#f38ba8;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
     progress.style.width = "0%";
     progressBar.style.pointerEvents = "none";
     progressBar.style.opacity = "0.3";
@@ -773,9 +773,13 @@ const updateTime = () => {
 
   if (!isLiveMode) {
     if (index === songs.length - 1) {
-      duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ff6b6b;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
+      if (duration) {
+        duration.innerHTML = `<button class="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#f38ba8;opacity: 0.5;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
+      }
     } else {
-      duration.innerHTML = `<button id="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ffffff86;opacity: 0.5;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
+      if (duration) {
+        duration.innerHTML = `<button class="btn-ao-vivo" style="background:none;border:none;padding:4px 8px;margin:3;font:inherit;color:#ffffff86;opacity: 0.5;cursor:pointer;display:inline-block;font-size:0.9rem;">● AO VIVO</button>`;
+      }
     }
     progress.style.width = `${progressWidth}%`;
   }
@@ -928,7 +932,7 @@ document.addEventListener("click", handleAoVivoClick);
 document.addEventListener("touchend", handleAoVivoClick);
 
 function handleAoVivoClick(e) {
-  if (e.target.id !== "btn-ao-vivo") return;
+  if (!e.target.classList.contains("btn-ao-vivo")) return;
   e.preventDefault();
   e.stopPropagation();
   
