@@ -67,6 +67,12 @@ export default [
     thumbnail: "src/miniaturas de vídeo/BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD).jpg",
   },
   {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/AMV%20-%20Black%20Impulse%20-%20Bestamvsofalltime%20Anime%20MV%20%E2%99%AB.mp4",
+    name: "AMV - Black Impulse - Bestamvsofalltime Anime MV ♫",
+    author: "TheBestAMVsOfAllTime",
+    thumbnail: "src/miniaturas de vídeo/AMV - Black Impulse - Bestamvsofalltime Anime MV ♫.jpg",
+  },
+  {
     src: "",
     name: "AO VIVO",
     author: "",
