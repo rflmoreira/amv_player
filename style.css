@@ -161,7 +161,7 @@ section {
 
 .progress {
   height: 8px;
-  background-color: #ff6b6b;
+  background-color: #f38ba8;
   border-radius: 5px;
   transition: width 0.2s ease;
   opacity: 0.8;
