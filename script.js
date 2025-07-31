@@ -47,7 +47,6 @@ const backgroundImages = [
     'src/background/Sasuke.jpg',
     'src/background/Naruto.jpg',
     'src/background/Nezuko.jpg',
-    'src/background/AsukaandShinji.jpg',
 ];
 
 // Função para definir uma imagem de fundo aleatória
