@@ -73,12 +73,6 @@ export default [
     thumbnail: "src/miniaturas de vídeo/Fate Series - Awaken「AMV」.jpg",
   },
   {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Jujutsu%20Kaisen%E3%80%8CAMV%E3%80%8DDravek%20-%20Katana%20(ft.%20Skam%20R'Tist)%20%E1%B4%B4%E1%B4%B0.mp4",
-    name: "Jujutsu Kaisen「AMV」Dravek - Katana (ft. Skam R'Tist) ᴴᴰ",
-    author: "KING AMV's 夢",
-    thumbnail: "src/miniaturas de vídeo/Jujutsu Kaisen「AMV」Dravek - Katana (ft. Skam R'Tist) ᴴᴰ.jpg",
-  },
-  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/BOKU%20NO%20HERO%20ACADEMIA%E3%80%8CAMV%E3%80%8D%E2%96%AA%20IN%20THE%20END%20(2018)%20%E2%96%AA%20(HD).mp4",
     name: "BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD)",
     author: "Dark AMVs",

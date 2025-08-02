@@ -72,6 +72,7 @@ body {
   z-index: -1;
   /* Adiciona uma transição para suavizar a troca */
   transition: opacity 0.5s ease-in-out;
+  filter: saturate(1.35) !important;
 }
 
 /* Oculta a imagem de capa quando o vídeo estiver tocando */

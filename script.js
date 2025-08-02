@@ -44,11 +44,10 @@ const miniIconLoading = `<i class='bx bx-loader-alt bx-spin'></i>`;
 // --- novo: lógica fundo aleatório ---
 // array com os caminhos das imagens de fundo
 const backgroundImages = [
-    'src/background/Sasuke.jpg',
     'src/background/Naruto.jpg',
     'src/background/Nezuko.jpg',
     'src/background/HinokamiKagura.jpg',
-    'src/background/asuka.jpg',
+    'src/background/evangelion-neon-genesis.jpg',
 ];
 
 // Função para definir uma imagem de fundo aleatória
