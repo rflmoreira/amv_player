@@ -25,6 +25,10 @@ const restoreButton = document.getElementById('restoreButton');
 const miniPlayPauseButton = document.getElementById('mini-play-pause-button');
 const miniMusicName = document.getElementById('mini-music-name');
 const miniMusicAuthor = document.getElementById('mini-music-author');
+// Elementos da capa e animação do mini player
+const miniCoverImg = document.getElementById('mini-cover-img');
+const miniWaveAnimation = document.getElementById('mini-wave-animation');
+const miniPlayerCover = document.getElementById('mini-player-cover');
 
 
 import songs from "./songs.js";
@@ -183,6 +187,11 @@ window.addEventListener('DOMContentLoaded', () => {
   
   updatePlayButtonTooltip();
   
+  // Event listener para esconder imagem quebrada no mini player
+  miniCoverImg.addEventListener('error', () => {
+    miniCoverImg.style.display = 'none';
+  });
+  
   if (lastLiveSong !== null && liveExitTime > 0) {
     playPauseButton.title = "Retomar transmissão ao vivo (Espaço)";
   }
@@ -335,6 +344,7 @@ bgVideo.addEventListener('playing', () => {
   isBuffering = false;
   isPlaying = true;
   waveAnimation.classList.add('playing');
+  miniWaveAnimation.classList.add('playing');
   playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
   miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
   updateTime();
@@ -346,6 +356,7 @@ bgVideo.addEventListener('play', () => {
   document.body.classList.add('video-reproduzindo');
   isPlaying = true;
   waveAnimation.classList.add('playing');
+  miniWaveAnimation.classList.add('playing');
   playPauseButton.innerHTML = isLiveMode ? textButtonStop : textButtonPause;
   miniPlayPauseButton.innerHTML = isLiveMode ? miniIconStop : miniIconPause;
   renderPlaylist(index);
@@ -401,6 +412,7 @@ bgVideo.addEventListener('ended', () => {
   // Remove a classe para mostrar a capa novamente
   document.body.classList.remove('video-reproduzindo');
   waveAnimation.classList.remove('playing');
+  miniWaveAnimation.classList.remove('playing');
   if (isLiveMode) {
     livePlaylistIndex++;
     
@@ -459,6 +471,7 @@ bgVideo.addEventListener('pause', () => {
   }
   isPlaying = false;
   waveAnimation.classList.remove('playing');
+  miniWaveAnimation.classList.remove('playing');
   playPauseButton.innerHTML = textButtonPlay;
   miniPlayPauseButton.innerHTML = miniIconPlay;
   renderPlaylist(index);
@@ -474,12 +487,31 @@ bgVideo.addEventListener('pause', () => {
 
 // Atualiza as informações da faixa na tela.
 function atualizarFaixa() {
-  const { name, author } = songs[index];
+  const { name, author, thumbnail } = songs[index];
   musicName.innerHTML = name;
   musicAuthor.textContent = author || "";
   
+  // Atualiza mini player
   miniMusicName.textContent = name;
   miniMusicAuthor.textContent = author || "";
+
+  // Define a imagem da capa no mini player, com fallback para a capa padrão
+  const coverSrc = thumbnail || songs[0].thumbnail;
+  if (coverSrc) {
+    miniCoverImg.src = coverSrc;
+    miniCoverImg.style.display = 'block';
+  } else {
+    miniCoverImg.style.display = 'none';
+  }
+
+  // Controla a visibilidade do overlay da animação de onda
+  if (index === 0) {
+    // No modo "AO VIVO", o overlay não deve aparecer
+    miniPlayerCover.classList.remove('active');
+  } else {
+    // Para músicas normais, o overlay fica ativo (visível)
+    miniPlayerCover.classList.add('active');
+  }
 
   changeMusicNameColor();
 }
@@ -1120,6 +1152,8 @@ function changeMusicNameColor() {
     miniMusicAuthor.style.color = '';
     miniMusicAuthor.style.opacity = '';
     currentSongColor = 'var(--catppuccin-lavender)';
+    // ATUALIZADO: Reseta a cor da animação do mini player
+    miniWaveAnimation.querySelectorAll('.wave-bar').forEach(bar => bar.style.backgroundColor = currentSongColor);
     return;
   }
 
@@ -1132,6 +1166,8 @@ function changeMusicNameColor() {
   miniMusicName.style.color = currentSongColor;
   miniMusicAuthor.style.color = currentSongColor;
   miniMusicAuthor.style.opacity = '0.8';
+  // ATUALIZADO: Define a cor da animação do mini player
+  miniWaveAnimation.querySelectorAll('.wave-bar').forEach(bar => bar.style.backgroundColor = currentSongColor);
 }
 
 document.getElementById('nextButton').addEventListener('click', () => {

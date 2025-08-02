@@ -16,7 +16,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<!-- A classe "body-capa" foi adicionada aqui -->
 <body class="body-capa">
   <video id="bg-video" playsinline></video>
   
@@ -90,6 +89,17 @@
         <i class='bx bx-chevron-up'></i>
     </button>
     <div class="mini-player-content">
+        <div id="mini-player-cover">
+            <img id="mini-cover-img" src="" alt="Capa da música" onerror="this.style.display='none';">
+            <div id="mini-wave-overlay">
+                <div id="mini-wave-animation" class="playlist-wave-animation">
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                </div>
+            </div>
+        </div>
         <div class="mini-player-info">
             <div id="mini-music-name">Nome da Música</div>
             <div id="mini-music-author">Autor</div>
