@@ -65,6 +65,7 @@ let lastLiveSong = null;
 let lastLiveTime = 0;
 let liveExitTime = 0;
 let currentSongColor = 'var(--catppuccin-lavender)';
+let playedSongs = []; // Array para controlar as músicas já tocadas no modo ao vivo
 
 // Controle do mini-player
 let miniPlayerTimeout = null;
@@ -150,6 +151,36 @@ const updatePlayButtonTooltip = () => {
   }
 };
 
+// Função para obter uma música aleatória no modo ao vivo
+const getRandomLiveSong = () => {
+  const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
+  
+  if (validSongs.length === 0) return 1;
+  
+  // Se todas as músicas foram tocadas, resetar a lista
+  if (playedSongs.length >= validSongs.length) {
+    playedSongs = [];
+  }
+  
+  // Filtrar músicas que ainda não foram tocadas
+  const unplayedSongs = validSongs.filter(songIndex => !playedSongs.includes(songIndex));
+  
+  // Se não há músicas não tocadas, usar todas as válidas
+  const availableSongs = unplayedSongs.length > 0 ? unplayedSongs : validSongs;
+  
+  // Selecionar uma música aleatória
+  const randomIndex = Math.floor(Math.random() * availableSongs.length);
+  const selectedSong = availableSongs[randomIndex];
+  
+  // Adicionar à lista de músicas tocadas
+  if (!playedSongs.includes(selectedSong)) {
+    playedSongs.push(selectedSong);
+  }
+  
+  return selectedSong;
+};
+
+// Configuração inicial
 // Configuração inicial
 window.addEventListener('DOMContentLoaded', () => {
   setRandomBackground();
@@ -426,16 +457,8 @@ bgVideo.addEventListener('play', () => {
     
     if (bgVideo.duration && !isNaN(bgVideo.duration) && projectedTime >= bgVideo.duration) {
       setTimeout(() => {
-        livePlaylistIndex++;
-        
-        if (livePlaylistIndex >= songs.length - 1) {
-          const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
-          livePlaylistIndex = validSongs.length > 0 ? validSongs[Math.floor(Math.random() * validSongs.length)] : 1;
-        }
-        
-        while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) {
-          livePlaylistIndex++;
-        }
+        // Obter próxima música aleatória
+        livePlaylistIndex = getRandomLiveSong();
         
         index = livePlaylistIndex;
         setVideoSources(songs[index].src);
@@ -475,16 +498,8 @@ bgVideo.addEventListener('ended', () => {
   waveAnimation.classList.remove('playing');
   miniWaveAnimation.classList.remove('playing');
   if (isLiveMode) {
-    livePlaylistIndex++;
-    
-    if (livePlaylistIndex >= songs.length - 1) {
-      const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
-      livePlaylistIndex = validSongs.length > 0 ? validSongs[Math.floor(Math.random() * validSongs.length)] : 1;
-    }
-    
-    while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) {
-      livePlaylistIndex++;
-    }
+    // Obter próxima música aleatória
+    livePlaylistIndex = getRandomLiveSong();
     
     if (livePlaylistIndex < songs.length - 1 && songs[livePlaylistIndex].src) {
       index = livePlaylistIndex;
@@ -647,6 +662,9 @@ const playPause = () => {
     console.log('Iniciando modo ao vivo');
     isLiveMode = true;
     
+    // Resetar lista de músicas tocadas ao iniciar modo ao vivo
+    playedSongs = [];
+    
     if (lastLiveSong !== null && liveExitTime > 0) {
       console.log('Retomando transmissão:', lastLiveSong, lastLiveTime);
       const timeAway = (Date.now() - liveExitTime) / 1000;
@@ -665,12 +683,8 @@ const playPause = () => {
         const resumeHandler = () => {
           if (bgVideo.duration && !isNaN(bgVideo.duration)) {
             if (projectedTime >= bgVideo.duration) {
-              livePlaylistIndex++;
-              if (livePlaylistIndex >= songs.length - 1) {
-                const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
-                livePlaylistIndex = validSongs.length > 0 ? validSongs[Math.floor(Math.random() * validSongs.length)] : 1;
-              }
-              while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) livePlaylistIndex++;
+              // Obter próxima música aleatória
+              livePlaylistIndex = getRandomLiveSong();
               
               index = livePlaylistIndex;
               setVideoSources(songs[index].src);
@@ -710,10 +724,7 @@ const playPause = () => {
     }
     
     // Se não tiver estado salvo, escolhe uma música aleatória.
-    const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
-    livePlaylistIndex = validSongs.length > 0 ? validSongs[Math.floor(Math.random() * validSongs.length)] : 1;
-    
-    while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) livePlaylistIndex++;
+    livePlaylistIndex = getRandomLiveSong();
     
     index = livePlaylistIndex;
     setVideoSources(songs[index].src);
@@ -761,12 +772,8 @@ const playPause = () => {
       const projectedTime = lastLiveTime + timeAway;
       
       if (bgVideo.duration && !isNaN(bgVideo.duration) && projectedTime >= bgVideo.duration) {
-        livePlaylistIndex++;
-        if (livePlaylistIndex >= songs.length - 1) {
-          const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
-          livePlaylistIndex = validSongs.length > 0 ? validSongs[Math.floor(Math.random() * validSongs.length)] : 1;
-        }
-        while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) livePlaylistIndex++;
+        // Obter próxima música aleatória
+        livePlaylistIndex = getRandomLiveSong();
         
         index = livePlaylistIndex;
         setVideoSources(songs[index].src);
@@ -1070,6 +1077,9 @@ function handleAoVivoClick(e) {
         console.log('Entrando no modo ao vivo');
         isLiveMode = true;
         
+        // Resetar lista de músicas tocadas ao entrar no modo ao vivo
+        playedSongs = [];
+        
         if (lastLiveSong !== null && liveExitTime > 0) {
           console.log('Retomando transmissão:', lastLiveSong, lastLiveTime);
           const timeAway = (Date.now() - liveExitTime) / 1000;
@@ -1083,9 +1093,8 @@ function handleAoVivoClick(e) {
             const resumeHandler = () => {
               if (bgVideo.duration && !isNaN(bgVideo.duration)) {
                 if (projectedTime >= bgVideo.duration) {
-                  livePlaylistIndex++;
-                  if (livePlaylistIndex >= songs.length - 1) livePlaylistIndex = 1;
-                  while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) livePlaylistIndex++;
+                  // Obter próxima música aleatória
+                  livePlaylistIndex = getRandomLiveSong();
                   
                   index = livePlaylistIndex;
                   setVideoSources(songs[index].src);
@@ -1123,9 +1132,8 @@ function handleAoVivoClick(e) {
           }
         }
         
-        const validSongs = songs.slice(1, -1).map((s, i) => s.src ? i + 1 : -1).filter(i => i !== -1);
-        livePlaylistIndex = validSongs.length > 0 ? validSongs[Math.floor(Math.random() * validSongs.length)] : 1;
-        while (livePlaylistIndex < songs.length - 1 && !songs[livePlaylistIndex].src) livePlaylistIndex++;
+        // Obter primeira música aleatória para iniciar o modo ao vivo
+        livePlaylistIndex = getRandomLiveSong();
         
         if (livePlaylistIndex < songs.length - 1) {
           index = livePlaylistIndex;
