@@ -226,7 +226,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (!document.pictureInPictureEnabled || !bgVideo.requestPictureInPicture) {
         console.log('PiP não está disponível');
         const originalText = pipButton.innerHTML;
-        pipButton.innerHTML = 'PiP não disponível';
+        pipButton.innerHTML = 'Picture-in-Picture não disponível';
         pipButton.style.opacity = '0.5';
         setTimeout(() => {
           pipButton.innerHTML = originalText;
@@ -249,7 +249,7 @@ window.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         console.error('Erro no PiP:', error);
         const originalText = pipButton.innerHTML;
-        pipButton.innerHTML = 'Erro ao ativar PiP';
+        pipButton.innerHTML = 'Erro ao ativar Picture-in-Picture';
         pipButton.style.opacity = '0.5';
         setTimeout(() => {
           pipButton.innerHTML = originalText;
@@ -1200,7 +1200,7 @@ bgVideo.addEventListener('enterpictureinpicture', () => {
 bgVideo.addEventListener('leavepictureinpicture', () => {
   console.log('Saiu do PiP');
   const pipButton = document.getElementById('pipButton');
-  if (pipButton) pipButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff86;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="9" y="9" width="8" height="8" rx="1" ry="1"></rect></svg>Ativar PiP';
+  if (pipButton) pipButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff86;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="9" y="9" width="8" height="8" rx="1" ry="1"></rect></svg>Ativar Picture-in-Picture';
 });
 
 // Paleta de cores

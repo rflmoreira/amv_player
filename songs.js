@@ -19,28 +19,22 @@ export default [
     thumbnail: "src/miniaturas de vídeo/Anime Mix「AMV」- Whatever It Takes.jpg",
   },
   {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Industry%20Baby%20vs%20E.T.%E3%80%8CAMV%20Lil%20Nas%20X%20%26%20Katy%20Perry%E3%80%8DMashup%20%E1%B4%B4%E1%B4%B0.mp4",
-    name: "Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ",
-    author: "KING AMV's 夢",
-    thumbnail: "src/miniaturas de vídeo/Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ.jpg",
-  },
-  {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/AMV%20%EF%BD%9C%20Tanjiro%20(Demon%20Slayer)%20-%20Gasoline%20(Halsey).mp4",
-    name: "AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey)",
-    author: "mocha amv",
-    thumbnail: "src/miniaturas de vídeo/AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey).gif",
-  },
-  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Fate%20Series%20-%20Awaken%E3%80%8CAMV%E3%80%8D.mp4",
     name: "Fate Series - Awaken「AMV」",
     author: "Moth AMVs",
     thumbnail: "src/miniaturas de vídeo/Fate Series - Awaken「AMV」.jpg",
   },
   {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/AMV%20%EF%BD%9C%20Tanjiro%20(Demon%20Slayer)%20-%20Gasoline%20(Halsey).mp4",
+    name: "AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey)",
+    author: "mocha amv",
+    thumbnail: "src/miniaturas de vídeo/AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey).jpg",
+  },
+  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Skyfall%20%20-%20Demon%20Slayer%20%5BAMV%5D.mp4",
     name: "Skyfall - Demon Slayer [AMV]",
     author: "tiff.",
-    thumbnail: "src/miniaturas de vídeo/Skyfall - Demon Slayer [AMV].gif",
+    thumbnail: "src/miniaturas de vídeo/Skyfall - Demon Slayer [AMV].jpg",
   },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/running%20up%20that%20hill%2C%20a%20deal%20with%20god%20-%20evangelion%20amv.mp4",
@@ -61,28 +55,16 @@ export default [
     thumbnail: "src/miniaturas de vídeo/＂its JUST an ANIME＂ ｜ 4K AMV⧸Edit.jpg",
   },
   {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Industry%20Baby%20vs%20E.T.%E3%80%8CAMV%20Lil%20Nas%20X%20%26%20Katy%20Perry%E3%80%8DMashup%20%E1%B4%B4%E1%B4%B0.mp4",
+    name: "Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ",
+    author: "KING AMV's 夢",
+    thumbnail: "src/miniaturas de vídeo/Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ.jpg",
+  },
+  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/BOKU%20NO%20HERO%20ACADEMIA%E3%80%8CAMV%E3%80%8D%E2%96%AA%20IN%20THE%20END%20(2018)%20%E2%96%AA%20(HD).mp4",
     name: "BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD)",
     author: "Dark AMVs",
     thumbnail: "src/miniaturas de vídeo/BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD).jpg",
-  },
-  {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Darkside%E3%80%8CAMV%E3%80%8DAnime%20Mix.mp4",
-    name: "Darkside「AMV」Anime Mix",
-    author: "UnClonable",
-    thumbnail: "src/miniaturas de vídeo/Darkside「AMV」Anime Mix.jpg",
-  },
-  {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Naruto%20AMV%20-%20On%20My%20Own.mp4",
-    name: "Naruto AMV - On My Own",
-    author: "AMV Maker",
-    thumbnail: "src/miniaturas de vídeo/Naruto AMV - On My Own.jpg",
-  },
-  {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Cyberpunk%EF%BC%9A%20Edgerunners%20AMV%20-%20After%20Dark%20x%20Sweater%20Weather.mp4",
-    name: "Cyberpunk： Edgerunners AMV - After Dark x Sweater Weather",
-    author: "Lifes Studioz",
-    thumbnail: "src/miniaturas de vídeo/Cyberpunk： Edgerunners AMV - After Dark x Sweater Weather.jpg",
   },
   {
     src: "",
