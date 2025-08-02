@@ -46,8 +46,7 @@ const miniIconLoading = `<i class='bx bx-loader-alt bx-spin'></i>`;
 const backgroundImages = [
     'src/background/Naruto.jpg',
     'src/background/Nezuko.jpg',
-    'src/background/HinokamiKagura.jpg',
-    'src/background/evangelion-neon-genesis.jpg',
+    'src/background/Shinji.jpg',
 ];
 
 // Função para definir uma imagem de fundo aleatória
