@@ -1,4 +1,4 @@
-// Elementos que vou usar na interface.
+// Elementos DOM
 const bgVideo = document.getElementById('bg-video');
 const syncCanvas = document.getElementById('sync-canvas');
 const ctx = syncCanvas.getContext('2d');
@@ -17,7 +17,7 @@ const playlistSection = document.getElementById('playlistSection');
 const playlistCloseButton = document.getElementById('playlistCloseButton');
 const waveAnimation = document.getElementById('wave-animation');
 
-// Elementos do mini player.
+// Elementos do mini player
 const mainPlayer = document.getElementById('main-player');
 const miniPlayer = document.getElementById('mini-player');
 const minimizeButton = document.getElementById('minimizeButton');
@@ -25,47 +25,37 @@ const restoreButton = document.getElementById('restoreButton');
 const miniPlayPauseButton = document.getElementById('mini-play-pause-button');
 const miniMusicName = document.getElementById('mini-music-name');
 const miniMusicAuthor = document.getElementById('mini-music-author');
-// Elementos da capa e animação do mini player
 const miniCoverImg = document.getElementById('mini-cover-img');
 const miniWaveAnimation = document.getElementById('mini-wave-animation');
 const miniPlayerCover = document.getElementById('mini-player-cover');
 
-
 import songs from "./songs.js";
 
-// Defino os ícones do player principal.
+// Ícones dos botões
 const textButtonPlay = `<i style="font-size: 4rem;" class='bx bx-play-circle'></i>`;
 const textButtonPause = `<i style="font-size: 4rem;" class='bx bx-pause-circle'></i>`;
 const textButtonStop = `<i style="font-size: 4rem;" class='bx bx-stop-circle'></i>`;
 const textButtonLoading = `<i style="font-size: 4rem;" class='bx bx-loader-alt bx-spin'></i>`;
 
-// Ícones do mini player, para ficar igual ao principal.
 const miniIconPlay = `<i class='bx bx-play-circle'></i>`;
 const miniIconPause = `<i class='bx bx-pause-circle'></i>`;
 const miniIconStop = `<i class='bx bx-stop-circle'></i>`;
 const miniIconLoading = `<i class='bx bx-loader-alt bx-spin'></i>`;
 
-// --- novo: lógica fundo aleatório ---
-// array com os caminhos das imagens de fundo
+// Imagens de fundo
 const backgroundImages = [
     'src/background/Naruto.jpg',
     'src/background/Nezuko.jpg',
     'src/background/Shinji.jpg',
 ];
 
-// Função para definir uma imagem de fundo aleatória
 const setRandomBackground = () => {
-    // Escolhe um índice aleatório do array de imagens
     const randomIndex = Math.floor(Math.random() * backgroundImages.length);
-    // Pega o caminho da imagem correspondente
     const randomImage = backgroundImages[randomIndex];
-    // Define a variável CSS '--bg-image' no elemento raiz (<html>), que será usada pelo style.css
     document.documentElement.style.setProperty('--bg-image', `url('${randomImage}')`);
 };
-// --- FIM DA NOVA LÓGICA ---
 
-
-// Variáveis de estado.
+// Variáveis de estado
 let index = 0;
 let isPlaying = false;
 let isBuffering = false;
@@ -76,9 +66,13 @@ let lastLiveTime = 0;
 let liveExitTime = 0;
 let currentSongColor = 'var(--catppuccin-lavender)';
 
-// Função para ajustar o vídeo de fundo e preencher a tela.
+// Controle do mini-player
+let miniPlayerTimeout = null;
+let isUserInteracting = false;
+const AUTO_HIDE_DELAY = 3000;
+
+// Ajusta o tamanho do vídeo para preencher a tela
 const adjustVideoSize = () => {
-    // Se não tiver vídeo ou ele não carregou ainda, não continua.
     if (!bgVideo || bgVideo.videoWidth === 0) {
         return;
     }
@@ -86,20 +80,17 @@ const adjustVideoSize = () => {
     const videoRatio = bgVideo.videoWidth / bgVideo.videoHeight;
     const windowRatio = window.innerWidth / window.innerHeight;
 
-    // Reseto o estilo para poder calcular de novo.
     bgVideo.style.width = 'auto';
     bgVideo.style.height = 'auto';
 
     if (windowRatio > videoRatio) {
-        // Se a janela for mais larga, o vídeo acompanha a largura.
         bgVideo.style.width = '100vw';
     } else {
-        // Se for mais alta, o vídeo acompanha a altura.
         bgVideo.style.height = '100vh';
     }
 };
 
-// Checo as capacidades do dispositivo, principalmente mobile.
+// Verifica capacidades do dispositivo
 const checkDeviceCapabilities = () => {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -108,7 +99,6 @@ const checkDeviceCapabilities = () => {
   
   console.log('Capacidades do dispositivo:', { isIOS, isAndroid, isMobile, pipEnabled: document.pictureInPictureEnabled });
   
-  // Atualizo a dica do botão PiP dependendo do suporte.
   const pipButton = document.getElementById('pipButton');
   if (pipButton) {
     if (!document.pictureInPictureEnabled) {
@@ -123,7 +113,7 @@ const checkDeviceCapabilities = () => {
   return { isIOS, isAndroid, isMobile };
 };
 
-// Salvo o estado do modo "ao vivo" no localStorage.
+// Salva estado do modo ao vivo no localStorage
 const saveLiveState = () => {
   if (isLiveMode) {
     const state = {
@@ -135,7 +125,7 @@ const saveLiveState = () => {
   }
 };
 
-// Carrego o estado salvo.
+// Carrega estado salvo
 const loadLiveState = () => {
   const saved = localStorage.getItem('amvPlayerLiveState');
   if (saved) {
@@ -151,7 +141,7 @@ const loadLiveState = () => {
   }
 };
 
-// Mudo a dica do botão de play se estiver no modo "ao vivo".
+// Atualiza tooltip do botão play
 const updatePlayButtonTooltip = () => {
   if (isLiveMode) {
     playPauseButton.title = "Pausar/Retomar transmissão ao vivo (Espaço)";
@@ -160,9 +150,9 @@ const updatePlayButtonTooltip = () => {
   }
 };
 
-// Configuração inicial quando a página carrega.
+// Configuração inicial
 window.addEventListener('DOMContentLoaded', () => {
-  setRandomBackground(); // Define o fundo aleatório ao carregar
+  setRandomBackground();
   checkDeviceCapabilities();
   loadLiveState();
   
@@ -176,7 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPlaylist(0);
   adjustVideoSize();
   
-  // Dicas dos botões.
+  // Tooltips dos botões
   playPauseButton.title = "Reproduzir/Pausar (Espaço)";
   prevButton.title = "Música anterior (Seta esquerda)";
   nextButton.title = "Próxima música (Seta direita)";
@@ -187,7 +177,6 @@ window.addEventListener('DOMContentLoaded', () => {
   
   updatePlayButtonTooltip();
   
-  // Event listener para esconder imagem quebrada no mini player
   miniCoverImg.addEventListener('error', () => {
     miniCoverImg.style.display = 'none';
   });
@@ -196,7 +185,7 @@ window.addEventListener('DOMContentLoaded', () => {
     playPauseButton.title = "Retomar transmissão ao vivo (Espaço)";
   }
   
-  // Configuração do botão PiP.
+  // Configuração do botão PiP
   const pipButton = document.getElementById('pipButton');
   if (pipButton) {
     const handlePiP = async function (e) {
@@ -243,19 +232,19 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Eventos para o vídeo.
+// Eventos do vídeo
 window.addEventListener('resize', adjustVideoSize);
 bgVideo.addEventListener('loadedmetadata', adjustVideoSize);
 
 
-// Salvo o estado antes de fechar a página.
+// Salva estado antes de fechar a página
 window.addEventListener('beforeunload', () => {
   if (isLiveMode) {
     saveLiveState();
   }
 });
 
-// Salvo o estado periodicamente no modo ao vivo.
+// Salva estado periodicamente no modo ao vivo
 setInterval(() => {
   if (isLiveMode && !bgVideo.paused) {
     lastLiveSong = livePlaylistIndex;
@@ -265,38 +254,107 @@ setInterval(() => {
   }
 }, 5000);
 
-// --- Controles do Mini Player ---
+// Controles do Mini Player
+const showMiniPlayer = () => {
+    if (mainPlayer.classList.contains('minimized')) {
+        miniPlayer.classList.remove('auto-hidden');
+        clearTimeout(miniPlayerTimeout);
+    }
+};
+
+const hideMiniPlayer = () => {
+    if (mainPlayer.classList.contains('minimized') && isPlaying && !isUserInteracting) {
+        miniPlayer.classList.add('auto-hidden');
+    }
+};
+
+const scheduleHideMiniPlayer = () => {
+    clearTimeout(miniPlayerTimeout);
+    if (mainPlayer.classList.contains('minimized') && isPlaying) {
+        miniPlayerTimeout = setTimeout(hideMiniPlayer, AUTO_HIDE_DELAY);
+    }
+};
+
+const handleUserInteraction = () => {
+    isUserInteracting = true;
+    showMiniPlayer();
+    scheduleHideMiniPlayer();
+    
+    setTimeout(() => {
+        isUserInteracting = false;
+    }, 100);
+};
+
 minimizeButton.onclick = () => {
     mainPlayer.classList.add('minimized');
     miniPlayer.classList.remove('minimized');
+    miniPlayer.classList.remove('auto-hidden');
+    miniPlayer.classList.remove('closing');
+    clearTimeout(miniPlayerTimeout);
+    
+    if (isPlaying) {
+        scheduleHideMiniPlayer();
+    }
 };
 
 restoreButton.onclick = () => {
     mainPlayer.classList.remove('minimized');
     miniPlayer.classList.add('minimized');
+    miniPlayer.classList.remove('auto-hidden');
+    miniPlayer.classList.remove('closing');
+    clearTimeout(miniPlayerTimeout);
 };
 
-// Suporte a toque para minimizar/restaurar.
+// Suporte a toque para minimizar/restaurar
 minimizeButton.addEventListener('touchend', (e) => {
     e.preventDefault();
     mainPlayer.classList.add('minimized');
     miniPlayer.classList.remove('minimized');
+    miniPlayer.classList.remove('auto-hidden');
+    miniPlayer.classList.remove('closing');
+    clearTimeout(miniPlayerTimeout);
+    
+    if (isPlaying) {
+        scheduleHideMiniPlayer();
+    }
 });
 
 restoreButton.addEventListener('touchend', (e) => {
     e.preventDefault();
     mainPlayer.classList.remove('minimized');
     miniPlayer.classList.add('minimized');
+    miniPlayer.classList.remove('auto-hidden');
+    miniPlayer.classList.remove('closing');
+    clearTimeout(miniPlayerTimeout);
 });
 
-miniPlayPauseButton.onclick = () => playPause();
+miniPlayPauseButton.onclick = () => {
+    handleUserInteraction();
+    playPause();
+};
 
-// Botões principais.
+// Event listeners para interação do usuário
+let mouseMoveThrottle = null;
+const throttledMouseMove = () => {
+    if (!mouseMoveThrottle) {
+        mouseMoveThrottle = setTimeout(() => {
+            handleUserInteraction();
+            mouseMoveThrottle = null;
+        }, 100);
+    }
+};
+
+document.addEventListener('mousemove', throttledMouseMove);
+document.addEventListener('touchstart', handleUserInteraction);
+document.addEventListener('touchmove', handleUserInteraction);
+document.addEventListener('click', handleUserInteraction);
+
+// Botões principais
 prevButton.onclick = () => prevNextMusic("prev");
 nextButton.onclick = () => prevNextMusic();
 playPauseButton.onclick = () => playPause();
 
-// Suporte a toque para os botões.
+// Suporte a toque para botões
 prevButton.addEventListener('touchend', (e) => {
   e.preventDefault();
   prevNextMusic("prev");
@@ -312,7 +370,7 @@ playPauseButton.addEventListener('touchend', (e) => {
   playPause();
 });
 
-// Atalhos do teclado.
+// Atalhos do teclado
 document.addEventListener("keydown", handleKeyPress);
 
 function handleKeyPress(event) {
@@ -330,7 +388,7 @@ function handleKeyPress(event) {
   }
 }
 
-// Eventos do player de vídeo.
+// Eventos do player de vídeo
 bgVideo.ontimeupdate = () => updateTime();
 
 bgVideo.addEventListener('waiting', () => {
@@ -352,7 +410,6 @@ bgVideo.addEventListener('playing', () => {
 });
 
 bgVideo.addEventListener('play', () => {
-  // Adiciona a classe para mostrar o vídeo e esconder a capa
   document.body.classList.add('video-reproduzindo');
   isPlaying = true;
   waveAnimation.classList.add('playing');
@@ -405,11 +462,15 @@ bgVideo.addEventListener('play', () => {
     }
   }
   
+  // Controle de visibilidade do mini-player
+  if (mainPlayer.classList.contains('minimized')) {
+    scheduleHideMiniPlayer();
+  }
+  
   drawToCanvas();
 });
 
 bgVideo.addEventListener('ended', () => {
-  // Remove a classe para mostrar a capa novamente
   document.body.classList.remove('video-reproduzindo');
   waveAnimation.classList.remove('playing');
   miniWaveAnimation.classList.remove('playing');
@@ -465,9 +526,8 @@ bgVideo.addEventListener('ended', () => {
 });
 
 bgVideo.addEventListener('pause', () => {
-  // Remove a classe para mostrar a capa novamente
   if (bgVideo.currentTime !== bgVideo.duration) {
-      document.body.classList.remove('video-reproduzindo');
+    document.body.classList.remove('video-reproduzindo');
   }
   isPlaying = false;
   waveAnimation.classList.remove('playing');
@@ -475,6 +535,12 @@ bgVideo.addEventListener('pause', () => {
   playPauseButton.innerHTML = textButtonPlay;
   miniPlayPauseButton.innerHTML = miniIconPlay;
   renderPlaylist(index);
+  
+  // Mostra mini-player quando pausado
+  if (mainPlayer.classList.contains('minimized')) {
+    showMiniPlayer();
+    clearTimeout(miniPlayerTimeout);
+  }
 
   if (isLiveMode) {
     lastLiveSong = livePlaylistIndex;
@@ -485,7 +551,7 @@ bgVideo.addEventListener('pause', () => {
   }
 });
 
-// Atualiza as informações da faixa na tela.
+// Atualiza informações da faixa na tela
 function atualizarFaixa() {
   const { name, author, thumbnail } = songs[index];
   musicName.innerHTML = name;
@@ -754,8 +820,6 @@ const playPause = () => {
       bgVideo.play().catch(() => {
         playPauseButton.innerHTML = textButtonPlay;
         miniPlayPauseButton.innerHTML = miniIconPlay;
-        bgVideo.removeEventListener('canplay', playHandler);
-        bgVideo.removeEventListener('playing', playHandler);
       });
     }
   } else {
@@ -1104,13 +1168,13 @@ function handleAoVivoClick(e) {
     }, 10);
 }
 
-// Controles da playlist.
+// Controles da playlist
 playlistToggleButton.addEventListener('click', togglePlaylist);
 playlistToggleButton.addEventListener('touchend', (e) => { e.preventDefault(); togglePlaylist(); });
 playlistCloseButton.addEventListener('click', togglePlaylist);
 playlistCloseButton.addEventListener('touchend', (e) => { e.preventDefault(); togglePlaylist(); });
 
-// Desenha o vídeo no canvas para sincronia.
+// Desenha vídeo no canvas para sincronia
 function drawToCanvas() {
   if (!bgVideo.paused && !bgVideo.ended) {
     ctx.drawImage(bgVideo, 0, 0, syncCanvas.width, syncCanvas.height);
@@ -1118,7 +1182,7 @@ function drawToCanvas() {
   requestAnimationFrame(drawToCanvas);
 }
 
-// Eventos do Picture-in-Picture.
+// Eventos do Picture-in-Picture
 bgVideo.addEventListener('enterpictureinpicture', () => {
   console.log('Entrou em PiP');
   const pipButton = document.getElementById('pipButton');
@@ -1131,7 +1195,7 @@ bgVideo.addEventListener('leavepictureinpicture', () => {
   if (pipButton) pipButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff86;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="9" y="9" width="8" height="8" rx="1" ry="1"></rect></svg>Ativar PiP';
 });
 
-// Paleta de cores.
+// Paleta de cores
 const catppuccinColors = [
   'var(--catppuccin-pink)', 'var(--catppuccin-mauve)', 'var(--catppuccin-red)',
   'var(--catppuccin-maroon)', 'var(--catppuccin-peach)', 'var(--catppuccin-yellow)',
@@ -1142,7 +1206,7 @@ const catppuccinColors = [
 const musicNameElement = document.getElementById('musicName');
 const musicAuthorElement = document.getElementById('musicAuthor');
 
-// Muda a cor do nome da música.
+// Muda cor do nome da música
 function changeMusicNameColor() {
   if (index === 0) {
     musicNameElement.style.color = '';
@@ -1152,7 +1216,6 @@ function changeMusicNameColor() {
     miniMusicAuthor.style.color = '';
     miniMusicAuthor.style.opacity = '';
     currentSongColor = 'var(--catppuccin-lavender)';
-    // ATUALIZADO: Reseta a cor da animação do mini player
     miniWaveAnimation.querySelectorAll('.wave-bar').forEach(bar => bar.style.backgroundColor = currentSongColor);
     return;
   }
@@ -1166,7 +1229,6 @@ function changeMusicNameColor() {
   miniMusicName.style.color = currentSongColor;
   miniMusicAuthor.style.color = currentSongColor;
   miniMusicAuthor.style.opacity = '0.8';
-  // ATUALIZADO: Define a cor da animação do mini player
   miniWaveAnimation.querySelectorAll('.wave-bar').forEach(bar => bar.style.backgroundColor = currentSongColor);
 }
 
@@ -1188,7 +1250,7 @@ function togglePlaylist() {
     });
   } else {
     playlistSection.style.display = 'flex';
-    void playlistSection.offsetWidth; // Força o reflow para a animação funcionar
+    void playlistSection.offsetWidth; // Força reflow para animação
     playlistSection.classList.add('expanded');
     setTimeout(() => renderPlaylist(index), 50);
   }
