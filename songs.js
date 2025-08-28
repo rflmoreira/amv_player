@@ -7,10 +7,16 @@ export default [
     isCover: true
   },
   {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%5BAMV%5D%20-%20WARRIORS.mp4",
-    name: "[AMV] - WARRIORS",
-    author: "viberonin",
-    thumbnail: "src/miniaturas de vídeo/[AMV] - WARRIORS.jpg",
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/BOKU%20NO%20HERO%20ACADEMIA%E3%80%8CAMV%E3%80%8D%E2%96%AA%20IN%20THE%20END%20(2018)%20%E2%96%AA%20(HD).mp4",
+    name: "BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD)",
+    author: "Dark AMVs",
+    thumbnail: "src/miniaturas de vídeo/BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD).jpg",
+  },
+  {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Skyfall%20%20-%20Demon%20Slayer%20%5BAMV%5D.mp4",
+    name: "Skyfall - Demon Slayer [AMV]",
+    author: "tiff.",
+    thumbnail: "src/miniaturas de vídeo/Skyfall - Demon Slayer [AMV].jpg",
   },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Anime%20Mix%E3%80%8CAMV%E3%80%8D-%20Whatever%20It%20Takes.mp4",
@@ -29,12 +35,6 @@ export default [
     name: "AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey)",
     author: "mocha amv",
     thumbnail: "src/miniaturas de vídeo/AMV ｜ Tanjiro (Demon Slayer) - Gasoline (Halsey).jpg",
-  },
-  {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Skyfall%20%20-%20Demon%20Slayer%20%5BAMV%5D.mp4",
-    name: "Skyfall - Demon Slayer [AMV]",
-    author: "tiff.",
-    thumbnail: "src/miniaturas de vídeo/Skyfall - Demon Slayer [AMV].jpg",
   },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/running%20up%20that%20hill%2C%20a%20deal%20with%20god%20-%20evangelion%20amv.mp4",
@@ -61,10 +61,22 @@ export default [
     thumbnail: "src/miniaturas de vídeo/Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ.jpg",
   },
   {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/BOKU%20NO%20HERO%20ACADEMIA%E3%80%8CAMV%E3%80%8D%E2%96%AA%20IN%20THE%20END%20(2018)%20%E2%96%AA%20(HD).mp4",
-    name: "BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD)",
-    author: "Dark AMVs",
-    thumbnail: "src/miniaturas de vídeo/BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD).jpg",
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/After%20Dark%20-%20Evangelion%E3%80%8C%20AMV%20%E3%80%8D.mp4",
+    name: "After Dark - Evangelion「 AMV 」",
+    author: "Inferno AMV",
+    thumbnail: "src/miniaturas de vídeo/After Dark - Evangelion「 AMV 」.jpg",
+  },
+  {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Jujutsu%20Kaisen%E3%80%8CAMV%E3%80%8D-%20beggin.mp4",
+    name: "Jujutsu Kaisen「AMV」- beggin",
+    author: "genkayedits悪い",
+    thumbnail: "src/miniaturas de vídeo/Jujutsu Kaisen「AMV」- beggin.jpg",
+  },
+  {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%5BAMV%5D%20-%20WARRIORS.mp4",
+    name: "[AMV] - WARRIORS",
+    author: "viberonin",
+    thumbnail: "src/miniaturas de vídeo/[AMV] - WARRIORS.jpg",
   },
   {
     src: "",
