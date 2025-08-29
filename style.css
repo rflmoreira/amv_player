@@ -6,7 +6,6 @@ video#bg-video {
   min-width: 100vw;
   min-height: 100vh;
   pointer-events: none;
-  /* Colocado na camada mais profunda para não cobrir a imagem de capa */
   z-index: -2;
   filter: saturate(1.35) !important;
 }
@@ -47,10 +46,9 @@ body {
   display: flex; 
   flex-direction: column; 
   min-height: 100vh; /* O body precisa ocupar a tela toda. */
-  /* Cor de fundo de fallback */
   background: #000000;
   overflow-x: hidden;
-  position: relative; /* Necessário para o z-index do ::before funcionar corretamente */
+  position: relative;
 }
 
 /* Fundo da capa aplicado a um pseudo-elemento para melhor controle de camadas */
@@ -61,15 +59,12 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  /* Usa uma variável CSS para a imagem, com um fallback */
   background-image: var(--bg-image, #000000);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
   background-size: cover;
-  /* Fica atrás do conteúdo principal, mas na frente do vídeo */
   z-index: -1;
-  /* Adiciona uma transição para suavizar a troca */
   transition: opacity 0.5s ease-in-out;
   filter: saturate(1.35) !important;
 }
@@ -114,8 +109,8 @@ section {
   background: rgba(25, 25, 25, 0.55);
   border-radius: 28px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
-  backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
-  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1); /* Compatibilidade com Safari */
+  backdrop-filter: blur(15px) saturate(300%) brightness(2.5);
+  -webkit-backdrop-filter: blur(15px) saturate(300%) brightness(2.5);
   border: 1px solid rgba(255, 255, 255, 0.18);
   position: relative;
   margin: 0;
@@ -158,6 +153,12 @@ section {
   background-color: #3a3a3a2a;
   margin-bottom: 5px;
   border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .progress {
@@ -166,6 +167,66 @@ section {
   border-radius: 5px;
   transition: width 0.2s ease;
   opacity: 0.8;
+  position: relative;
+  pointer-events: none;
+}
+
+/* Bolinha na ponta da barra de progresso */
+.progress::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: rgba(243, 139, 168, 0.925);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  cursor: grab;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* Hover da bolinha quando a barra de progresso é hovered */
+.progress-bar:hover:not(.dragging) .progress::after {
+  transform: translateY(-50%) scale(1.15) !important;
+}
+
+.progress::after:hover:not(:active) {
+  transform: translateY(-50%) scale(1.15) !important;
+}
+
+.progress:hover::after:not(:active) {
+  transform: translateY(-50%) scale(1.15) !important;
+}
+
+.progress::after:active,
+.progress-bar.dragging .progress::after {
+  cursor: grabbing;
+  transform: translateY(-50%) scale(1.2) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.progress-bar.dragging {
+  opacity: 1;
+}
+
+.progress-bar.dragging .progress {
+  transition: none;
+}
+
+.progress-bar::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  cursor: pointer;
 }
 
 /* Informações da música. */
@@ -188,6 +249,29 @@ section {
   color: #ffffff86;
   width: 100%;
   max-width: 180px;
+}
+
+#musicName a {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              color 0.2s ease;
+  color: inherit;
+  text-decoration: none;
+}
+
+#musicName a:hover {
+  transform: scale(1.05);
+}
+
+#musicName a .bx-link-external {
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+#musicName a:hover .bx-link-external {
+  opacity: 1;
+  transform: scale(1.1);
+  color: #f5c2e7; /* Rosa catppuccin */
 }
 
 .music-author {
@@ -221,12 +305,21 @@ button {
   color: inherit;
 }
 
-/* Estilo para botões desativados. */
 .botao-desativado {
   opacity: 0.5;
   pointer-events: none;
   filter: grayscale(1);
   cursor: not-allowed !important;
+}
+
+.btn-ao-vivo[style*="opacity: 0.5"] {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease !important;
+}
+
+.btn-ao-vivo[style*="opacity: 0.5"]:hover {
+  transform: scale(1.1) !important;
+  color: #f38ba8 !important;
+  opacity: 1 !important;
 }
 
 /* Escondo os controles do vídeo se não estiver em tela cheia. */
@@ -235,7 +328,6 @@ button {
   display: none !important;
 }
 
-/* Ajustes para o vídeo em tela cheia. */
 :fullscreen #bg-video,
 :-webkit-full-screen #bg-video {
   pointer-events: auto !important;
@@ -268,6 +360,15 @@ button {
     padding: 0;
     z-index: 11;
     -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#minimizeButton:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+#minimizeButton:active {
+    transform: translateX(-50%) scale(0.95);
 }
 
 #minimizeButton i {
@@ -321,15 +422,14 @@ button {
   opacity: 0;
   border-radius: 28px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
-  backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
-  -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+  backdrop-filter: blur(15px) saturate(300%) brightness(2.5);
+  -webkit-backdrop-filter: blur(15px) saturate(300%) brightness(2.5);
   border: 1px solid rgba(255, 255, 255, 0.18);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
 
-/* Escondo a barra de rolagem. */
 #playlistSection::-webkit-scrollbar {
   display: none;
 }
@@ -340,7 +440,6 @@ button {
   opacity: 1;
 }
 
-/* Animação de fechamento. */
 #playlistSection.closing {
   transform: translateX(-50%) translateY(120%) scale(0.8);
   opacity: 0;
@@ -372,7 +471,6 @@ button {
   display: none;
 }
 
-/* Novos estilos para os itens da playlist. */
 .playlist-item {
     display: flex;
     align-items: center;
@@ -380,13 +478,14 @@ button {
     padding: 6px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
 }
 
 .playlist-item:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.02) !important;
 }
 
 .playlist-item.selected {
@@ -471,11 +570,19 @@ button {
   border: none;
   color: #ffffff86;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   padding: 8px;
   min-width: 44px;
   min-height: 44px;
   line-height: 1;
+}
+
+#playlistCloseButton:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+#playlistCloseButton:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 #playlistCloseButton i {
@@ -542,11 +649,41 @@ button {
 #playlistCloseButton,
 #pipButton,
 .progress-bar,
-#btn-ao-vivo {
+.btn-ao-vivo {
   cursor: pointer !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Melhorando a resposta ao toque no iOS. */
+#playPauseButton:hover,
+#prevButton:hover,
+#nextButton:hover,
+#playlistToggleButton:hover,
+#pipButton:hover,
+.btn-ao-vivo:hover {
+  transform: scale(1.1);
+}
+
+#playPauseButton:active,
+#prevButton:active,
+#nextButton:active,
+#playlistToggleButton:active,
+#pipButton:active,
+.btn-ao-vivo:active {
+  transform: scale(0.95);
+}
+
+.btn-ao-vivo {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.btn-ao-vivo:hover {
+  transform: scale(1.1) !important;
+}
+
+.btn-ao-vivo:active {
+  transform: scale(0.95) !important;
+}
+
 button, .clickable {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   -webkit-touch-callout: none;
@@ -555,7 +692,6 @@ button, .clickable {
   cursor: pointer;
 }
 
-/* Garanto uma área mínima de toque para botões importantes. */
 #playPauseButton, #prevButton, #nextButton, 
 #playlistToggleButton, #playlistCloseButton,
 #pipButton, #minimizeButton, #restoreButton {
@@ -610,13 +746,13 @@ button, .clickable {
     position: fixed;
     bottom: 50px;
     left: 50%;
-    width: 280px; /* AUMENTADO */
+    width: 280px;
     height: auto;
     padding: 10px 15px;
     padding-top: 20px;
     background: rgba(25, 25, 25, 0.55);
-    backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
-    -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+    backdrop-filter: blur(15px) saturate(300%) brightness(2.5);
+    -webkit-backdrop-filter: blur(15px) saturate(300%) brightness(2.5);
     border-radius: 28px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 2px rgba(255, 255, 255, 0.25) inset;
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -625,7 +761,6 @@ button, .clickable {
     flex-direction: column;
     align-items: center;
     color: #ffffff86;
-    /* Transições elásticas estilo "chiclete" */
     transform: translateX(-50%) translateY(0) scale(1);
     opacity: 1;
     transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
@@ -633,34 +768,29 @@ button, .clickable {
                 scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Estado oculto do mini-player durante reprodução */
 #mini-player.auto-hidden {
     transform: translateX(-50%) translateY(30px) scale(0.9);
     opacity: 0;
     pointer-events: none;
 }
 
-/* Estado minimizado (quando o player principal está visível) */
 #mini-player.minimized {
     transform: translateX(-50%) translateY(120%) scale(0.7);
     opacity: 0;
     pointer-events: none;
 }
 
-/* Animação de fechamento do mini-player */
 #mini-player.closing {
     transform: translateX(-50%) translateY(120%) scale(0.7);
     opacity: 0;
 }
 
-/* Garantir que o mini-player apareça quando necessário, mas respeitando o estado minimizado */
 body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     opacity: 1 !important;
     transform: translateX(-50%) translateY(0) scale(1) !important;
     pointer-events: auto !important;
 }
 
-/* Garantir que o mini-player seja visível ao carregar a página */
 #mini-player:not(.minimized):not(.auto-hidden) {
     opacity: 1;
     transform: translateX(-50%) translateY(0) scale(1);
@@ -682,15 +812,19 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     padding: 0;
     z-index: 21;
     -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#restoreButton:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+#restoreButton:active {
+    transform: translateX(-50%) scale(0.95);
 }
 
 #restoreButton i {
     font-size: 1.8rem;
-}
-
-#minimizeButton:hover,
-#restoreButton:hover {
-    background: transparent;
 }
 
 .mini-player-content {
@@ -701,7 +835,6 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     gap: 12px;
 }
 
-/* Estilos para a capa do mini player */
 #mini-player-cover {
     position: relative;
     width: 80px; 
@@ -718,14 +851,12 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     object-fit: cover;
 }
 
-/* Esconde a imagem quando não conseguir carregar */
 #mini-cover-img:not([src]), 
 #mini-cover-img[src=""], 
 #mini-cover-img[src="#"] {
     display: none;
 }
 
-/* Overlay para o mini-player, para conter a animação e centralizá-la */
 #mini-wave-overlay {
     position: absolute;
     top: 0;
@@ -740,7 +871,6 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     transition: opacity 0.2s ease;
 }
 
-/* Mostra o overlay quando uma música está selecionada */
 #mini-player-cover.active #mini-wave-overlay {
     opacity: 1;
 }
@@ -773,6 +903,15 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mini-player-controls button:hover {
+    transform: scale(1.1);
+}
+
+.mini-player-controls button:active {
+    transform: scale(0.95);
 }
 
 #mini-play-pause-button i {
@@ -791,7 +930,7 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
 }
 
 .playlist-wave-animation {
-    height: 22px; /* Altura padrão para a animação de onda na playlist */
+    height: 22px;
 }
 
 #mini-wave-animation {
@@ -813,15 +952,11 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
     filter: grayscale(1);
 }
 
-/* A cor da onda na playlist e no mini player muda com a música (via JS). */
-
-/* Ativo a animação quando a música está tocando. */
 #wave-animation.playing .wave-bar,
 .playlist-wave-animation.playing .wave-bar {
     animation: wave 1.5s ease-in-out infinite;
 }
 
-/* Delays para cada barrinha da onda. */
 #wave-animation.playing .wave-bar:nth-child(2),
 .playlist-wave-animation.playing .wave-bar:nth-child(2) {
     animation-delay: -1.2s;
@@ -853,7 +988,6 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
 }
 
 
-/* Scrollbar para desktop (escondida). */
 @media (hover: hover) and (pointer: fine) {
   #playlistSection ul::-webkit-scrollbar {
     display: none;
@@ -864,7 +998,6 @@ body:not(.video-reproduzindo) #mini-player:not(.minimized) {
   }
 }
 
-/* Scrollbar para mobile (visível e fina). */
 @media (hover: none) and (pointer: coarse) {
   #playlistSection ul {
     scrollbar-width: thin;
@@ -910,7 +1043,6 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* Garante que todos os elementos do rodapé tenham tamanho fixo. */
 footer p,
 footer div,
 footer strong {

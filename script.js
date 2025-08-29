@@ -65,7 +65,7 @@ let lastLiveSong = null;
 let lastLiveTime = 0;
 let liveExitTime = 0;
 let currentSongColor = 'var(--catppuccin-lavender)';
-let playedSongs = []; // Array para controlar as músicas já tocadas no modo ao vivo
+let playedSongs = [];
 
 // Controle do mini-player
 let miniPlayerTimeout = null;
@@ -157,22 +157,17 @@ const getRandomLiveSong = () => {
   
   if (validSongs.length === 0) return 1;
   
-  // Se todas as músicas foram tocadas, resetar a lista
   if (playedSongs.length >= validSongs.length) {
     playedSongs = [];
   }
   
-  // Filtrar músicas que ainda não foram tocadas
   const unplayedSongs = validSongs.filter(songIndex => !playedSongs.includes(songIndex));
   
-  // Se não há músicas não tocadas, usar todas as válidas
   const availableSongs = unplayedSongs.length > 0 ? unplayedSongs : validSongs;
   
-  // Selecionar uma música aleatória
   const randomIndex = Math.floor(Math.random() * availableSongs.length);
   const selectedSong = availableSongs[randomIndex];
   
-  // Adicionar à lista de músicas tocadas
   if (!playedSongs.includes(selectedSong)) {
     playedSongs.push(selectedSong);
   }
@@ -180,7 +175,6 @@ const getRandomLiveSong = () => {
   return selectedSong;
 };
 
-// Configuração inicial
 // Configuração inicial
 window.addEventListener('DOMContentLoaded', () => {
   setRandomBackground();
@@ -197,7 +191,6 @@ window.addEventListener('DOMContentLoaded', () => {
   renderPlaylist(0);
   adjustVideoSize();
   
-  // Tooltips dos botões
   playPauseButton.title = "Reproduzir/Pausar (Espaço)";
   prevButton.title = "Música anterior (Seta esquerda)";
   nextButton.title = "Próxima música (Seta direita)";
@@ -216,7 +209,6 @@ window.addEventListener('DOMContentLoaded', () => {
     playPauseButton.title = "Retomar transmissão ao vivo (Espaço)";
   }
   
-  // Configuração do botão PiP
   const pipButton = document.getElementById('pipButton');
   if (pipButton) {
     const handlePiP = async function (e) {
@@ -263,19 +255,15 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Eventos do vídeo
 window.addEventListener('resize', adjustVideoSize);
 bgVideo.addEventListener('loadedmetadata', adjustVideoSize);
 
-
-// Salva estado antes de fechar a página
 window.addEventListener('beforeunload', () => {
   if (isLiveMode) {
     saveLiveState();
   }
 });
 
-// Salva estado periodicamente no modo ao vivo
 setInterval(() => {
   if (isLiveMode && !bgVideo.paused) {
     lastLiveSong = livePlaylistIndex;
@@ -364,7 +352,6 @@ miniPlayPauseButton.onclick = () => {
     playPause();
 };
 
-// Event listeners para interação do usuário
 let mouseMoveThrottle = null;
 const throttledMouseMove = () => {
     if (!mouseMoveThrottle) {
@@ -380,12 +367,10 @@ document.addEventListener('touchstart', handleUserInteraction);
 document.addEventListener('touchmove', handleUserInteraction);
 document.addEventListener('click', handleUserInteraction);
 
-// Botões principais
 prevButton.onclick = () => prevNextMusic("prev");
 nextButton.onclick = () => prevNextMusic();
 playPauseButton.onclick = () => playPause();
 
-// Suporte a toque para botões
 prevButton.addEventListener('touchend', (e) => {
   e.preventDefault();
   prevNextMusic("prev");
@@ -401,7 +386,6 @@ playPauseButton.addEventListener('touchend', (e) => {
   playPause();
 });
 
-// Atalhos do teclado
 document.addEventListener("keydown", handleKeyPress);
 
 function handleKeyPress(event) {
@@ -419,7 +403,6 @@ function handleKeyPress(event) {
   }
 }
 
-// Eventos do player de vídeo
 bgVideo.ontimeupdate = () => updateTime();
 
 bgVideo.addEventListener('waiting', () => {
@@ -485,7 +468,6 @@ bgVideo.addEventListener('play', () => {
     }
   }
   
-  // Controle de visibilidade do mini-player
   if (mainPlayer.classList.contains('minimized')) {
     scheduleHideMiniPlayer();
   }
@@ -498,7 +480,6 @@ bgVideo.addEventListener('ended', () => {
   waveAnimation.classList.remove('playing');
   miniWaveAnimation.classList.remove('playing');
   if (isLiveMode) {
-    // Obter próxima música aleatória
     livePlaylistIndex = getRandomLiveSong();
     
     if (livePlaylistIndex < songs.length - 1 && songs[livePlaylistIndex].src) {
@@ -551,7 +532,6 @@ bgVideo.addEventListener('pause', () => {
   miniPlayPauseButton.innerHTML = miniIconPlay;
   renderPlaylist(index);
   
-  // Mostra mini-player quando pausado
   if (mainPlayer.classList.contains('minimized')) {
     showMiniPlayer();
     clearTimeout(miniPlayerTimeout);
@@ -566,17 +546,20 @@ bgVideo.addEventListener('pause', () => {
   }
 });
 
-// Atualiza informações da faixa na tela
 function atualizarFaixa() {
-  const { name, author, thumbnail } = songs[index];
-  musicName.innerHTML = name;
+  const { name, author, thumbnail, url } = songs[index];
+  
+  if (url) {
+    musicName.innerHTML = `<a href="${url}" target="_blank" style="color: inherit; text-decoration: none;">${name} <i class='bx bx-link-external' style='font-size: 0.7rem; opacity: 0.8; margin-left: 4px;'></i></a>`;
+  } else {
+    musicName.innerHTML = name;
+  }
+  
   musicAuthor.textContent = author || "";
   
-  // Atualiza mini player
   miniMusicName.textContent = name;
   miniMusicAuthor.textContent = author || "";
 
-  // Define a imagem da capa no mini player, com fallback para a capa padrão
   const coverSrc = thumbnail || songs[0].thumbnail;
   if (coverSrc) {
     miniCoverImg.src = coverSrc;
@@ -585,12 +568,9 @@ function atualizarFaixa() {
     miniCoverImg.style.display = 'none';
   }
 
-  // Controla a visibilidade do overlay da animação de onda
   if (index === 0) {
-    // No modo "AO VIVO", o overlay não deve aparecer
     miniPlayerCover.classList.remove('active');
   } else {
-    // Para músicas normais, o overlay fica ativo (visível)
     miniPlayerCover.classList.add('active');
   }
 
@@ -656,13 +636,11 @@ const prevNextMusic = (type = "next") => {
   }
 };
 
-// Controle principal de play/pause.
 const playPause = () => {
   if (index === 0) {
     console.log('Iniciando modo ao vivo');
     isLiveMode = true;
     
-    // Resetar lista de músicas tocadas ao iniciar modo ao vivo
     playedSongs = [];
     
     if (lastLiveSong !== null && liveExitTime > 0) {
@@ -723,7 +701,6 @@ const playPause = () => {
       }
     }
     
-    // Se não tiver estado salvo, escolhe uma música aleatória.
     livePlaylistIndex = getRandomLiveSong();
     
     index = livePlaylistIndex;
@@ -842,7 +819,6 @@ const playPause = () => {
   }
 };
 
-// Atualiza o timer e a barra de progresso.
 const updateTime = () => {
   const durationFormatted = isNaN(bgVideo.duration) ? 0 : bgVideo.duration;
   const progressWidth = durationFormatted ? (bgVideo.currentTime / durationFormatted) * 100 : 0;
@@ -887,7 +863,6 @@ const updateTime = () => {
   }
 };
 
-// Define o source do vídeo.
 function setVideoSources(src) {
   if (src) {
     if (!isLiveMode) {
@@ -904,12 +879,10 @@ function setVideoSources(src) {
     bgVideo.load();
   } else {
     bgVideo.src = '';
-    // Garante que a capa seja mostrada se não houver vídeo
     document.body.classList.remove('video-reproduzindo');
   }
 }
 
-// Atualiza o estado dos botões de avançar/voltar.
 function atualizarBotoesAvanco() {
   const desativado = index === 0 || isLiveMode;
   nextButton.disabled = desativado;
@@ -918,7 +891,6 @@ function atualizarBotoesAvanco() {
   prevButton.classList.toggle('botao-desativado', desativado);
 }
 
-// Monta a lista de músicas.
 function renderPlaylist(selectedIndex = 1) {
   playlistItems.innerHTML = "";
   if (!playlistSection.classList.contains('expanded')) return;
@@ -963,7 +935,6 @@ function renderPlaylist(selectedIndex = 1) {
   }
 }
 
-// Seleciona uma música da playlist.
 function selectSong(idx) {
   if (isLiveMode) {
     lastLiveSong = livePlaylistIndex;
@@ -1017,7 +988,6 @@ function selectSong(idx) {
 
 const formatZero = (n) => (n < 10 ? "0" + n : n);
 
-// Clique na barra de progresso.
 progressBar.onclick = handleProgressClick;
 progressBar.addEventListener('touchend', handleProgressClick);
 
@@ -1029,7 +999,68 @@ function handleProgressClick(e) {
   bgVideo.currentTime = (offsetX / progressBar.offsetWidth) * bgVideo.duration;
 }
 
-// Lida com o clique no botão "AO VIVO".
+let isDragging = false;
+let draggedTime = 0;
+
+progressBar.addEventListener('mousedown', startDrag);
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', endDrag);
+
+progressBar.addEventListener('touchstart', startDrag);
+document.addEventListener('touchmove', drag);
+document.addEventListener('touchend', endDrag);
+
+function startDrag(e) {
+  if (isLiveMode) return;
+  isDragging = true;
+  progressBar.classList.add('dragging');
+  e.preventDefault();
+  e.stopPropagation();
+  updateProgressVisual(e);
+}
+
+function drag(e) {
+  if (!isDragging || isLiveMode) return;
+  e.preventDefault();
+  updateProgressVisual(e);
+}
+
+function endDrag(e) {
+  if (!isDragging) return;
+  isDragging = false;
+  progressBar.classList.remove('dragging');
+  
+  if (bgVideo.duration && draggedTime >= 0) {
+    bgVideo.currentTime = draggedTime;
+  }
+}
+
+function updateProgressVisual(e) {
+  const rect = progressBar.getBoundingClientRect();
+  const clientX = e.clientX || e.touches?.[0]?.clientX || e.changedTouches?.[0]?.clientX;
+  const offsetX = Math.max(0, Math.min(clientX - rect.left, progressBar.offsetWidth));
+  const percentage = offsetX / progressBar.offsetWidth;
+  
+  if (bgVideo.duration) {
+    draggedTime = percentage * bgVideo.duration;
+    
+    progress.style.width = `${percentage * 100}%`;
+    
+    currentTime.textContent = formatTime(draggedTime);
+  }
+}
+
+function updateProgressFromEvent(e) {
+  const rect = progressBar.getBoundingClientRect();
+  const clientX = e.clientX || e.touches?.[0]?.clientX || e.changedTouches?.[0]?.clientX;
+  const offsetX = Math.max(0, Math.min(clientX - rect.left, progressBar.offsetWidth));
+  const percentage = offsetX / progressBar.offsetWidth;
+  
+  if (bgVideo.duration) {
+    bgVideo.currentTime = percentage * bgVideo.duration;
+  }
+}
+
 document.addEventListener("click", handleAoVivoClick);
 document.addEventListener("touchend", handleAoVivoClick);
 
@@ -1047,7 +1078,7 @@ function handleAoVivoClick(e) {
         liveExitTime = Date.now();
         saveLiveState();
         
-        index = 1; // Sempre volta para a primeira música
+        index = 1;
         bgVideo.loop = false;
         setVideoSources(songs[index].src);
         atualizarFaixa();
@@ -1077,7 +1108,6 @@ function handleAoVivoClick(e) {
         console.log('Entrando no modo ao vivo');
         isLiveMode = true;
         
-        // Resetar lista de músicas tocadas ao entrar no modo ao vivo
         playedSongs = [];
         
         if (lastLiveSong !== null && liveExitTime > 0) {
@@ -1093,7 +1123,6 @@ function handleAoVivoClick(e) {
             const resumeHandler = () => {
               if (bgVideo.duration && !isNaN(bgVideo.duration)) {
                 if (projectedTime >= bgVideo.duration) {
-                  // Obter próxima música aleatória
                   livePlaylistIndex = getRandomLiveSong();
                   
                   index = livePlaylistIndex;
@@ -1132,7 +1161,6 @@ function handleAoVivoClick(e) {
           }
         }
         
-        // Obter primeira música aleatória para iniciar o modo ao vivo
         livePlaylistIndex = getRandomLiveSong();
         
         if (livePlaylistIndex < songs.length - 1) {
@@ -1176,13 +1204,11 @@ function handleAoVivoClick(e) {
     }, 10);
 }
 
-// Controles da playlist
 playlistToggleButton.addEventListener('click', togglePlaylist);
 playlistToggleButton.addEventListener('touchend', (e) => { e.preventDefault(); togglePlaylist(); });
 playlistCloseButton.addEventListener('click', togglePlaylist);
 playlistCloseButton.addEventListener('touchend', (e) => { e.preventDefault(); togglePlaylist(); });
 
-// Desenha vídeo no canvas para sincronia
 function drawToCanvas() {
   if (!bgVideo.paused && !bgVideo.ended) {
     ctx.drawImage(bgVideo, 0, 0, syncCanvas.width, syncCanvas.height);
@@ -1190,7 +1216,6 @@ function drawToCanvas() {
   requestAnimationFrame(drawToCanvas);
 }
 
-// Eventos do Picture-in-Picture
 bgVideo.addEventListener('enterpictureinpicture', () => {
   console.log('Entrou em PiP');
   const pipButton = document.getElementById('pipButton');
@@ -1203,7 +1228,6 @@ bgVideo.addEventListener('leavepictureinpicture', () => {
   if (pipButton) pipButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ffffff86;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><rect x="9" y="9" width="8" height="8" rx="1" ry="1"></rect></svg>Ativar Picture-in-Picture';
 });
 
-// Paleta de cores
 const catppuccinColors = [
   'var(--catppuccin-pink)', 'var(--catppuccin-mauve)', 'var(--catppuccin-red)',
   'var(--catppuccin-maroon)', 'var(--catppuccin-peach)', 'var(--catppuccin-yellow)',
@@ -1214,7 +1238,6 @@ const catppuccinColors = [
 const musicNameElement = document.getElementById('musicName');
 const musicAuthorElement = document.getElementById('musicAuthor');
 
-// Muda cor do nome da música
 function changeMusicNameColor() {
   if (index === 0) {
     musicNameElement.style.color = '';
@@ -1258,7 +1281,7 @@ function togglePlaylist() {
     });
   } else {
     playlistSection.style.display = 'flex';
-    void playlistSection.offsetWidth; // Força reflow para animação
+    void playlistSection.offsetWidth;
     playlistSection.classList.add('expanded');
     setTimeout(() => renderPlaylist(index), 50);
   }
