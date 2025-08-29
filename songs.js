@@ -13,6 +13,12 @@ export default [
     thumbnail: "src/miniaturas de vídeo/BOKU NO HERO ACADEMIA「AMV」▪ IN THE END (2018) ▪ (HD).jpg",
   },
   {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%5BAMV%5D%20-%20WARRIORS.mp4",
+    name: "[AMV] - WARRIORS",
+    author: "viberonin",
+    thumbnail: "src/miniaturas de vídeo/[AMV] - WARRIORS.jpg",
+  },
+  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Skyfall%20%20-%20Demon%20Slayer%20%5BAMV%5D.mp4",
     name: "Skyfall - Demon Slayer [AMV]",
     author: "tiff.",
@@ -49,23 +55,17 @@ export default [
     thumbnail: "src/miniaturas de vídeo/Perturbator - Humans Are Such Easy Prey (Unofficial Videoclip).jpg",
   },
   {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%EF%BC%82its%20JUST%20an%20ANIME%EF%BC%82%20%EF%BD%9C%204K%20AMV%E2%A7%B8Edit.mp4",
-    name: "＂its JUST an ANIME＂ ｜ 4K AMV⧸Edit",
-    author: "cloudcore.",
-    thumbnail: "src/miniaturas de vídeo/＂its JUST an ANIME＂ ｜ 4K AMV⧸Edit.jpg",
-  },
-  {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Industry%20Baby%20vs%20E.T.%E3%80%8CAMV%20Lil%20Nas%20X%20%26%20Katy%20Perry%E3%80%8DMashup%20%E1%B4%B4%E1%B4%B0.mp4",
     name: "Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ",
     author: "KING AMV's 夢",
     thumbnail: "src/miniaturas de vídeo/Industry Baby vs E.T.「AMV Lil Nas X & Katy Perry」Mashup ᴴᴰ.jpg",
   },
-  {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/After%20Dark%20-%20Evangelion%E3%80%8C%20AMV%20%E3%80%8D.mp4",
-    name: "After Dark - Evangelion「 AMV 」",
-    author: "Inferno AMV",
-    thumbnail: "src/miniaturas de vídeo/After Dark - Evangelion「 AMV 」.jpg",
-  },
+  // {
+  //   src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/After%20Dark%20-%20Evangelion%E3%80%8C%20AMV%20%E3%80%8D.mp4",
+  //   name: "After Dark - Evangelion「 AMV 」",
+  //   author: "Inferno AMV",
+  //   thumbnail: "src/miniaturas de vídeo/After Dark - Evangelion「 AMV 」.jpg",
+  // },
   {
     src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Jujutsu%20Kaisen%E3%80%8CAMV%E3%80%8D-%20beggin.mp4",
     name: "Jujutsu Kaisen「AMV」- beggin",
@@ -73,10 +73,22 @@ export default [
     thumbnail: "src/miniaturas de vídeo/Jujutsu Kaisen「AMV」- beggin.jpg",
   },
   {
-    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%5BAMV%5D%20-%20WARRIORS.mp4",
-    name: "[AMV] - WARRIORS",
-    author: "viberonin",
-    thumbnail: "src/miniaturas de vídeo/[AMV] - WARRIORS.jpg",
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Darkside%E3%80%8CAMV%E3%80%8DAnime%20Mix.mp4",
+    name: "Darkside「AMV」Anime Mix",
+    author: "UnClonable",
+    thumbnail: "src/miniaturas de vídeo/Darkside「AMV」Anime Mix.jpg",
+  },
+  // {
+  //   src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/Pantheon%20(2022)%20-%20AMV.mp4",
+  //   name: "Pantheon (2022) - AMV",
+  //   author: "Knight Camelot",
+  //   thumbnail: "src/miniaturas de vídeo/Pantheon (2022) - AMV.jpg",
+  // },
+  {
+    src: "https://pub-49ebc8fe985e463d90f8aa912454bf50.r2.dev/video/%EF%BC%82its%20JUST%20an%20ANIME%EF%BC%82%20%EF%BD%9C%204K%20AMV%E2%A7%B8Edit.mp4",
+    name: "＂its JUST an ANIME＂ ｜ 4K AMV⧸Edit",
+    author: "cloudcore.",
+    thumbnail: "src/miniaturas de vídeo/＂its JUST an ANIME＂ ｜ 4K AMV⧸Edit.jpg",
   },
   {
     src: "",
